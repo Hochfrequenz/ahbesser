@@ -1,0 +1,203 @@
+openapi: 3.0.3
+info:
+  title: AHBesser API Documentation
+  description: >
+    This is the description for the API of the ahbesser web application.
+
+    Some useful links:
+    - [The machine-readable-anwendungshandbuecher repository](https://github.com/Hochfrequenz/machine-readable_anwendungshandbuecher)
+    - [kohlr_AHB_i - the CLI tool to scrape the AHB tables from docx files](https://github.com/Hochfrequenz/kohlrahbi)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: kevin.krechan@hochfrequenz.de
+  license:
+    name: GPL-3.0
+    url: https://www.gnu.org/licenses/gpl-3.0.en.html
+  version: 0.0.1
+externalDocs:
+  description: JSON files of the AHB documents
+  url: https://github.com/Hochfrequenz/machine-readable_anwendungshandbuecher
+servers:
+  - url: https://ahbesser.hochfrequenz.de/api/v1
+tags:
+  - name: ahb
+    description: Everything about AHB documents
+paths:
+  /ahb/{format-version}/{pruefi}:
+    get:
+      tags:
+        - ahb
+      summary: Get an AHB document for a Pruefidentifikator from the provided Formatversion
+      operationId: getAhb
+      parameters:
+        - name: format-version
+          in: path
+          description: Formatversion of the AHB to return
+          required: true
+          schema:
+            $ref: "#/components/schemas/FormatVersion"
+        - name: pruefi
+          in: path
+          description: Pruefidentifikator of the AHB to return
+          required: true
+          schema:
+            type: string
+            example: "25007"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ahb"
+      security:
+        - ahbesser_auth:
+            - read:ahb
+  /format-versions:
+    get:
+      tags:
+        - ahb
+      summary: Get a list of all available format versions
+      operationId: getFormatVersions
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example: [FV2310, FV2404, FV2410]
+  /{format-version}/pruefis:
+    get:
+      tags:
+        - ahb
+      summary: Get a list of all available Pruefidentifikators for a given format version
+      operationId: getPruefis
+      parameters:
+        - name: format-version
+          in: path
+          description: Formatversion of the AHB to return
+          required: true
+          schema:
+            $ref: "#/components/schemas/FormatVersion"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example: ["25007", "25008", "25009"]
+  /version:
+    get:
+      tags:
+        - maintenance
+      summary: Get the current version of the AHBesser application
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Version"
+
+components:
+  schemas:
+    Ahb:
+      type: object
+      properties:
+        lines:
+          type: array
+          items:
+            type: object
+            properties:
+              ahb_expression:
+                type: string
+                example: "Must"
+              data_element:
+                type: string
+                example: "0062"
+              guid:
+                type: string
+                format: uuid
+                example: "123e4567-e89b-12d3-a456-426614174000"
+              index:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: "Header Name"
+              section_name:
+                type: string
+                example: "Header Section"
+              segment_code:
+                type: string
+                example: "UNH"
+              segment_group_key:
+                type: string
+                example: "001"
+              value_pool_entry:
+                type: string
+                example: "Entry1"
+            required:
+              - ahb_expression
+              - guid
+              - index
+              - section_name
+        meta:
+          type: object
+          properties:
+            description:
+              type: string
+              example: "API response meta description"
+            direction:
+              type: string
+              example: "inbound"
+            maus_version:
+              type: string
+              pattern: '^\\d+\\.\\d+\\.\\d+$'
+              example: "0.3.1"
+            pruefidentifikator:
+              type: string
+              example: "25007"
+          required:
+            - description
+            - direction
+            - maus_version
+            - pruefidentifikator
+      required:
+        - lines
+        - meta
+    FormatVersion:
+      type: string
+      enum: [FV2310, FV2404, FV2410]
+    Version:
+      type: object
+      properties:
+        version:
+          type: string
+          example: "1.0.3"
+        buildDate:
+          type: string
+          example: "2024-01-15"
+        commitHash:
+          type: string
+          example: "a1b2c3d4"
+        commitDate:
+          type: string
+          example: "2024-01-14"
+        buildBranch:
+          type: string
+          example: "main"
+  securitySchemes:
+    ahbesser_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            read:ahb: read your ahb
