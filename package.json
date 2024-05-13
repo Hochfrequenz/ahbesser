@@ -12,7 +12,8 @@
     "server:build": "tsc --project tsconfig.server.json",
     "server:watch": "npm-watch server:start",
     "format:check": "prettier '**/*.{js,jsx,ts,tsx,html,css,scss,json,yml,md}' --check",
-    "format": "prettier '**/*.{js,jsx,ts,tsx,html,css,scss,json,yml,md}' --write"
+    "format": "prettier '**/*.{js,jsx,ts,tsx,html,css,scss,json,yml,md}' --write",
+    "ng-openapi-gen": "ng-openapi-gen --input openapi.yml --output ./src/app/core/api --indexFile=true"
   },
   "watch": {
     "server:start": {
@@ -54,6 +55,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "ng-openapi-gen": "^0.51.0",
     "npm-watch": "^0.13.0",
     "typescript": "~5.4.2"
   }
