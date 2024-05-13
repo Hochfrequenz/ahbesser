@@ -17,7 +17,6 @@ import { GetFormatVersions$Params } from '../fn/ahb/get-format-versions';
 import { getPruefis } from '../fn/ahb/get-pruefis';
 import { GetPruefis$Params } from '../fn/ahb/get-pruefis';
 
-
 /**
  * Everything about AHB documents
  */
@@ -40,7 +39,10 @@ export class AhbService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAhb$Response(params: GetAhb$Params, context?: HttpContext): Observable<StrictHttpResponse<Ahb>> {
+  getAhb$Response(
+    params: GetAhb$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<Ahb>> {
     return getAhb(this.http, this.rootUrl, params, context);
   }
 
@@ -56,7 +58,7 @@ export class AhbService extends BaseService {
    */
   getAhb(params: GetAhb$Params, context?: HttpContext): Observable<Ahb> {
     return this.getAhb$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Ahb>): Ahb => r.body)
+      map((r: StrictHttpResponse<Ahb>): Ahb => r.body),
     );
   }
 
@@ -73,7 +75,10 @@ export class AhbService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getFormatVersions$Response(params?: GetFormatVersions$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
+  getFormatVersions$Response(
+    params?: GetFormatVersions$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<Array<string>>> {
     return getFormatVersions(this.http, this.rootUrl, params, context);
   }
 
@@ -87,9 +92,12 @@ export class AhbService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getFormatVersions(params?: GetFormatVersions$Params, context?: HttpContext): Observable<Array<string>> {
+  getFormatVersions(
+    params?: GetFormatVersions$Params,
+    context?: HttpContext,
+  ): Observable<Array<string>> {
     return this.getFormatVersions$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<string>>): Array<string> => r.body)
+      map((r: StrictHttpResponse<Array<string>>): Array<string> => r.body),
     );
   }
 
@@ -106,10 +114,17 @@ export class AhbService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getPruefis$Response(params: GetPruefis$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<{
-'pruefidentifikator'?: string;
-'description'?: string;
-}>>> {
+  getPruefis$Response(
+    params: GetPruefis$Params,
+    context?: HttpContext,
+  ): Observable<
+    StrictHttpResponse<
+      Array<{
+        pruefidentifikator?: string;
+        description?: string;
+      }>
+    >
+  > {
     return getPruefis(this.http, this.rootUrl, params, context);
   }
 
@@ -123,19 +138,29 @@ export class AhbService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getPruefis(params: GetPruefis$Params, context?: HttpContext): Observable<Array<{
-'pruefidentifikator'?: string;
-'description'?: string;
-}>> {
+  getPruefis(
+    params: GetPruefis$Params,
+    context?: HttpContext,
+  ): Observable<
+    Array<{
+      pruefidentifikator?: string;
+      description?: string;
+    }>
+  > {
     return this.getPruefis$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<{
-'pruefidentifikator'?: string;
-'description'?: string;
-}>>): Array<{
-'pruefidentifikator'?: string;
-'description'?: string;
-}> => r.body)
+      map(
+        (
+          r: StrictHttpResponse<
+            Array<{
+              pruefidentifikator?: string;
+              description?: string;
+            }>
+          >,
+        ): Array<{
+          pruefidentifikator?: string;
+          description?: string;
+        }> => r.body,
+      ),
     );
   }
-
 }
