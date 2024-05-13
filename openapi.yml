@@ -145,9 +145,14 @@ components:
                 example: "Entry1"
             required:
               - ahb_expression
+              - data_element
               - guid
               - index
+              - name
               - section_name
+              - segment_code
+              - segment_group_key
+              - value_pool_entry
         meta:
           type: object
           properties:
