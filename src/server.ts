@@ -1,0 +1,40 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
+
+import express from 'express';
+import { join } from 'path';
+import cors from 'cors';
+import { apiRoutes } from './server/api.routes';
+
+const server = express();
+if (process.env['ENABLE_CORS'] === 'true') {
+  server.use(cors());
+}
+
+const distFolder = join(process.cwd(), 'dist/ahbesser/browser');
+const docsFolder = join(process.cwd(), 'docs');
+const indexHtml = 'index.html';
+
+server.get('/version', (req, res) =>
+  res.send({
+    buildDate: '',
+    commitId: '',
+    name: 'ahbesser',
+    version: '0.0.0',
+  }),
+);
+server.get('/health', (req, res) => res.send());
+server.get('/readiness', (req, res) => res.send());
+
+server.use('/api', apiRoutes);
+
+// Serve static files from /browser
+server.get('*.*', express.static(distFolder, { maxAge: '1y' }));
+
+// All regular routes serve angular
+server.get('*', async (req, res) => res.sendFile(join(distFolder, indexHtml)));
+
+const port = process.env['PORT'] || 3000;
+server.listen(port, () => {
+  console.log(`Node Express server listening on http://localhost:${port}`);
+});

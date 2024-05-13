@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "outDir": "dist/server",
+    "rootDir": "src",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "incremental": true,
+    "lib": ["es2021", "esnext.asynciterable"],
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "target": "es2017",
+    "sourceMap": true,
+    "declaration": true,
+    "types": ["node"]
+  },
+  "include": [
+    "src/server.ts",
+    "src/server",
+    "src/app/core/api/models.ts",
+    "src/app/core/api/models"
+  ],
+  "exclude": ["**/node_modules/**", "**/dist/**", "**/*.spec.ts"]
+}

@@ -2,11 +2,27 @@
   "name": "ahbesser",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "start": "concurrently \"npm run ng:start\" \"npm run server:watch\"",
+    "ng:start": "ng serve",
+    "ng:build": "ng build",
+    "ng:watch": "ng build --watch --configuration development",
+    "ng:lint": "ng lint",
+    "server:start": "npm run server:build && npm run server:serve",
+    "server:serve": "node dist/server/server.js",
+    "server:build": "tsc --project tsconfig.server.json",
+    "server:watch": "npm-watch server:start",
+    "format:check": "prettier '**/*.{js,jsx,ts,tsx,html,css,scss,json,yml,md}' --check",
+    "format": "prettier '**/*.{js,jsx,ts,tsx,html,css,scss,json,yml,md}' --write"
+  },
+  "watch": {
+    "server:start": {
+      "patterns": [
+        "src/server.ts",
+        "src/server"
+      ],
+      "extensions": "ts",
+      "quiet": false
+    }
   },
   "private": true,
   "dependencies": {
@@ -18,6 +34,9 @@
     "@angular/platform-browser": "^17.3.0",
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
@@ -27,12 +46,14 @@
     "@angular/cli": "^17.3.7",
     "@angular/compiler-cli": "^17.3.0",
     "@types/jasmine": "~5.1.0",
+    "concurrently": "^8.2.2",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "npm-watch": "^0.13.0",
     "typescript": "~5.4.2"
   }
 }
