@@ -1,1 +1,20 @@
-<app-header /> this is where the table will be
+<app-header />
+
+@if (ahb$ | async; as ahb) {
+  <section>
+    <pre>{{ ahb.meta | json }}</pre>
+  </section>
+  <section>
+    <input
+      type="search"
+      (search)="onSearchQueryChange()"
+      placeholder="Tabelle durchsuchen"
+      [formControl]="searchQuery"
+    />
+    @if (lines$ | async; as lines) {
+      <app-ahb-table [lines]="lines" />
+    }
+  </section>
+} @else {
+  loading ...
+}

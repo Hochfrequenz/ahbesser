@@ -1,0 +1,47 @@
+<div class="relative overflow-x-auto">
+  <table
+    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+  >
+    <thead
+      class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+    >
+      <tr>
+        <th scope="col" class="px-6 py-3">Segmentname</th>
+        <th scope="col" class="px-6 py-3">Segmentgruppe</th>
+        <th scope="col" class="px-6 py-3">Segment</th>
+        <th scope="col" class="px-6 py-3">Datenelement</th>
+        <th scope="col" class="px-6 py-3">Name</th>
+        <th scope="col" class="px-6 py-3">Bedingung</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (line of lines; track line.index) {
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <th
+            scope="row"
+            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+          >
+            {{ line.section_name }}
+          </th>
+          <td class="px-6 py-4">
+            {{ line.segment_group_key }}
+          </td>
+          <td class="px-6 py-4">
+            {{ line.segment_code }}
+          </td>
+          <td class="px-6 py-4">
+            {{ line.data_element }}
+          </td>
+          <td class="px-6 py-4">
+            {{ line.name }}
+          </td>
+          <td class="px-6 py-4">
+            {{ line.ahb_expression }}
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<pre>{{ lines | json }}</pre>

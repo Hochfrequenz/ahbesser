@@ -30,4 +30,4 @@ export function getFormatVersions(
     );
 }
 
-getFormatVersions.PATH = '/format-versions';
+getFormatVersions.PATH = '/api/format-versions';

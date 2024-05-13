@@ -45,4 +45,4 @@ export function getAhb(
     );
 }
 
-getAhb.PATH = '/ahb/{format-version}/{pruefi}';
+getAhb.PATH = '/api/ahb/{format-version}/{pruefi}';

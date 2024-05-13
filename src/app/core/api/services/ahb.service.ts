@@ -27,7 +27,7 @@ export class AhbService extends BaseService {
   }
 
   /** Path part for operation `getAhb()` */
-  static readonly GetAhbPath = '/ahb/{format-version}/{pruefi}';
+  static readonly GetAhbPath = '/api/ahb/{format-version}/{pruefi}';
 
   /**
    * Get an AHB document for a Pruefidentifikator from the provided Formatversion.
@@ -63,7 +63,7 @@ export class AhbService extends BaseService {
   }
 
   /** Path part for operation `getFormatVersions()` */
-  static readonly GetFormatVersionsPath = '/format-versions';
+  static readonly GetFormatVersionsPath = '/api/format-versions';
 
   /**
    * Get a list of all available format versions.
@@ -102,7 +102,7 @@ export class AhbService extends BaseService {
   }
 
   /** Path part for operation `getPruefis()` */
-  static readonly GetPruefisPath = '/{format-version}/pruefis';
+  static readonly GetPruefisPath = '/api/{format-version}/pruefis';
 
   /**
    * Get a list of all available Pruefidentifikators for a given format version.

@@ -50,4 +50,4 @@ export function getPruefis(
     );
 }
 
-getPruefis.PATH = '/{format-version}/pruefis';
+getPruefis.PATH = '/api/{format-version}/pruefis';
