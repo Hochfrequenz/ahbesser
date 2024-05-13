@@ -1,0 +1,16 @@
+docker-compose.yml
+node_modules
+/dist
+/.vscode
+/.nx
+/.angular
+.drone.yml
+.editorconfig
+.eslintrc.json
+.git
+.gitignore
+.nvmrc
+.prettierignore
+.prettierrc
+README.md
+*.tsbuildinfo
