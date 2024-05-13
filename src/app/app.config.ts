@@ -4,6 +4,9 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { ApiModule } from './core/api';
 import { HttpClientModule } from '@angular/common/http';
+import { environment } from './environments/environment';
+
+console.log({ environment });
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,7 +14,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       HttpClientModule,
       ApiModule.forRoot({
-        rootUrl: '',
+        rootUrl: environment.apiUrl,
       }),
     ),
   ],

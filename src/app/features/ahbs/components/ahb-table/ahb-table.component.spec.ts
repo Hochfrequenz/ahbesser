@@ -8,10 +8,9 @@ describe('AhbTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AhbTableComponent]
-    })
-    .compileComponents();
-    
+      imports: [AhbTableComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(AhbTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
