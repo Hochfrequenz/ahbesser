@@ -8,10 +8,9 @@ describe('AhbLandingPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AhbLandingPageComponent]
-    })
-    .compileComponents();
-    
+      imports: [AhbLandingPageComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(AhbLandingPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
