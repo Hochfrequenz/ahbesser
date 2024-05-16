@@ -7,6 +7,8 @@ RUN addgroup --system --gid 1001 nodejs && \
 
 COPY --chown=nodejs:nodejs . .
 
+RUN rm -rf azure-mock/
+
 # install
 RUN npm ci --no-scripts
 
