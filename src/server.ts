@@ -4,7 +4,7 @@ require('dotenv').config();
 import express from 'express';
 import { join } from 'path';
 import cors from 'cors';
-import { apiRoutes } from './server/api.routes';
+import router from './server/infrastructure/api.routes';
 
 const server = express();
 if (process.env['ENABLE_CORS'] === 'true') {
@@ -26,7 +26,7 @@ server.get('/version', (req, res) =>
 server.get('/health', (req, res) => res.send());
 server.get('/readiness', (req, res) => res.send());
 
-server.use('/api', apiRoutes);
+server.use('/api', router);
 
 // Serve static files from /browser
 server.get('*.*', express.static(distFolder, { maxAge: '1y' }));
