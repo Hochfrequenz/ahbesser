@@ -69,7 +69,7 @@ paths:
                 items:
                   type: string
                 example: [FV2310, FV2404, FV2410]
-  /api/{format-version}/pruefis:
+  /api/format-versions/{format-version}/pruefis:
     get:
       tags:
         - ahb
@@ -90,14 +90,8 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    pruefidentifikator:
-                      type: string
-                      example: "25007"
-                    description:
-                      type: string
-                      example: "Meta description of the whole document"
+                  type: string
+                example: ["31001", "31002", "31003"]
   /version:
     get:
       tags:
