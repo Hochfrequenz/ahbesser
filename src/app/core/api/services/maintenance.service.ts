@@ -32,10 +32,7 @@ export class MaintenanceService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  versionGet$Response(
-    params?: VersionGet$Params,
-    context?: HttpContext,
-  ): Observable<StrictHttpResponse<Version>> {
+  versionGet$Response(params?: VersionGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Version>> {
     return versionGet(this.http, this.rootUrl, params, context);
   }
 
@@ -49,12 +46,10 @@ export class MaintenanceService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  versionGet(
-    params?: VersionGet$Params,
-    context?: HttpContext,
-  ): Observable<Version> {
+  versionGet(params?: VersionGet$Params, context?: HttpContext): Observable<Version> {
     return this.versionGet$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Version>): Version => r.body),
+      map((r: StrictHttpResponse<Version>): Version => r.body)
     );
   }
+
 }
