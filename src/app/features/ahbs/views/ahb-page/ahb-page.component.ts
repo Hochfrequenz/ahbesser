@@ -63,17 +63,10 @@ export class AhbPageComponent {
         })
         .pipe(shareReplay());
       this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
-      setTimeout(() => {
-        this.headerSearchForm.setValue({
-          formatVersion: this.formatVersion(),
-          pruefi: this.pruefi(),
-        });
-      }, 1000);
-      console.log(
-        this.formatVersion(),
-        this.pruefi(),
-        this.headerSearchForm.value,
-      );
+      this.headerSearchForm.setValue({
+        formatVersion: this.formatVersion(),
+        pruefi: this.pruefi(),
+      });
     });
   }
 
