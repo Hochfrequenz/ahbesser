@@ -11,4 +11,10 @@ export default class FormatVersionController {
         const formatVersionEntity = await this.repository.list();
         res.status(200).send(formatVersionEntity);
     }
+
+    public async listPruefisByFormatVersion(req: Request, res: Response): Promise<void> {
+        const formatVersion = req.params["formatVersion"];
+        const pruefis = await this.repository.listPruefisByFormatVersion(formatVersion);
+        res.status(200).send(pruefis);
+    }
 }
