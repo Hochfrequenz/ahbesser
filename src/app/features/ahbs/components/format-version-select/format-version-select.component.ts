@@ -49,7 +49,7 @@ export class FormatVersionSelectComponent
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: () => void): void {
+  registerOnTouched(): void {
     // do nothing
   }
 

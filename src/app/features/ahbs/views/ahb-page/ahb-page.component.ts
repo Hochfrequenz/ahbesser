@@ -1,15 +1,7 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  effect,
-  input,
-} from '@angular/core';
+import { Component, effect, input } from '@angular/core';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { AhbTableComponent } from '../../components/ahb-table/ahb-table.component';
-import { Ahb, AhbService, FormatVersion } from '../../../../core/api';
+import { Ahb, AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
 import {
   FormControl,

@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
-import { map, of, tap } from 'rxjs';
+import { of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-pruefi-input',
