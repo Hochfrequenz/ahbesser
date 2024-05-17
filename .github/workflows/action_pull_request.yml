@@ -29,3 +29,18 @@ jobs:
 
       - name: Lint frontend
         run: npm run ng:lint
+
+      - name: Lint server
+        run: exit 0 # todo: add stuff
+
+      - name: Test frontend
+        run: exit 0 # todo: add stuff
+
+      - name: Test server
+        run: exit 0 # todo: add stuff
+
+      - name: Build frontend
+        run: npm run ng:build
+
+      - name: Build server
+        run: npm run server:build
