@@ -12,6 +12,8 @@ export default class AHBController {
         // TODO: Make this dynamic
         const type = FileType.JSON;
         const ahb = await this.repository.get(pruefi, formatVersion, type);
-        res.status(200).send(ahb);
+        res.status(200)
+        .setHeader("Content-Type", "application/json")
+        .send(ahb);
     }
 }
