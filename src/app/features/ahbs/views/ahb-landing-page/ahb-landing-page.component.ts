@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormatVersionSelectComponent } from '../../components/format-version-select/format-version-select.component';
+import { PruefiInputComponent } from '../../components/pruefi-input/pruefi-input.component';
 
 @Component({
   selector: 'app-ahb-landing-page',
@@ -18,6 +19,7 @@ import { FormatVersionSelectComponent } from '../../components/format-version-se
     FormsModule,
     ReactiveFormsModule,
     FormatVersionSelectComponent,
+    PruefiInputComponent,
   ],
   templateUrl: './ahb-landing-page.component.html',
 })

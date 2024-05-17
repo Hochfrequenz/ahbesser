@@ -1,0 +1,9 @@
+<select
+  [formControl]="control"
+  (change)="onChange ? onChange(control.value) : null"
+>
+  <option value="">Bitte auswählen</option>
+  @for (pruefi of pruefis$ | async; track pruefi) {
+    <option>{{ pruefi }}</option>
+  }
+</select>

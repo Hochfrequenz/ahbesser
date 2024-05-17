@@ -40,11 +40,10 @@
 
           <div class="relative mb-6">
             <label for="pruefi-input">Prüfidentifikator </label>
-            <input
-              type="text"
+            <app-pruefi-input
               id="pruefi-input"
-              placeholder="Pruefidentifikator"
               formControlName="pruefi"
+              [formatVersion]="form.controls.formatVersion.value"
             />
             @if (
               form.controls.pruefi.errors?.["required"] &&
