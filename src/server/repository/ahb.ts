@@ -7,7 +7,7 @@ import { NotFoundError } from "../infrastructure/errors";
 export enum FileType {
     CSV = "csv",
     JSON = "json",
-    XLSC = "xlsc"
+    XLSX = "xlsx"
 }
 
 export default class AHBRepository {
@@ -53,8 +53,8 @@ export default class AHBRepository {
                 return "csv";
             case FileType.JSON:
                 return "flatahb";
-            case FileType.XLSC:
-                return "xlsc";
+            case FileType.XLSX:
+                return "xlsx";
             default:
                 throw new NotFoundError(`Unknown file type ${fileType}`);
         }
