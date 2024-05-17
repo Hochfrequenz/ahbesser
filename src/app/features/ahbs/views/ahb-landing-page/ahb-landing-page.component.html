@@ -25,10 +25,8 @@
         <form [formGroup]="form">
           <div class="relative mb-6">
             <label for="format-version-input">Formatversion </label>
-            <input
-              type="text"
+            <app-format-version-select
               id="format-version-input"
-              placeholder="Formatversion"
               formControlName="formatVersion"
             />
             @if (
@@ -41,7 +39,7 @@
           </div>
 
           <div class="relative mb-6">
-            <label for="pruefi-input">Pruefidentifikator </label>
+            <label for="pruefi-input">Prüfidentifikator </label>
             <input
               type="text"
               id="pruefi-input"

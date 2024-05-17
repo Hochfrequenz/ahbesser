@@ -8,11 +8,17 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { FormatVersionSelectComponent } from '../../components/format-version-select/format-version-select.component';
 
 @Component({
   selector: 'app-ahb-landing-page',
   standalone: true,
-  imports: [HeaderComponent, FormsModule, ReactiveFormsModule],
+  imports: [
+    HeaderComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    FormatVersionSelectComponent,
+  ],
   templateUrl: './ahb-landing-page.component.html',
 })
 export class AhbLandingPageComponent {
