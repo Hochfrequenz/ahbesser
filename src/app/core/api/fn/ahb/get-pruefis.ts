@@ -20,14 +20,7 @@ export function getPruefis(
   rootUrl: string,
   params: GetPruefis$Params,
   context?: HttpContext,
-): Observable<
-  StrictHttpResponse<
-    Array<{
-      pruefidentifikator?: string;
-      description?: string;
-    }>
-  >
-> {
+): Observable<StrictHttpResponse<Array<string>>> {
   const rb = new RequestBuilder(rootUrl, getPruefis.PATH, 'get');
   if (params) {
     rb.path('format-version', params['format-version'], {});
@@ -40,14 +33,9 @@ export function getPruefis(
     .pipe(
       filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<
-          Array<{
-            pruefidentifikator?: string;
-            description?: string;
-          }>
-        >;
+        return r as StrictHttpResponse<Array<string>>;
       }),
     );
 }
 
-getPruefis.PATH = '/api/{format-version}/pruefis';
+getPruefis.PATH = '/api/format-versions/{format-version}/pruefis';

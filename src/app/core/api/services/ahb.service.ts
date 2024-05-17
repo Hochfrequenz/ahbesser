@@ -102,7 +102,8 @@ export class AhbService extends BaseService {
   }
 
   /** Path part for operation `getPruefis()` */
-  static readonly GetPruefisPath = '/api/{format-version}/pruefis';
+  static readonly GetPruefisPath =
+    '/api/format-versions/{format-version}/pruefis';
 
   /**
    * Get a list of all available Pruefidentifikators for a given format version.
@@ -117,14 +118,7 @@ export class AhbService extends BaseService {
   getPruefis$Response(
     params: GetPruefis$Params,
     context?: HttpContext,
-  ): Observable<
-    StrictHttpResponse<
-      Array<{
-        pruefidentifikator?: string;
-        description?: string;
-      }>
-    >
-  > {
+  ): Observable<StrictHttpResponse<Array<string>>> {
     return getPruefis(this.http, this.rootUrl, params, context);
   }
 
@@ -141,26 +135,9 @@ export class AhbService extends BaseService {
   getPruefis(
     params: GetPruefis$Params,
     context?: HttpContext,
-  ): Observable<
-    Array<{
-      pruefidentifikator?: string;
-      description?: string;
-    }>
-  > {
+  ): Observable<Array<string>> {
     return this.getPruefis$Response(params, context).pipe(
-      map(
-        (
-          r: StrictHttpResponse<
-            Array<{
-              pruefidentifikator?: string;
-              description?: string;
-            }>
-          >,
-        ): Array<{
-          pruefidentifikator?: string;
-          description?: string;
-        }> => r.body,
-      ),
+      map((r: StrictHttpResponse<Array<string>>): Array<string> => r.body),
     );
   }
 }
