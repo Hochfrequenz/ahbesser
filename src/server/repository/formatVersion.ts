@@ -1,3 +1,4 @@
+import { BlobServiceClient } from "@azure/storage-blob";
 import BlobStorageContainerBacked from "./abstract/blobStorageBacked";
 
 interface FormatVersionsWithPruefis {
@@ -11,8 +12,8 @@ interface FormatVersionsWithPruefis {
 export default class FormatVersionRepository extends BlobStorageContainerBacked {
     private ahbContainerName: string;
     private formatVersionContainerName: string;
-    constructor() {
-        super();
+    constructor(client?: BlobServiceClient) {
+        super(client);
         if (!process.env["AHB_CONTAINER_NAME"]) {
             throw new Error("AHB_CONTAINER_NAME is not set");
         }
