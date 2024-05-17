@@ -2,6 +2,7 @@ import { BlobServiceClient } from "@azure/storage-blob";
 import { createNewBlobStorageClient } from '../infrastructure/azure-blob-storage-client';
 import { Ahb } from "../../app/core/api/models";
 import { Readable } from "stream";
+import { NotFoundError } from "../infrastructure/errors";
 
 export enum FileType {
     CSV = "csv",
@@ -55,7 +56,7 @@ export default class AHBRepository {
             case FileType.XLSC:
                 return "xlsc";
             default:
-                throw new Error("Unknown file type");
+                throw new NotFoundError(`Unknown file type ${fileType}`);
         }
     }
 
@@ -63,12 +64,16 @@ export default class AHBRepository {
     // Assuming each pruefi is unique for a formatVersion.
     private async getFormatName(pruefi: string, formatVersion: string): Promise<string> {
         const containerClient = this.blobServiceClient.getContainerClient(this.ahbContainerName);
+        let blobsFound = false;
         for await (const blob of containerClient.listBlobsFlat({ prefix: `${formatVersion}/`})) {
+            blobsFound = true;
             if (blob.name.includes(pruefi)) {
                 return blob.name.split("/")[1];
             }
         }
-        throw new Error("Format not found");
+        throw blobsFound
+        ? new NotFoundError(`Pruefi ${pruefi} does not exist on Format Version ${formatVersion}`)
+        : new NotFoundError(`Format Version ${formatVersion} does not exist`);
     }
 
     // Helper function to convert a stream to a string

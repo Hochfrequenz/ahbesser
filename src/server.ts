@@ -5,6 +5,7 @@ import express from 'express';
 import { join } from 'path';
 import cors from 'cors';
 import router from './server/infrastructure/api.routes';
+import { httpErrorHandler } from './server/infrastructure/errors';
 
 const server = express();
 if (process.env['ENABLE_CORS'] === 'true') {
@@ -33,6 +34,9 @@ server.get('*.*', express.static(distFolder, { maxAge: '1y' }));
 
 // All regular routes serve angular
 server.get('*', async (req, res) => res.sendFile(join(distFolder, indexHtml)));
+
+// Apply error handler middleware
+server.use(httpErrorHandler);
 
 const port = process.env['PORT'] || 3000;
 server.listen(port, () => {

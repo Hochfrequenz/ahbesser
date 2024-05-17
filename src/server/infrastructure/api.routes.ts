@@ -5,8 +5,9 @@ const router = Router();
 
 const ahbController = new AHBController();
 
-router.get('/ahb/:formatVersion/:pruefi', async (req, res) => {
-  await ahbController.get(req, res);
+
+router.get('/ahb/:formatVersion/:pruefi', async (req, res, next) => {
+  await ahbController.get(req, res).catch((err: Error) => next(err));
 });
 
 router.all('/**', (req, res) => {
