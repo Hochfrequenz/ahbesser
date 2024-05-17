@@ -1,10 +1,27 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  effect,
+  input,
+} from '@angular/core';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { AhbTableComponent } from '../../components/ahb-table/ahb-table.component';
 import { Ahb, AhbService, FormatVersion } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Observable, map, shareReplay } from 'rxjs';
+import { Router } from '@angular/router';
+import { FormatVersionSelectComponent } from '../../components/format-version-select/format-version-select.component';
+import { PruefiInputComponent } from '../../components/pruefi-input/pruefi-input.component';
 
 @Component({
   selector: 'app-ahb-page',
@@ -15,32 +32,52 @@ import { Observable, map, shareReplay } from 'rxjs';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    FormatVersionSelectComponent,
+    PruefiInputComponent,
   ],
   templateUrl: './ahb-page.component.html',
 })
-export class AhbPageComponent implements OnChanges {
-  @Input() formatVersion!: string;
-  @Input() pruefi!: string;
+export class AhbPageComponent {
+  formatVersion = input.required<string>();
+  pruefi = input.required<string>();
 
   searchQuery = new FormControl('');
 
   ahb$?: Observable<Ahb>;
   lines$?: Observable<Ahb['lines']>;
 
-  constructor(private readonly ahbService: AhbService) {}
+  headerSearchForm = new FormGroup({
+    formatVersion: new FormControl('', Validators.required),
+    pruefi: new FormControl('', Validators.required),
+  });
 
-  ngOnChanges(): void {
-    this.ahb$ = this.ahbService
-      .getAhb({
-        'format-version': this.formatVersion as FormatVersion, // todo remove cast -> fix openapi spec
-        pruefi: this.pruefi,
-      })
-      .pipe(shareReplay());
-    this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
+  constructor(
+    private readonly ahbService: AhbService,
+    private readonly router: Router,
+  ) {
+    effect(() => {
+      this.ahb$ = this.ahbService
+        .getAhb({
+          'format-version': this.formatVersion(),
+          pruefi: this.pruefi(),
+        })
+        .pipe(shareReplay());
+      this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
+      setTimeout(() => {
+        this.headerSearchForm.setValue({
+          formatVersion: this.formatVersion(),
+          pruefi: this.pruefi(),
+        });
+      }, 1000);
+      console.log(
+        this.formatVersion(),
+        this.pruefi(),
+        this.headerSearchForm.value,
+      );
+    });
   }
 
   onSearchQueryChange() {
-    console.log(this.searchQuery.value);
     this.lines$ = this.ahb$?.pipe(
       map((ahb) => ahb.lines),
       map(
@@ -50,5 +87,17 @@ export class AhbPageComponent implements OnChanges {
           ) ?? [],
       ),
     );
+  }
+
+  onClickHeaderSearchSubmit() {
+    if (!this.headerSearchForm.valid) {
+      this.headerSearchForm.markAllAsTouched();
+      return;
+    }
+    this.router.navigate([
+      '/ahb',
+      this.headerSearchForm.value.formatVersion,
+      this.headerSearchForm.value.pruefi,
+    ]);
   }
 }

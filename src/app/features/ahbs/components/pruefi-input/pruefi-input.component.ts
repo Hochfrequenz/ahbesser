@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
-import { of } from 'rxjs';
+import { map, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-pruefi-input',
@@ -39,9 +39,12 @@ export class PruefiInputComponent implements ControlValueAccessor {
         this.pruefis$ = of([]);
         return;
       }
-      this.pruefis$ = this.ahbService.getPruefis({
-        'format-version': formatVersion,
-      });
+      this.control.disable();
+      this.pruefis$ = this.ahbService
+        .getPruefis({
+          'format-version': formatVersion,
+        })
+        .pipe(tap(() => this.control.enable()));
     });
   }
 

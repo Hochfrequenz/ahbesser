@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { AhbService } from '../../../../core/api';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -35,7 +35,10 @@ export class FormatVersionSelectComponent
   constructor(private readonly ahbService: AhbService) {}
 
   ngOnInit(): void {
-    this.formatVersions$ = this.ahbService.getFormatVersions();
+    this.control.disable();
+    this.formatVersions$ = this.ahbService
+      .getFormatVersions()
+      .pipe(tap(() => this.control.enable()));
   }
 
   writeValue(formatVersion: string): void {
