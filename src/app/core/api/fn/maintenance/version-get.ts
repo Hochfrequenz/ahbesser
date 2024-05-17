@@ -8,22 +8,28 @@ import { RequestBuilder } from '../../request-builder';
 
 import { Version } from '../../models/version';
 
-export interface VersionGet$Params {
-}
+export interface VersionGet$Params {}
 
-export function versionGet(http: HttpClient, rootUrl: string, params?: VersionGet$Params, context?: HttpContext): Observable<StrictHttpResponse<Version>> {
+export function versionGet(
+  http: HttpClient,
+  rootUrl: string,
+  params?: VersionGet$Params,
+  context?: HttpContext,
+): Observable<StrictHttpResponse<Version>> {
   const rb = new RequestBuilder(rootUrl, versionGet.PATH, 'get');
   if (params) {
   }
 
-  return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
-  ).pipe(
-    filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
-    map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Version>;
-    })
-  );
+  return http
+    .request(
+      rb.build({ responseType: 'json', accept: 'application/json', context }),
+    )
+    .pipe(
+      filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Version>;
+      }),
+    );
 }
 
 versionGet.PATH = '/version';
