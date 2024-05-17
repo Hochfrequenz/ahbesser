@@ -69,7 +69,7 @@ paths:
                 items:
                   type: string
                 example: [FV2310, FV2404, FV2410]
-  /api/{format-version}/pruefis:
+  /api/format-versions/{format-version}/pruefis:
     get:
       tags:
         - ahb
