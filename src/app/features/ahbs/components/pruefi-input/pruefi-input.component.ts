@@ -56,7 +56,7 @@ export class PruefiInputComponent implements ControlValueAccessor {
     this.onChange = fn;
   }
 
-  registerOnTouched(_: () => void): void {
+  registerOnTouched(): void {
     // do nothing
   }
 
