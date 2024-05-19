@@ -1,0 +1,3 @@
+[submodule "azure-mock/data"]
+	path = azure-mock/data
+	url = git@github.com:Hochfrequenz/machine-readable_anwendungshandbuecher.git
