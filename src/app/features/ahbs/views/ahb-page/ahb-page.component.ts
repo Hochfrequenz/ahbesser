@@ -1,9 +1,9 @@
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, input, signal } from '@angular/core';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { AhbTableComponent } from '../../components/ahb-table/ahb-table.component';
 import { Ahb, AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, map, shareReplay } from 'rxjs';
 import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-header/ahb-search-form-header.component';
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
@@ -26,7 +26,7 @@ export class AhbPageComponent {
   formatVersion = input.required<string>();
   pruefi = input.required<string>();
 
-  searchQuery = new FormControl('');
+  searchQuery = signal<string | undefined>('');
 
   ahb$?: Observable<Ahb>;
   lines$?: Observable<Ahb['lines']>;
@@ -41,18 +41,6 @@ export class AhbPageComponent {
         .pipe(shareReplay());
       this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
     });
-  }
-
-  onSearchQueryChange(searchQuery: string | undefined) {
-    this.lines$ = this.ahb$?.pipe(
-      map((ahb) => ahb.lines),
-      map(
-        (lines) =>
-          lines.filter((line) =>
-            JSON.stringify(line).includes(searchQuery ?? ''),
-          ) ?? [],
-      ),
-    );
   }
 
   onClickExport() {

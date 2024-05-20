@@ -13,29 +13,33 @@
       </tr>
     </thead>
     <tbody>
-      @for (line of lines; track line.index) {
+      @for (line of lines(); track line.index) {
         <tr class="bg-white border-b">
           <th
             scope="row"
             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-          >
-            {{ line.section_name }}
-          </th>
-          <td class="px-6 py-4">
-            {{ line.segment_group_key }}
-          </td>
-          <td class="px-6 py-4">
-            {{ line.segment_code }}
-          </td>
-          <td class="px-6 py-4">
-            {{ line.data_element }}
-          </td>
-          <td class="px-6 py-4">
-            {{ line.name }}
-          </td>
-          <td class="px-6 py-4">
-            {{ line.ahb_expression }}
-          </td>
+            [innerHTML]="line.section_name | highlight: highlight()"
+          ></th>
+          <td
+            class="px-6 py-4"
+            [innerHTML]="line.segment_group_key | highlight: highlight()"
+          ></td>
+          <td
+            class="px-6 py-4"
+            [innerHTML]="line.segment_code | highlight: highlight()"
+          ></td>
+          <td
+            class="px-6 py-4"
+            [innerHTML]="line.data_element | highlight: highlight()"
+          ></td>
+          <td
+            class="px-6 py-4"
+            [innerHTML]="line.name | highlight: highlight()"
+          ></td>
+          <td
+            class="px-6 py-4"
+            [innerHTML]="line.ahb_expression | highlight: highlight()"
+          ></td>
         </tr>
       }
     </tbody>

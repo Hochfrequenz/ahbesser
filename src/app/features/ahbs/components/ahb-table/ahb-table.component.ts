@@ -1,14 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { Ahb } from '../../../../core/api';
 import { JsonPipe } from '@angular/common';
+import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 
 @Component({
   selector: 'app-ahb-table',
   standalone: true,
-  imports: [JsonPipe],
+  imports: [JsonPipe, HighlightPipe],
   templateUrl: './ahb-table.component.html',
   styleUrl: './ahb-table.component.scss',
 })
 export class AhbTableComponent {
-  @Input({ required: true }) lines!: Ahb['lines'];
+  lines = input.required<Ahb['lines']>();
+  highlight = input<string | undefined>();
 }

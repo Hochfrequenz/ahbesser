@@ -25,7 +25,7 @@
       <div>
         <app-input-search-enhanced
           class="inline-block w-full md:w-96"
-          (searchQueryChange)="onSearchQueryChange($event)"
+          (searchQueryChange)="searchQuery.set($event)"
         />
       </div>
       <button
@@ -38,7 +38,7 @@
   </div>
   <section>
     @if (lines$ | async; as lines) {
-      <app-ahb-table [lines]="lines" />
+      <app-ahb-table [lines]="lines" [highlight]="searchQuery()" />
     }
   </section>
 } @else {
