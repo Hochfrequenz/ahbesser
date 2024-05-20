@@ -1,5 +1,4 @@
 import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
-import e from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -44,7 +43,7 @@ const uploadFiles = async (
       continue;
     }
 
-    let isValidDirectoryWithRequiredFiles =
+    const isValidDirectoryWithRequiredFiles =
       stat.isDirectory() &&
       (file.startsWith('FV') ||
         edifactFormats.includes(file) ||
