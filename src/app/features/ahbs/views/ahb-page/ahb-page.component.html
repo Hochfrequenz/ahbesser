@@ -1,34 +1,8 @@
 <app-header>
-  <form [formGroup]="headerSearchForm">
-    <app-format-version-select
-      id="format-version-input"
-      formControlName="formatVersion"
-    />
-    @if (
-      headerSearchForm.controls.formatVersion.errors?.["required"] &&
-      (headerSearchForm.controls.formatVersion.dirty ||
-        headerSearchForm.controls.formatVersion.touched)
-    ) {
-      <p class="text-red-800">Dieses Feld ist ein Pflichtfeld</p>
-    }
-    <app-pruefi-input
-      id="pruefi-input"
-      formControlName="pruefi"
-      [formatVersion]="headerSearchForm.controls.formatVersion.value"
-    />
-    @if (
-      headerSearchForm.controls.pruefi.errors?.["required"] &&
-      (headerSearchForm.controls.pruefi.dirty ||
-        headerSearchForm.controls.pruefi.touched)
-    ) {
-      <p class="text-red-800">Dieses Feld ist ein Pflichtfeld</p>
-    }
-
-    <!-- Submit button -->
-    <button type="submit" (click)="onClickHeaderSearchSubmit()">
-      Dokument öffnen
-    </button>
-  </form>
+  <app-ahb-search-form-header
+    [formatVersion]="formatVersion()"
+    [pruefi]="pruefi()"
+  />
 </app-header>
 
 @if (ahb$ | async; as ahb) {

@@ -1,0 +1,12 @@
+<form [formGroup]="headerSearchForm">
+  <app-format-version-select
+    id="format-version-input"
+    formControlName="formatVersion"
+  />
+  <app-pruefi-input
+    id="pruefi-input"
+    formControlName="pruefi"
+    [formatVersion]="headerSearchForm.controls.formatVersion.value"
+    (ngModelChange)="onPruefiSelect()"
+  />
+</form>
