@@ -14,7 +14,7 @@
     "format:check": "prettier '**/*.{js,jsx,ts,tsx,html,css,scss,json,yml,md}' --check",
     "format": "prettier '**/*.{js,jsx,ts,tsx,html,css,scss,json,yml,md}' --write",
     "ng-openapi-gen": "ng-openapi-gen --input openapi.yml --output ./src/app/core/api --indexFile=true",
-    "lint": "ng lint"
+    "lint": "eslint ."
   },
   "watch": {
     "server:start": {
