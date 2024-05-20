@@ -54,4 +54,8 @@ export class AhbPageComponent {
       ),
     );
   }
+
+  onClickExport() {
+    alert('not implemented');
+  }
 }
