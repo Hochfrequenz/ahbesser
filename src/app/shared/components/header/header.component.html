@@ -1,16 +1,15 @@
 <header class="bg-primary">
   <nav class="mx-auto flex px-6 py-2" aria-label="Global">
-    <div class="flex me-5">
-      <a routerLink="/" class="me-5">
-        <span class="sr-only">Hochfrequenz Unternehmensberatung GmbH</span>
-        <img
-          class="h-8 w-auto"
-          src="/assets/logo.png"
-          alt="Firmenlogo von Hochfrequenz"
-        />
-      </a>
-      <span class="text-xl align-middle">AHB Tabelle</span>
-    </div>
+    <a routerLink="/" title="Homepage" class="flex-none flex items-center">
+      <img
+        class="h-[23px] w-[23px] me-5"
+        width="23"
+        height="23"
+        src="/assets/logo.png"
+        alt="Firmenlogo von Hochfrequenz"
+      />
+    </a>
+    <span class="text-xl flex items-center me-14">AHB Tabelle</span>
     <ng-content />
   </nav>
 </header>
