@@ -14,7 +14,7 @@ const uploadFiles = async (
   folderPath: string,
   containerClient: ContainerClient,
 ) => {
-  var files = fs.readdirSync(folderPath);
+  let files = fs.readdirSync(folderPath);
 
   files = files.filter((file) => file.startsWith('FV'));
 
