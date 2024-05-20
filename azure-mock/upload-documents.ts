@@ -10,8 +10,23 @@ const createBlobServiceClient = () => {
   return BlobServiceClient.fromConnectionString(connectionString);
 };
 
-const edifactFormats = ["COMDIS", "IFTSTA", "INVOIC", "MSCONS", "ORDCHG", "ORDERS", "ORDRSP", "PARTIN", "PRICAT", "QUOTES", "REMADV", "REQOTE", "UTILMD", "UTILTS"]
-const fileFormats = ["csv", "flatahb", "xlsx"]
+const edifactFormats = [
+  'COMDIS',
+  'IFTSTA',
+  'INVOIC',
+  'MSCONS',
+  'ORDCHG',
+  'ORDERS',
+  'ORDRSP',
+  'PARTIN',
+  'PRICAT',
+  'QUOTES',
+  'REMADV',
+  'REQOTE',
+  'UTILMD',
+  'UTILTS',
+];
+const fileFormats = ['csv', 'flatahb', 'xlsx'];
 
 // Recursive function to upload files
 const uploadFiles = async (
@@ -29,12 +44,15 @@ const uploadFiles = async (
       continue;
     }
 
-    let isValidDirectoryWithRequiredFiles = (stat.isDirectory() && (file.startsWith('FV') || edifactFormats.includes(file) || fileFormats.includes(file)));
+    let isValidDirectoryWithRequiredFiles =
+      stat.isDirectory() &&
+      (file.startsWith('FV') ||
+        edifactFormats.includes(file) ||
+        fileFormats.includes(file));
 
     if (isValidDirectoryWithRequiredFiles) {
       await uploadFiles(filePath, containerClient);
-    }
-    else {
+    } else {
       const blobName = path
         .relative(process.argv[2], filePath)
         .replace(/\\/g, '/');
