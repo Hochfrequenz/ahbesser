@@ -9,45 +9,27 @@ import { RequestBuilder } from '../../request-builder';
 import { FormatVersion } from '../../models/format-version';
 
 export interface GetPruefis$Params {
-  /**
-   * Formatversion of the AHB to return
-   */
+
+/**
+ * Formatversion of the AHB to return
+ */
   'format-version': FormatVersion;
 }
 
-export function getPruefis(
-  http: HttpClient,
-  rootUrl: string,
-  params: GetPruefis$Params,
-  context?: HttpContext,
-): Observable<
-  StrictHttpResponse<
-    Array<{
-      pruefidentifikator?: string;
-      description?: string;
-    }>
-  >
-> {
+export function getPruefis(http: HttpClient, rootUrl: string, params: GetPruefis$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
   const rb = new RequestBuilder(rootUrl, getPruefis.PATH, 'get');
   if (params) {
     rb.path('format-version', params['format-version'], {});
   }
 
-  return http
-    .request(
-      rb.build({ responseType: 'json', accept: 'application/json', context }),
-    )
-    .pipe(
-      filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<
-          Array<{
-            pruefidentifikator?: string;
-            description?: string;
-          }>
-        >;
-      }),
-    );
+  return http.request(
+    rb.build({ responseType: 'json', accept: 'application/json', context })
+  ).pipe(
+    filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
+    map((r: HttpResponse<any>) => {
+      return r as StrictHttpResponse<Array<string>>;
+    })
+  );
 }
 
-getPruefis.PATH = '/api/{format-version}/pruefis';
+getPruefis.PATH = '/api/format-versions/{format-version}/pruefis';

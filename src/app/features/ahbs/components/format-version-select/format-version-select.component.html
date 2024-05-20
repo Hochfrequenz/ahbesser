@@ -1,0 +1,11 @@
+@if (formatVersions$ | async; as formatVersions) {
+  <select
+    [formControl]="control"
+    (change)="onChange ? onChange(control.value) : null"
+  >
+    <option value="">Bitte auswählen</option>
+    @for (formatVersion of formatVersions; track formatVersion) {
+      <option [value]="formatVersion">{{ formatVersion }}</option>
+    }
+  </select>
+}

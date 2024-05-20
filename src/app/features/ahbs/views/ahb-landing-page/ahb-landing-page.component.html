@@ -25,10 +25,8 @@
         <form [formGroup]="form">
           <div class="relative mb-6">
             <label for="format-version-input">Formatversion </label>
-            <input
-              type="text"
+            <app-format-version-select
               id="format-version-input"
-              placeholder="Formatversion"
               formControlName="formatVersion"
             />
             @if (
@@ -41,12 +39,11 @@
           </div>
 
           <div class="relative mb-6">
-            <label for="pruefi-input">Pruefidentifikator </label>
-            <input
-              type="text"
+            <label for="pruefi-input">Prüfidentifikator </label>
+            <app-pruefi-input
               id="pruefi-input"
-              placeholder="Pruefidentifikator"
               formControlName="pruefi"
+              [formatVersion]="form.controls.formatVersion.value"
             />
             @if (
               form.controls.pruefi.errors?.["required"] &&
@@ -64,7 +61,7 @@
             data-twe-ripple-color="light"
             (click)="onClickSubmit()"
           >
-            Dokument oeffnen
+            Dokument öffnen
           </button>
         </form>
       </div>
