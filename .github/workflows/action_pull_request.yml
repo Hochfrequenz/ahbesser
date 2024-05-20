@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: node:20.13-alpine
     steps:
       - uses: actions/checkout@v2
         with:
@@ -29,9 +29,6 @@ jobs:
 
       - name: Lint
         run: npm run lint
-
-      - name: Lint server
-        run: exit 0 # todo: add stuff
 
       - name: Test frontend
         run: exit 0 # todo: add stuff
