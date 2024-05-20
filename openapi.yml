@@ -179,7 +179,6 @@ components:
         - meta
     FormatVersion:
       type: string
-      enum: [FV2310, FV2404, FV2410]
     Version:
       type: object
       properties:
