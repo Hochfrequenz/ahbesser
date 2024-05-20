@@ -1,11 +1,12 @@
-@if (pruefis$ | async; as pruefis) {
-  <select
-    [formControl]="control"
-    (change)="onChange ? onChange(control.value) : null"
-  >
-    <option value="">Bitte auswählen</option>
-    @for (pruefi of pruefis; track pruefi) {
-      <option [value]="pruefi">{{ pruefi }}</option>
-    }
-  </select>
-}
+<input
+  type="text"
+  list="pruefi-list"
+  [formControl]="control"
+  (change)="onChange ? onChange(control.value) : null"
+  placeholder="Bitte auswählen"
+/>
+<datalist id="pruefi-list">
+  @for (pruefi of pruefis$ | async; track pruefi) {
+    <option [value]="pruefi">{{ pruefi }}</option>
+  }
+</datalist>
