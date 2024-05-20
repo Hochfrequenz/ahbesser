@@ -44,7 +44,7 @@ const uploadFiles = async (
       continue;
     }
 
-    let isValidDirectoryWithRequiredFiles =
+    const isValidDirectoryWithRequiredFiles =
       stat.isDirectory() &&
       (file.startsWith('FV') ||
         edifactFormats.includes(file) ||
