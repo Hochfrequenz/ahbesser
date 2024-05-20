@@ -1,11 +1,20 @@
 @if (formatVersions$ | async; as formatVersions) {
-  <select
-    [formControl]="control"
-    (change)="onChange ? onChange(control.value) : null"
-  >
-    <option value="">Bitte auswählen</option>
-    @for (formatVersion of formatVersions; track formatVersion) {
-      <option [value]="formatVersion">{{ formatVersion }}</option>
-    }
-  </select>
+  <div class="flex flex-col items-start mt-2 h-auto">
+    <select
+      id="format-version-select"
+      class="inline-block border-2 border-white rounded bg-[#F6ECED] py-3 ps-3 pe-24 focus:outline-0"
+      [formControl]="control"
+      (change)="onChange ? onChange(control.value) : null"
+    >
+      @for (formatVersion of formatVersions; track formatVersion) {
+        <option [value]="formatVersion">{{ formatVersion }}</option>
+      }
+    </select>
+    <label
+      for="format-version-select"
+      class="ml-3 -mt-14 text-xs text-blue-600 inline-block text-[#737373] text-[12px] bg-white px-1"
+    >
+      Formatversion
+    </label>
+  </div>
 }
