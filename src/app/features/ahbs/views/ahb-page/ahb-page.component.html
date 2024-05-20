@@ -1,21 +1,36 @@
 <app-header>
   <app-ahb-search-form-header
+    class="flex-1"
     [formatVersion]="formatVersion()"
     [pruefi]="pruefi()"
   />
 </app-header>
 
 @if (ahb$ | async; as ahb) {
+  <div class="flex mb-10">
+    <section class="pt-10 mx-5">
+      <h2 class="border-b inline-block pb-[12px] mb-[20px] uppercase">
+        Anwendungshandbücher für Menschen
+      </h2>
+      <h3 class="font-bold text-[20px]">
+        Anwendungshandbuch {{ ahb.meta.pruefidentifikator }}
+      </h3>
+      <p class="text-[20px] mb-5">{{ ahb.meta.description }}</p>
+      <p class="text-[14px]">
+        <span class="font-bold"> Sender/Empfänger: </span>
+        {{ ahb.meta.direction }}
+      </p>
+    </section>
+    <section class="pt-10 mx-5 text-right flex-1">
+      <input
+        type="search"
+        (search)="onSearchQueryChange()"
+        placeholder="Tabelle durchsuchen"
+        [formControl]="searchQuery"
+      />
+    </section>
+  </div>
   <section>
-    <pre>{{ ahb.meta | json }}</pre>
-  </section>
-  <section>
-    <input
-      type="search"
-      (search)="onSearchQueryChange()"
-      placeholder="Tabelle durchsuchen"
-      [formControl]="searchQuery"
-    />
     @if (lines$ | async; as lines) {
       <app-ahb-table [lines]="lines" />
     }
