@@ -1,0 +1,46 @@
+name: "Pull Request"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "20.13"
+          cache: "npm"
+
+      - name: Install modules
+        run: npm ci
+
+      - name: Prettier
+        run: npm run format:check
+
+      - name: Lint frontend
+        run: npm run ng:lint
+
+      - name: Lint server
+        run: exit 0 # todo: add stuff
+
+      - name: Test frontend
+        run: exit 0 # todo: add stuff
+
+      - name: Test server
+        run: exit 0 # todo: add stuff
+
+      - name: Build frontend
+        run: npm run ng:build
+
+      - name: Build server
+        run: npm run server:build

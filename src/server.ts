@@ -13,10 +13,9 @@ if (process.env['ENABLE_CORS'] === 'true') {
 }
 
 const distFolder = join(process.cwd(), 'dist/ahbesser/browser');
-const docsFolder = join(process.cwd(), 'docs');
 const indexHtml = 'index.html';
 
-server.get('/version', (req, res) =>
+server.get('/version', (_, res) =>
   res.send({
     buildDate: '',
     commitId: '',
@@ -24,8 +23,8 @@ server.get('/version', (req, res) =>
     version: '0.0.0',
   }),
 );
-server.get('/health', (req, res) => res.send());
-server.get('/readiness', (req, res) => res.send());
+server.get('/health', (_, res) => res.send());
+server.get('/readiness', (_, res) => res.send());
 
 server.use('/api', router);
 
@@ -33,7 +32,7 @@ server.use('/api', router);
 server.get('*.*', express.static(distFolder, { maxAge: '1y' }));
 
 // All regular routes serve angular
-server.get('*', async (req, res) => res.sendFile(join(distFolder, indexHtml)));
+server.get('*', async (_, res) => res.sendFile(join(distFolder, indexHtml)));
 
 // Apply error handler middleware
 server.use(httpErrorHandler);
