@@ -1,5 +1,4 @@
 import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
-import e from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
 
