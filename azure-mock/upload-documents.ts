@@ -1,4 +1,5 @@
 import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
+import e from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -9,22 +10,31 @@ const createBlobServiceClient = () => {
   return BlobServiceClient.fromConnectionString(connectionString);
 };
 
+const edifactFormats = ["COMDIS", "IFTSTA", "INVOIC", "MSCONS", "ORDCHG", "ORDERS", "ORDRSP", "PARTIN", "PRICAT", "QUOTES", "REMADV", "REQOTE", "UTILMD", "UTILTS"]
+const fileFormats = ["csv", "flatahb", "xlsx"]
+
 // Recursive function to upload files
 const uploadFiles = async (
   folderPath: string,
   containerClient: ContainerClient,
 ) => {
-  let files = fs.readdirSync(folderPath);
-
-  files = files.filter((file) => file.startsWith('FV'));
+  const files = fs.readdirSync(folderPath);
 
   for (const file of files) {
     const filePath = path.join(folderPath, file);
     const stat = fs.statSync(filePath);
 
-    if (stat.isDirectory()) {
+    // Skip hidden files and README
+    if (file.startsWith('.') || file.startsWith('README')) {
+      continue;
+    }
+
+    let isValidDirectoryWithRequiredFiles = (stat.isDirectory() && (file.startsWith('FV') || edifactFormats.includes(file) || fileFormats.includes(file)));
+
+    if (isValidDirectoryWithRequiredFiles) {
       await uploadFiles(filePath, containerClient);
-    } else {
+    }
+    else {
       const blobName = path
         .relative(process.argv[2], filePath)
         .replace(/\\/g, '/');
