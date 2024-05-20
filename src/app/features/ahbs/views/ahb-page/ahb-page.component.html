@@ -22,11 +22,8 @@
       </p>
     </section>
     <section class="pt-10 mx-5 text-right flex-1">
-      <input
-        type="search"
-        (search)="onSearchQueryChange()"
-        placeholder="Tabelle durchsuchen"
-        [formControl]="searchQuery"
+      <app-input-search-enhanced
+        (searchQueryChange)="onSearchQueryChange($event)"
       />
     </section>
   </div>

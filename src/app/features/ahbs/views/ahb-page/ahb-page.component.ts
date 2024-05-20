@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, map, shareReplay } from 'rxjs';
 import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-header/ahb-search-form-header.component';
+import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
 
 @Component({
   selector: 'app-ahb-page',
@@ -17,6 +18,7 @@ import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-h
     AhbTableComponent,
     CommonModule,
     AhbSearchFormHeaderComponent,
+    InputSearchEnhancedComponent,
   ],
   templateUrl: './ahb-page.component.html',
 })
@@ -41,13 +43,13 @@ export class AhbPageComponent {
     });
   }
 
-  onSearchQueryChange() {
+  onSearchQueryChange(searchQuery: string | undefined) {
     this.lines$ = this.ahb$?.pipe(
       map((ahb) => ahb.lines),
       map(
         (lines) =>
           lines.filter((line) =>
-            JSON.stringify(line).includes(this.searchQuery.value ?? ''),
+            JSON.stringify(line).includes(searchQuery ?? ''),
           ) ?? [],
       ),
     );
