@@ -24,9 +24,8 @@
       <div class="md:w-8/12 lg:ms-6 lg:w-5/12">
         <form [formGroup]="form">
           <div class="relative mb-6">
-            <label for="format-version-input">Formatversion </label>
             <app-format-version-select
-              id="format-version-input"
+              class="inline-block h-16 w-full"
               formControlName="formatVersion"
             />
             @if (
@@ -39,9 +38,8 @@
           </div>
 
           <div class="relative mb-6">
-            <label for="pruefi-input">Prüfidentifikator </label>
             <app-pruefi-input
-              id="pruefi-input"
+              class="inline-block h-16 w-full"
               formControlName="pruefi"
               [formatVersion]="form.controls.formatVersion.value"
             />
