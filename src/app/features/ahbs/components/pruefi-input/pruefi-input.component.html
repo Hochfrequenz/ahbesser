@@ -1,11 +1,22 @@
-@if (pruefis$ | async; as pruefis) {
-  <select
+<div class="flex flex-col items-start mt-2 w-full">
+  <input
+    class="rounded border-2 border-white bg-[#F6ECED] py-2.5 px-2 focus:outline-0 w-full"
+    type="text"
+    list="pruefi-list"
     [formControl]="control"
     (change)="onChange ? onChange(control.value) : null"
+    placeholder="Bitte auswählen"
+  />
+  <label
+    for="format-version-select"
+    class="ml-3 -mt-14 text-xs text-blue-600 inline-block text-[#737373] text-[12px] bg-white px-1"
   >
-    <option value="">Bitte auswählen</option>
-    @for (pruefi of pruefis; track pruefi) {
-      <option [value]="pruefi">{{ pruefi }}</option>
-    }
-  </select>
-}
+    Prüfidentifikator
+  </label>
+</div>
+
+<datalist id="pruefi-list">
+  @for (pruefi of pruefis$ | async; track pruefi) {
+    <option [value]="pruefi">{{ pruefi }}</option>
+  }
+</datalist>

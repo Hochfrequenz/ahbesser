@@ -9,6 +9,24 @@ const createBlobServiceClient = () => {
   return BlobServiceClient.fromConnectionString(connectionString);
 };
 
+const edifactFormats = [
+  'COMDIS',
+  'IFTSTA',
+  'INVOIC',
+  'MSCONS',
+  'ORDCHG',
+  'ORDERS',
+  'ORDRSP',
+  'PARTIN',
+  'PRICAT',
+  'QUOTES',
+  'REMADV',
+  'REQOTE',
+  'UTILMD',
+  'UTILTS',
+];
+const fileFormats = ['csv', 'flatahb', 'xlsx'];
+
 // Recursive function to upload files
 const uploadFiles = async (
   folderPath: string,
@@ -20,7 +38,18 @@ const uploadFiles = async (
     const filePath = path.join(folderPath, file);
     const stat = fs.statSync(filePath);
 
-    if (stat.isDirectory()) {
+    // Skip hidden files and README
+    if (file.startsWith('.') || file.startsWith('README')) {
+      continue;
+    }
+
+    const isValidDirectoryWithRequiredFiles =
+      stat.isDirectory() &&
+      (file.startsWith('FV') ||
+        edifactFormats.includes(file) ||
+        fileFormats.includes(file));
+
+    if (isValidDirectoryWithRequiredFiles) {
       await uploadFiles(filePath, containerClient);
     } else {
       const blobName = path
