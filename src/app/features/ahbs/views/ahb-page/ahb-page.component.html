@@ -1,47 +1,42 @@
 <app-header>
-  <form [formGroup]="headerSearchForm">
-    <app-format-version-select
-      id="format-version-input"
-      formControlName="formatVersion"
-    />
-    @if (
-      headerSearchForm.controls.formatVersion.errors?.["required"] &&
-      (headerSearchForm.controls.formatVersion.dirty ||
-        headerSearchForm.controls.formatVersion.touched)
-    ) {
-      <p class="text-red-800">Dieses Feld ist ein Pflichtfeld</p>
-    }
-    <app-pruefi-input
-      id="pruefi-input"
-      formControlName="pruefi"
-      [formatVersion]="headerSearchForm.controls.formatVersion.value"
-    />
-    @if (
-      headerSearchForm.controls.pruefi.errors?.["required"] &&
-      (headerSearchForm.controls.pruefi.dirty ||
-        headerSearchForm.controls.pruefi.touched)
-    ) {
-      <p class="text-red-800">Dieses Feld ist ein Pflichtfeld</p>
-    }
-
-    <!-- Submit button -->
-    <button type="submit" (click)="onClickHeaderSearchSubmit()">
-      Dokument öffnen
-    </button>
-  </form>
+  <app-ahb-search-form-header
+    class="flex-1 hidden md:inline"
+    [formatVersion]="formatVersion()"
+    [pruefi]="pruefi()"
+  />
 </app-header>
 
 @if (ahb$ | async; as ahb) {
+  <div class="flex flex-col md:flex-row mb-10">
+    <section class="pt-10 mx-5">
+      <h2 class="border-b inline-block pb-[12px] mb-[20px] uppercase">
+        Anwendungshandbücher für Menschen
+      </h2>
+      <h3 class="font-bold text-[20px]">
+        Anwendungshandbuch {{ ahb.meta.pruefidentifikator }}
+      </h3>
+      <p class="text-[20px] mb-5">{{ ahb.meta.description }}</p>
+      <p class="text-[14px]">
+        <span class="font-bold"> Sender/Empfänger: </span>
+        {{ ahb.meta.direction }}
+      </p>
+    </section>
+    <section class="pt-10 mx-5 text-right flex-1">
+      <div>
+        <app-input-search-enhanced
+          class="inline-block w-full md:w-96"
+          (searchQueryChange)="onSearchQueryChange($event)"
+        />
+      </div>
+      <button
+        class="rounded-full bg-[#EBBEC1] text-[16px] font-bold py-3 px-5 text-white mt-5"
+        (click)="onClickExport()"
+      >
+        Export XML
+      </button>
+    </section>
+  </div>
   <section>
-    <pre>{{ ahb.meta | json }}</pre>
-  </section>
-  <section>
-    <input
-      type="search"
-      (search)="onSearchQueryChange()"
-      placeholder="Tabelle durchsuchen"
-      [formControl]="searchQuery"
-    />
     @if (lines$ | async; as lines) {
       <app-ahb-table [lines]="lines" />
     }
