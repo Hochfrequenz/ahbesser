@@ -10,8 +10,8 @@ updates:
     schedule:
       interval: "weekly"
     reviewers:
-      - "@TommyBom"
-      - "@ohenning"
+      - "TommyBom"
+      - "ohenning"
       - "@Hochfrequenz/frontend-developers-review-team"
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
@@ -19,4 +19,4 @@ updates:
     schedule:
       interval: "weekly"
     reviewers:
-      - "@hf-krechan"
+      - "hf-krechan"
