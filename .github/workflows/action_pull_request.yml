@@ -28,7 +28,7 @@ jobs:
         run: npm run format:check
 
       - name: Lint frontend
-        run: npm run ng:lint -- --debug
+        run: npm run ng:lint
 
       - name: Lint server
         run: npm run server:lint -- --debug
