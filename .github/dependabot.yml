@@ -13,6 +13,11 @@ updates:
       - "TommyBom"
       - "ohenning"
       - "@Hochfrequenz/frontend-developers-review-team"
+    groups:
+      angular:
+        applies-to: version-updates
+        patterns:
+          - "@angular*"
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
