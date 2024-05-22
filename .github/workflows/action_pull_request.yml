@@ -27,8 +27,11 @@ jobs:
       - name: Prettier
         run: npm run format:check
 
-      - name: Lint
-        run: npm run lint
+      - name: Lint frontend
+        run: npm run ng:lint
+
+      - name: Lint server
+        run: npm run server:lint
 
       - name: Test frontend
         run: exit 0 # todo: add stuff

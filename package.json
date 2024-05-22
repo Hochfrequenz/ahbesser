@@ -12,10 +12,11 @@
     "server:serve": "node dist/server/server.js",
     "server:build": "tsc --project tsconfig.server.json",
     "server:watch": "npm-watch server:start",
+    "server:lint": "eslint .",
     "format:check": "prettier '**/*.{js,jsx,ts,tsx,html,css,scss,json,yml,md}' --check",
     "format": "prettier '**/*.{js,jsx,ts,tsx,html,css,scss,json,yml,md}' --write",
     "ng-openapi-gen": "ng-openapi-gen --input openapi.yml --output ./src/app/core/api --indexFile=true",
-    "lint": "npm run ng:lint && eslint .",
+    "lint": "npm run ng:lint && npm run server:lint",
     "install-submodules": "git submodule update --init --recursive"
   },
   "watch": {
