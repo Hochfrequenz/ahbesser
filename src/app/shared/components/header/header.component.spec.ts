@@ -2,7 +2,6 @@ import { HeaderComponent } from './header.component';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 describe('HeaderComponent', () => {
-
   beforeEach(() => MockBuilder(HeaderComponent));
 
   it('should render', () => {

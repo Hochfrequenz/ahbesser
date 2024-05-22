@@ -1,4 +1,3 @@
-import { signal } from '@angular/core';
 import { AhbPageComponent } from './ahb-page.component';
 import { MockBuilder, MockRender, MockService, ngMocks } from 'ng-mocks';
 import { AhbService } from '../../../../core/api';

@@ -2,7 +2,6 @@ import { LandingPageComponent } from './landing-page.component';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 describe('LandingPageComponent', () => {
-
   beforeEach(() => MockBuilder(LandingPageComponent));
 
   it('should render', () => {
