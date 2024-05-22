@@ -28,10 +28,10 @@ jobs:
         run: npm run format:check
 
       - name: Lint frontend
-        run: npm run ng:lint
+        run: npm run ng:lint -- --debug
 
       - name: Lint server
-        run: npm run server:lint
+        run: npm run server:lint -- --debug
 
       - name: Test frontend
         run: exit 0 # todo: add stuff
