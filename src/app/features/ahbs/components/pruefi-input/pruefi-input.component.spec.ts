@@ -1,22 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { PruefiInputComponent } from './pruefi-input.component';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 describe('PruefiInputComponent', () => {
-  let component: PruefiInputComponent;
-  let fixture: ComponentFixture<PruefiInputComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [PruefiInputComponent],
-    }).compileComponents();
+  beforeEach(() => MockBuilder(PruefiInputComponent));
 
-    fixture = TestBed.createComponent(PruefiInputComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render', () => {
+    const fixture = MockRender(PruefiInputComponent, {
+      formatVersion: null,
+    });
+    const html = ngMocks.formatHtml(fixture);
+    expect(html).toContain('id="pruefi-list"');
   });
 });

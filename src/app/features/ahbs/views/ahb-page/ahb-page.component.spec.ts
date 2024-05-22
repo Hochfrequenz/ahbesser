@@ -1,22 +1,33 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { signal } from '@angular/core';
 import { AhbPageComponent } from './ahb-page.component';
+import { MockBuilder, MockRender, MockService, ngMocks } from 'ng-mocks';
+import { AhbService } from '../../../../core/api';
+import { of } from 'rxjs';
 
 describe('AhbPageComponent', () => {
-  let component: AhbPageComponent;
-  let fixture: ComponentFixture<AhbPageComponent>;
+  beforeEach(() =>
+    MockBuilder(AhbPageComponent).mock(
+      AhbService,
+      MockService(AhbService, {
+        getAhb: (params) =>
+          of({
+            meta: {
+              pruefidentifikator: params.pruefi,
+            },
+          }),
+      } as AhbService),
+    ),
+  );
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AhbPageComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(AhbPageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  it('should render', () => {
+    const fixture = MockRender(AhbPageComponent, {
+      formatVersion: 'FV123',
+      pruefi: '123',
+    });
+    const html = ngMocks.formatHtml(fixture);
+    expect(html).toContain('<app-header>');
+    expect(html).toContain('loading ...');
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  // todo add more tests
 });

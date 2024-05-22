@@ -1,22 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { HeaderComponent } from './header.component';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 describe('HeaderComponent', () => {
-  let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [HeaderComponent],
-    }).compileComponents();
+  beforeEach(() => MockBuilder(HeaderComponent));
 
-    fixture = TestBed.createComponent(HeaderComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render', () => {
+    const fixture = MockRender(HeaderComponent);
+    const html = ngMocks.formatHtml(fixture);
+    expect(html).toContain('alt="Firmenlogo von Hochfrequenz"');
   });
 });
