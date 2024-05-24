@@ -1,4 +1,4 @@
-import { Component, effect, input, signal } from '@angular/core';
+import { Component, effect, input, signal, viewChild } from '@angular/core';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { AhbTableComponent } from '../../components/ahb-table/ahb-table.component';
 import { Ahb, AhbService } from '../../../../core/api';
@@ -27,6 +27,8 @@ import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 export class AhbPageComponent {
   formatVersion = input.required<string>();
   pruefi = input.required<string>();
+
+  table = viewChild(AhbTableComponent);
 
   searchQuery = signal<string | undefined>('');
 

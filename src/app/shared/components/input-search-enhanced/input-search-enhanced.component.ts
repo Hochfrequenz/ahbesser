@@ -9,6 +9,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class InputSearchEnhancedComponent {
   searchQueryChange = output<string | undefined>();
+  keyupEnter = output();
+  nextClick = output();
+  previousClick = output();
 
   searchQuery = model<string>();
 
@@ -16,13 +19,5 @@ export class InputSearchEnhancedComponent {
     effect(() => {
       this.searchQueryChange.emit(this.searchQuery());
     });
-  }
-
-  onClickNext() {
-    alert('not implemented');
-  }
-
-  onClickPrevious() {
-    alert('not implemented');
   }
 }
