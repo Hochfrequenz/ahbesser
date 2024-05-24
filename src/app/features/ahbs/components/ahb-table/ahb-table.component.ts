@@ -4,7 +4,9 @@ import {
   computed,
   effect,
   input,
+  output,
   signal,
+  viewChild,
 } from '@angular/core';
 import { Ahb } from '../../../../core/api';
 import { JsonPipe } from '@angular/common';
@@ -18,8 +20,13 @@ import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
   styleUrl: './ahb-table.component.scss',
 })
 export class AhbTableComponent {
+  header = viewChild<ElementRef>('header');
+
   lines = input.required<Ahb['lines']>();
   highlight = input<string | undefined>();
+
+  selectElement = output<{ element: HTMLElement; offsetY: number }>();
+
   markIndex = signal(0);
 
   markElements = computed<HTMLElement[]>(() => {
@@ -51,23 +58,23 @@ export class AhbTableComponent {
         allowSignalWrites: true,
       },
     );
-    // set selected class
     effect(() => {
       const selectedMarkElement = this.selectedMarkElement();
       if (selectedMarkElement === null) {
         return;
       }
+      // make selected element orange
       const markElements = this.markElements();
       markElements.forEach((el) => el.classList.remove('bg-orange-500'));
       selectedMarkElement.classList.add('bg-orange-500');
-    });
-    // scroll
-    effect(() => {
-      const selectedMarkElement = this.selectedMarkElement();
-      if (selectedMarkElement === null) {
-        return;
-      }
-      selectedMarkElement.scrollIntoView();
+      // notify outer scroll container
+      const header = this.header();
+      const headerHeight =
+        header?.nativeElement.getBoundingClientRect().height ?? 0;
+      this.selectElement.emit({
+        element: selectedMarkElement,
+        offsetY: headerHeight,
+      });
     });
   }
 

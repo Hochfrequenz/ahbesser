@@ -41,9 +41,13 @@
       </section>
     </div>
     <section class="flex-1 overflow-auto">
-      <div class="h-full overflow-auto">
+      <div class="h-full overflow-auto" #scroll>
         @if (lines$ | async; as lines) {
-          <app-ahb-table [lines]="lines" [highlight]="searchQuery()" />
+          <app-ahb-table
+            [lines]="lines"
+            [highlight]="searchQuery()"
+            (selectElement)="scrollToElement($event.element, $event.offsetY)"
+          />
         }
       </div>
     </section>
