@@ -31,7 +31,7 @@ jobs:
         run: npm run ng:lint
 
       - name: Lint server
-        run: exit 0 # todo: add stuff
+        run: npm run server:lint
 
       - name: Unit tests
         run: npm test
