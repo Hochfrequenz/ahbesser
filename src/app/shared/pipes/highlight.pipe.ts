@@ -18,9 +18,8 @@ export class HighlightPipe implements PipeTransform {
     if (!highlightText) {
       return this.domSanitizer.bypassSecurityTrustHtml(value);
     }
-    const html = value
-      .split(highlightText)
-      .join(`<mark>${highlightText}</mark>`);
+    const regex = new RegExp(highlightText, 'gi');
+    const html = value.replace(regex, (match) => `<mark>${match}</mark>`);
     return this.domSanitizer.bypassSecurityTrustHtml(html);
   }
 }
