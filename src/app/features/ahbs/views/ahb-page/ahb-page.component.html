@@ -30,6 +30,8 @@
             (keyupEnter)="table()?.nextResult()"
             (nextClick)="table()?.nextResult()"
             (previousClick)="table()?.previousResult()"
+            [selectedPosition]="(table()?.markIndex() ?? 0) + 1"
+            [totalResults]="table()?.markElements()?.length"
           />
         </div>
         <button

@@ -1,4 +1,4 @@
-import { Component, effect, model, output } from '@angular/core';
+import { Component, effect, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -8,6 +8,9 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './input-search-enhanced.component.html',
 })
 export class InputSearchEnhancedComponent {
+  selectedPosition = input<number | undefined>();
+  totalResults = input<number | undefined>();
+
   searchQueryChange = output<string | undefined>();
   keyupEnter = output();
   nextClick = output();
