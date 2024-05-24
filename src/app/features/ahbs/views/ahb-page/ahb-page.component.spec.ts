@@ -24,7 +24,7 @@ describe('AhbPageComponent', () => {
       pruefi: '123',
     });
     const html = ngMocks.formatHtml(fixture);
-    expect(html).toContain('<app-header>');
+    expect(html).toContain('<app-header');
     expect(html).toContain('loading ...');
   });
 
