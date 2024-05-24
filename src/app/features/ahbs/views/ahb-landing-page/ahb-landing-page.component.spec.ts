@@ -1,22 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AhbLandingPageComponent } from './ahb-landing-page.component';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 describe('AhbLandingPageComponent', () => {
-  let component: AhbLandingPageComponent;
-  let fixture: ComponentFixture<AhbLandingPageComponent>;
+  beforeEach(() => MockBuilder(AhbLandingPageComponent));
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AhbLandingPageComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(AhbLandingPageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render', () => {
+    const fixture = MockRender(AhbLandingPageComponent);
+    const html = ngMocks.formatHtml(fixture);
+    expect(html).toContain('<app-header>');
+    expect(html).toContain('<form');
   });
 });

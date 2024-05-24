@@ -1,22 +1,19 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { of } from 'rxjs';
+import { AhbService } from '../../../../core/api';
 import { FormatVersionSelectComponent } from './format-version-select.component';
+import { MockBuilder, MockRender, MockService } from 'ng-mocks';
 
 describe('FormatVersionSelectComponent', () => {
-  let component: FormatVersionSelectComponent;
-  let fixture: ComponentFixture<FormatVersionSelectComponent>;
+  beforeEach(() =>
+    MockBuilder(FormatVersionSelectComponent).mock(
+      AhbService,
+      MockService(AhbService, {
+        getFormatVersions: () => of([]),
+      }),
+    ),
+  );
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [FormatVersionSelectComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(FormatVersionSelectComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render', () => {
+    MockRender(FormatVersionSelectComponent);
   });
 });
