@@ -1,47 +1,42 @@
-<div class="relative overflow-x-auto">
-  <table
-    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-  >
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+<table class="table-auto w-full text-sm text-gray-500">
+  <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+    <tr>
+      <th scope="col" class="px-6 py-3">Segmentname</th>
+      <th scope="col" class="px-6 py-3">Segmentgruppe</th>
+      <th scope="col" class="px-6 py-3">Segment</th>
+      <th scope="col" class="px-6 py-3">Datenelement</th>
+      <th scope="col" class="px-6 py-3">Name</th>
+      <th scope="col" class="px-6 py-3">Bedingung</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (line of lines(); track line.index) {
       <tr>
-        <th scope="col" class="px-6 py-3">Segmentname</th>
-        <th scope="col" class="px-6 py-3">Segmentgruppe</th>
-        <th scope="col" class="px-6 py-3">Segment</th>
-        <th scope="col" class="px-6 py-3">Datenelement</th>
-        <th scope="col" class="px-6 py-3">Name</th>
-        <th scope="col" class="px-6 py-3">Bedingung</th>
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.section_name | highlight: highlight()"
+        ></td>
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.segment_group_key | highlight: highlight()"
+        ></td>
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.segment_code | highlight: highlight()"
+        ></td>
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.data_element | highlight: highlight()"
+        ></td>
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.name | highlight: highlight()"
+        ></td>
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.ahb_expression | highlight: highlight()"
+        ></td>
       </tr>
-    </thead>
-    <tbody>
-      @for (line of lines(); track line.index) {
-        <tr class="bg-white border-b">
-          <th
-            scope="row"
-            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-            [innerHTML]="line.section_name | highlight: highlight()"
-          ></th>
-          <td
-            class="px-6 py-4"
-            [innerHTML]="line.segment_group_key | highlight: highlight()"
-          ></td>
-          <td
-            class="px-6 py-4"
-            [innerHTML]="line.segment_code | highlight: highlight()"
-          ></td>
-          <td
-            class="px-6 py-4"
-            [innerHTML]="line.data_element | highlight: highlight()"
-          ></td>
-          <td
-            class="px-6 py-4"
-            [innerHTML]="line.name | highlight: highlight()"
-          ></td>
-          <td
-            class="px-6 py-4"
-            [innerHTML]="line.ahb_expression | highlight: highlight()"
-          ></td>
-        </tr>
-      }
-    </tbody>
-  </table>
-</div>
+    }
+  </tbody>
+</table>

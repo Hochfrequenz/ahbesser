@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, map, shareReplay } from 'rxjs';
 import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-header/ahb-search-form-header.component';
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
+import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 
 @Component({
   selector: 'app-ahb-page',
@@ -19,6 +20,7 @@ import { InputSearchEnhancedComponent } from '../../../../shared/components/inpu
     CommonModule,
     AhbSearchFormHeaderComponent,
     InputSearchEnhancedComponent,
+    HighlightPipe,
   ],
   templateUrl: './ahb-page.component.html',
 })
