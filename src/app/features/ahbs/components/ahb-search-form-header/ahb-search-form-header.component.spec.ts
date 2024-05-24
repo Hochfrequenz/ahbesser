@@ -1,22 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AhbSearchFormHeaderComponent } from './ahb-search-form-header.component';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 describe('AhbSearchFormHeaderComponent', () => {
-  let component: AhbSearchFormHeaderComponent;
-  let fixture: ComponentFixture<AhbSearchFormHeaderComponent>;
+  beforeEach(() => MockBuilder(AhbSearchFormHeaderComponent));
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AhbSearchFormHeaderComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(AhbSearchFormHeaderComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render', () => {
+    MockRender(AhbSearchFormHeaderComponent, {
+      formatVersion: 'FV123',
+      pruefi: '123',
+    });
   });
 });

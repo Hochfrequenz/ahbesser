@@ -33,11 +33,8 @@ jobs:
       - name: Lint server
         run: npm run server:lint
 
-      - name: Test frontend
-        run: exit 0 # todo: add stuff
-
-      - name: Test server
-        run: exit 0 # todo: add stuff
+      - name: Unit tests
+        run: npm test
 
       - name: Build frontend
         run: npm run ng:build
