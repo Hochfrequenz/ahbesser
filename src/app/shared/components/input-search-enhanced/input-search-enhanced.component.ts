@@ -1,10 +1,18 @@
 import { Component, effect, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { IconMagnifyingGlassComponent } from '../icon-magnifying-glass/icon-magnifying-glass.component';
+import { IconArrowLeftComponent } from '../icon-arrow-left/icon-arrow-left.component';
+import { IconArrowRightComponent } from '../icon-arrow-right/icon-arrow-right.component';
 
 @Component({
   selector: 'app-input-search-enhanced',
   standalone: true,
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    IconMagnifyingGlassComponent,
+    IconArrowLeftComponent,
+    IconArrowRightComponent,
+  ],
   templateUrl: './input-search-enhanced.component.html',
 })
 export class InputSearchEnhancedComponent {
