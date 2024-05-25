@@ -23,7 +23,7 @@
   </thead>
   <tbody>
     @for (line of lines(); track line.index) {
-      <tr>
+      <tr class="border-b">
         <td
           class="px-6 py-4"
           [innerHTML]="line.section_name | highlight: highlight()"
