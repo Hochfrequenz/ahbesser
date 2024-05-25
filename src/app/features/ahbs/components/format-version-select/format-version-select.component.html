@@ -2,7 +2,7 @@
   <div class="flex flex-col items-start mt-2 h-auto w-full">
     <select
       id="format-version-select"
-      class="inline-block border-2 border-white rounded bg-[#F6ECED] py-3 ps-3 pe-24 focus:outline-0 w-full"
+      class="inline-block border-2 border-white rounded bg-tint py-3 ps-3 pe-24 focus:outline-0 w-full"
       [formControl]="control"
       (change)="onChange ? onChange(control.value) : null"
     >
@@ -12,7 +12,7 @@
     </select>
     <label
       for="format-version-select"
-      class="ml-3 -mt-14 text-xs inline-block text-[#737373] text-[12px] bg-white px-1"
+      class="ml-3 -mt-14 text-xs inline-block text-slate-500 text-[12px] bg-white px-1"
     >
       Formatversion
     </label>
