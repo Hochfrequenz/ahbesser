@@ -19,12 +19,18 @@
   <!-- input -->
   <input
     class="bg-transparent mx-5 align-middle focus:outline-0 flex-1"
-    type="search"
+    type="text"
     [(ngModel)]="searchQuery"
     placeholder="Zählernummer etc"
+    (keyup.enter)="keyupEnter.emit()"
   />
+  @if (totalResults()) {
+    <div class="align-middle pe-5 text-gray-500">
+      {{ selectedPosition() }}/{{ totalResults() }}
+    </div>
+  }
   <!-- previous/next buttons -->
-  <button class="align-middle" (click)="onClickPrevious()">
+  <button class="align-middle" (click)="previousClick.emit()">
     <svg
       width="12"
       height="12"
@@ -38,7 +44,7 @@
       />
     </svg>
   </button>
-  <button class="align-middle ms-3" (click)="onClickNext()">
+  <button class="align-middle ms-3" (click)="nextClick.emit()">
     <svg
       width="12"
       height="12"

@@ -6,8 +6,6 @@ import { ApiModule } from './core/api';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from './environments/environment';
 
-console.log({ environment });
-
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withComponentInputBinding()),

@@ -1,22 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AhbTableComponent } from './ahb-table.component';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 
 describe('AhbTableComponent', () => {
-  let component: AhbTableComponent;
-  let fixture: ComponentFixture<AhbTableComponent>;
+  beforeEach(async () => MockBuilder(AhbTableComponent));
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AhbTableComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(AhbTableComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render', () => {
+    const fixture = MockRender(AhbTableComponent, {
+      lines: [],
+    });
+    ngMocks.formatHtml(fixture);
   });
 });
