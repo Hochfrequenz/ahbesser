@@ -1,69 +1,63 @@
-<app-header />
-
-<section>
-  <div class="container h-full px-6 py-24">
-    <div
-      class="flex h-full flex-wrap items-center justify-center lg:justify-between"
-    >
-      <!-- Left column container with background-->
-      <div class="mb-12 md:mb-0 md:w-8/12 lg:w-6/12">
-        <div class="px-4 py-6 text-white md:mx-6 md:p-12">
-          <h4 class="mb-6 text-xl font-semibold">
-            We are more than just a company
-          </h4>
-          <p class="text-sm text-black">
-            Lorem ipsum dolor sit amet,
-            <mark class="bg-danger text-dark">test</mark>consectetur adipisicing
-            elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-            aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris nisi ut aliquip ex ea commodo consequat.
-          </p>
-        </div>
-      </div>
-
-      <!-- Right column container with form -->
-      <div class="md:w-8/12 lg:ms-6 lg:w-5/12">
-        <form [formGroup]="form">
-          <div class="relative mb-6">
-            <app-format-version-select
-              class="inline-block h-16 w-full"
-              formControlName="formatVersion"
-            />
-            @if (
-              form.controls.formatVersion.errors?.["required"] &&
-              (form.controls.formatVersion.dirty ||
-                form.controls.formatVersion.touched)
-            ) {
-              <p class="text-red-800">Dieses Feld ist ein Pflichtfeld</p>
-            }
-          </div>
-
-          <div class="relative mb-6">
-            <app-pruefi-input
-              class="inline-block h-16 w-full"
-              formControlName="pruefi"
-              [formatVersion]="form.controls.formatVersion.value"
-            />
-            @if (
-              form.controls.pruefi.errors?.["required"] &&
-              (form.controls.pruefi.dirty || form.controls.pruefi.touched)
-            ) {
-              <p class="text-red-800">Dieses Feld ist ein Pflichtfeld</p>
-            }
-          </div>
-
-          <!-- Submit button -->
-          <button
-            type="submit"
-            class="inline-block w-full rounded bg-primary px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
-            data-twe-ripple-init
-            data-twe-ripple-color="light"
-            (click)="onClickSubmit()"
-          >
-            Dokument öffnen
-          </button>
-        </form>
+<app-header>
+  <span class="block p-3">&nbsp;</span>
+</app-header>
+<div class="container h-full px-6 py-24">
+  <div
+    class="flex h-full flex-wrap items-center justify-center lg:justify-between"
+  >
+    <!-- Left column container with background-->
+    <div class="mb-12 md:mb-0 md:w-8/12 lg:w-6/12">
+      <div class="px-4 py-6 md:mx-6 md:p-12">
+        <h2 class="border-b inline-block pb-[12px] mb-[20px] uppercase">
+          Anwendungshandbücher für Menschen
+        </h2>
+        <p class="text-sm text-black">
+          Gib hier die Prüfidentifikationsnummer ein. Und die Formatversion.
+        </p>
+        <p class="text-sm text-black">
+          Nutzen Sie unser benutzerfreundliches Suchformular, um direkt auf die
+          Informationen zuzugreifen, die Sie benötigen. Geben Sie einfach die
+          Formatversion und den Prüfidentifikator ein, und unser System liefert
+          Ihnen präzise Ergebnisse in Sekundenschnelle. So sparen Sie Zeit und
+          erhalten genau die Details, die für Ihre Arbeit relevant sind.
+          Probieren Sie es aus und erleben Sie, wie einfach und effizient die
+          Suche nach spezifischen Anwendungshandbüchern sein kann.
+        </p>
       </div>
     </div>
+
+    <!-- Right column container with form -->
+    <div class="md:w-8/12 lg:ms-6 lg:w-5/12">
+      <form [formGroup]="form">
+        <div class="relative mb-6">
+          <app-format-version-select
+            class="inline-block h-16 w-full"
+            formControlName="formatVersion"
+          />
+          @if (
+            form.controls.formatVersion.errors?.["required"] &&
+            (form.controls.formatVersion.dirty ||
+              form.controls.formatVersion.touched)
+          ) {
+            <p class="text-red-800">Dieses Feld ist ein Pflichtfeld</p>
+          }
+        </div>
+
+        <div class="relative mb-6">
+          <app-pruefi-input
+            class="inline-block h-16 w-full"
+            formControlName="pruefi"
+            [formatVersion]="form.controls.formatVersion.value"
+            (ngModelChange)="onClickSubmit()"
+          />
+          @if (
+            form.controls.pruefi.errors?.["required"] &&
+            (form.controls.pruefi.dirty || form.controls.pruefi.touched)
+          ) {
+            <p class="text-red-800">Dieses Feld ist ein Pflichtfeld</p>
+          }
+        </div>
+      </form>
+    </div>
   </div>
-</section>
+</div>

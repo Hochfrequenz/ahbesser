@@ -7,6 +7,6 @@ describe('HeaderComponent', () => {
   it('should render', () => {
     const fixture = MockRender(HeaderComponent);
     const html = ngMocks.formatHtml(fixture);
-    expect(html).toContain('alt="Firmenlogo von Hochfrequenz"');
+    expect(html).toContain('app-icon-logo');
   });
 });

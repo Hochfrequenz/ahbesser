@@ -1,13 +1,7 @@
 <header class="bg-primary">
   <nav class="mx-auto flex px-6 py-2" aria-label="Global">
     <a routerLink="/" title="Homepage" class="flex-none flex items-center">
-      <img
-        class="h-[23px] w-[23px] me-5"
-        width="23"
-        height="23"
-        src="/assets/logo.png"
-        alt="Firmenlogo von Hochfrequenz"
-      />
+      <app-icon-logo [size]="23" />
     </a>
     <span class="text-xl flex items-center me-14">AHB Tabelle</span>
     <ng-content />
