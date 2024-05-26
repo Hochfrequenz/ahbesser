@@ -32,7 +32,6 @@ export class AhbLandingPageComponent {
   constructor(private readonly router: Router) {}
 
   onClickSubmit() {
-    console.log(this.form.value);
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;

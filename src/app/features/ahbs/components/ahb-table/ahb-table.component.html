@@ -1,43 +1,54 @@
-<div class="relative overflow-x-auto">
-  <table
-    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-  >
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-      <tr>
-        <th scope="col" class="px-6 py-3">Segmentname</th>
-        <th scope="col" class="px-6 py-3">Segmentgruppe</th>
-        <th scope="col" class="px-6 py-3">Segment</th>
-        <th scope="col" class="px-6 py-3">Datenelement</th>
-        <th scope="col" class="px-6 py-3">Name</th>
-        <th scope="col" class="px-6 py-3">Bedingung</th>
+<table class="table-auto w-full text-sm text-gray-500">
+  <thead class="text-xs text-gray-700 uppercase bg-gray-50" #header>
+    <tr>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
+        Segmentname
+      </th>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
+        Segmentgruppe
+      </th>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
+        Segment
+      </th>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
+        Datenelement
+      </th>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
+        Name
+      </th>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
+        Bedingung
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (line of lines(); track line.index) {
+      <tr class="border-b">
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.section_name | highlight: highlight()"
+        ></td>
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.segment_group_key | highlight: highlight()"
+        ></td>
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.segment_code | highlight: highlight()"
+        ></td>
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.data_element | highlight: highlight()"
+        ></td>
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.name | highlight: highlight()"
+        ></td>
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.ahb_expression | highlight: highlight()"
+        ></td>
       </tr>
-    </thead>
-    <tbody>
-      @for (line of lines; track line.index) {
-        <tr class="bg-white border-b">
-          <th
-            scope="row"
-            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-          >
-            {{ line.section_name }}
-          </th>
-          <td class="px-6 py-4">
-            {{ line.segment_group_key }}
-          </td>
-          <td class="px-6 py-4">
-            {{ line.segment_code }}
-          </td>
-          <td class="px-6 py-4">
-            {{ line.data_element }}
-          </td>
-          <td class="px-6 py-4">
-            {{ line.name }}
-          </td>
-          <td class="px-6 py-4">
-            {{ line.ahb_expression }}
-          </td>
-        </tr>
-      }
-    </tbody>
-  </table>
-</div>
+    }
+  </tbody>
+</table>
