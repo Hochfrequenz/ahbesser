@@ -1,0 +1,10 @@
+name: ahb-tabellen
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: "AHB-tables for humans \U0001F916"
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: container-azure-python

@@ -1,0 +1,7 @@
+config:
+  ahb-tabellen:appPath: app
+  ahb-tabellen:containerPort: "3000"
+  ahb-tabellen:cpu: "1"
+  ahb-tabellen:memory: "2"
+  azure-native:location: germanywestcentral
+  pulumi:template: container-azure-python
