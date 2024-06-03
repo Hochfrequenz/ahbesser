@@ -4,8 +4,6 @@
 
 ## 🏛 Architecture
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.7.
-
 ## ⚙️ Setup
 
 Make sure you have the latest version of [node.js](https://nodejs.org/en) installed (for instance via the [node version manager](https://github.com/nvm-sh/nvm) `nvm`).
@@ -56,4 +54,6 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 ## 🔗 Links
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- Generate machine-readable files from AHB documents with [KohlrAHBi](https://github.com/Hochfrequenz/kohlrahbi) 🥬.
+- Official edi@energy AHB documents are provided by BDEW at [edi-energy.de](https://www.edi-energy.de/index.php?id=38).
+- To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
