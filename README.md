@@ -9,29 +9,36 @@
 Make sure you have the latest version of [node.js](https://nodejs.org/en) installed (for instance via the [node version manager](https://github.com/nvm-sh/nvm) `nvm`).
 
 Download and install [Angular CLI](https://v17.angular.io/cli) using the `npm` package manager (comes with node.js):
+
 ```bash
 $ npm install -g @angular/cli
 ```
-Add nodejs to your PATH environment variable (windows):
+
+Add node.js to your PATH environment variable (windows):
+
 - run `$ npm config get prefix` to retrieve the directory where npm will install global packages (e.g. `C:\Program Files\nodejs`)
-- open "Edit the system environment variables" and locate to "Environment Variables" -> "System Variables" -> "Path"
-- edit "Path" and add the nodejs directory path
+- open "Edit the system environment variables" and navigate to "Environment Variables" -> "System Variables" -> "Path"
+- edit "Path" and add the node.js directory path
 - restart your PC and check if Angular CLI has been installed successfully by running `$ ng --version`
 
-### Starting the app using Angular CLI 
+### Starting the app using Angular CLI
 
-To start a dev server, run 
+To start a dev server, run
+
 ```bash
 $ ng serve
 ```
+
 and navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
 ### Starting the app via Docker 🐋
 
 While having [Docker Desktop](https://www.docker.com/products/docker-desktop/) up and running, start the docker container using
+
 ```bash
 $ docker compose up -d
 ```
+
 and navigate to `http://localhost:4000/`.
 
 ## 🛠️ Build & Development
