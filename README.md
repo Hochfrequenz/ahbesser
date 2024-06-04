@@ -6,7 +6,7 @@
 
 ```mermaid
 flowchart TD
-    A("edi-energy-mirror: 
+    A("edi-energy-mirror:
     raw documents (PDF, docx)") -->|kohlrAHBi🥬| B("machine-readable-
     anwendungshandbücher")
     A -->|kohlrAHBi🥬| C("Azure Blob Storage")
