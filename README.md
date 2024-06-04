@@ -2,8 +2,6 @@
 
 ## ℹ️ Overview
 
-AHBesser 
-
 ### 🏛 Architecture
 
 ```mermaid
@@ -21,27 +19,26 @@ flowchart TD
 ```
 . 
 ├── azure-mock/
-    ├── data/                        # contains AHB data stored in machine-readable_anwendungshandbuecher repository
-    └── upload-documents.ts          # script to upload data/ directory to azure blob storage
+    ├── data/                     # contains AHB data stored in machine-readable_anwendungshandbuecher repository
+    └── upload-documents.ts       # script to upload data/ directory to azure blob storage
 ├── src/
     ├── app/
         ├── core/
-            └── api/                 # API config files
-        ├── environments/            # config files for dev/stage/prod
-        ├── features/                # AHB and landingpage related views and components
-        └── shared/                  # global components (header, footer, logo, etc.)
-    ├── assets/                      # logo, favicon, etc.
+            └── api/              # API config files
+        ├── environments/         # config files for dev/stage/prod
+        ├── features/             # AHB and landingpage related views and components
+        └── shared/               # global components (header, footer, logo, etc.)
+    ├── assets/                   # logo, favicon, etc.
     ├── server/
-        ├── controller/              # contains code to handle incoming http requests concerning AHB and FormatVersionen 
-        ├── infrastructure/          # contains code to manage routing of API endpoints and interact with azure blob storage
-        └── repository/              # contains CRUD operations to register AHB/FormatVersionen related routers
-    ├── index.html                   # entry point for the angular web application
-    ├── main.ts                      # bootstraps the angular web application
-    ├── server.ts                    # sets up backend server
-    └── styles.scss                  # imports Tailwind base styles, component styles and utility classes
+        ├── controller/           # contains code to handle incoming http requests concerning AHB and FormatVersionen 
+        ├── infrastructure/       # contains code to manage routing of API endpoints and interact with azure blob storage
+        └── repository/           # contains CRUD operations to register AHB/FormatVersionen related routers
+    ├── index.html                # entry point for the angular web application
+    ├── main.ts                   # bootstraps the angular web application
+    ├── server.ts                 # sets up backend server
+    └── styles.scss               # imports Tailwind base styles, component styles and utility classes
 └── ⚙️ <several config files>
 ```
-
 
 ## ⚙️ Setup
 
