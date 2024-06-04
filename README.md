@@ -4,6 +4,16 @@
 
 ## 🏛 Architecture
 
+```mermaid
+flowchart TD
+    A("edi-energy-mirror: 
+    raw documents (PDF, docx)") -->|kohlrAHBi🥬| B("machine-readable-
+    anwendungshandbücher")
+    A -->|kohlrAHBi🥬| C("Azure Blob Storage")
+    C <--> D("AHBesser
+    (AHB tables)")
+```
+
 ## ⚙️ Setup
 
 Make sure you have the latest version of [node.js](https://nodejs.org/en) installed (for instance via the [node version manager](https://github.com/nvm-sh/nvm) `nvm`).
@@ -14,7 +24,7 @@ Download and install [Angular CLI](https://v17.angular.io/cli) using the `npm` p
 $ npm install -g @angular/cli
 ```
 
-Add node.js to your PATH environment variable (windows):
+[**Windows**] Add node.js to your PATH environment variable:
 
 - run `$ npm config get prefix` to retrieve the directory where npm will install global packages (e.g. `C:\Program Files\nodejs`)
 - open "Edit the system environment variables" and navigate to "Environment Variables" -> "System Variables" -> "Path"
