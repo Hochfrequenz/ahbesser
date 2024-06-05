@@ -73,7 +73,7 @@ The application will automatically reload if you change any of the source files.
 While having [Docker Desktop](https://www.docker.com/products/docker-desktop/) up and running, start the docker container using
 
 ```bash
-$ docker compose up -d
+$ docker compose up -d --build
 ```
 
 and navigate to `http://localhost:4000/`.
