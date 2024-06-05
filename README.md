@@ -59,7 +59,7 @@ $ npm install -g @angular/cli
 
 ### Starting the app via Docker 🐋
 
-Create a `.env` file in the root directory and paste the contents of the `.example.env` file.<br>
+Create an `.env` file in the root directory and paste the contents of the `.example.env` file.<br>
 While having [Docker Desktop](https://www.docker.com/products/docker-desktop/) up and running, start the docker container using
 
 ```bash
