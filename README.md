@@ -65,7 +65,8 @@ To start a dev server, run
 $ ng serve
 ```
 
-and navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+and navigate to `http://localhost:4200/`.
+The application will automatically reload if you change any of the source files.
 
 ### Starting the app via Docker 🐋
 
