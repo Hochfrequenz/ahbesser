@@ -85,6 +85,7 @@ $ npm run start
 ```
 
 For further commands, refer to the scripts located in `package.json`.
+
 > Note: Be sure to run `$ npm ci` during the initial setup to install all required dependencies.
 
 ## 🛠️ Build & Development
