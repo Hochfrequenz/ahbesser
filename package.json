@@ -75,7 +75,7 @@
     "npm-watch": "^0.13.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
-    "tsx": "^4.15.5",
+    "tsx": "^4.15.7",
     "typescript": "~5.4.2"
   }
 }
