@@ -1,6 +1,6 @@
 import pulumi
 import pulumi_docker as docker
-import pulumi_random as random
+
 import pulumi_github as github
 import pulumi_azure_native as azure_native
 
