@@ -3,7 +3,8 @@ Pulumi program that deploys a containerized web service to Azure Container Insta
 """
 
 import pulumi_docker as docker
-import pulumi_github as github
+
+# import pulumi_github as github
 import pulumi_azure_native as azure_native
 import pulumi
 
@@ -13,6 +14,8 @@ config = pulumi.Config()
 # app_path = config.get("appPath", "./app")
 image_name = config.get("imageName", "my-app")
 image_tag = config.get("imageTag", "latest")
+ghcr_token = config.require_secret("ghcr_token")
+
 
 assert image_name, "imageName must be set"
 assert image_tag, "imageTag must be set"
@@ -48,7 +51,7 @@ image = docker.Image(
     registry=docker.RegistryArgs(
         server="ghcr.io",
         username="hf-krechan",
-        password=pulumi.Config("dockerconfig").require_secret("ghcr_token"),
+        password=ghcr_token,
     ),
 )
 
