@@ -21,6 +21,9 @@ assert ghcr_token, "ghcr_token must be set"
 ahb_blob_container_name = config.get("ahbBlobContainerName")
 assert ahb_blob_container_name, "ahbBlobContainerName must be set"
 
+format_version_container_name = config.get("formatVersionContainerName")
+assert format_version_container_name, "formatVersionContainerName must be set"
+
 container_port = config.get_int("containerPort")
 assert container_port, "containerPort must be set"
 
@@ -95,7 +98,7 @@ environment_variables = [
         name="AHB_CONTAINER_NAME", value=ahb_blob_container_name
     ),
     azure_native.containerinstance.EnvironmentVariableArgs(
-        name="FORMAT_VERSION_CONTAINER_NAME", value="format-versions"
+        name="FORMAT_VERSION_CONTAINER_NAME", value=format_version_container_name
     ),
 ]
 
