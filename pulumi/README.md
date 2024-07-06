@@ -12,6 +12,21 @@ You need to have the following tools installed on your machine:
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
 - [Python](https://www.python.org/downloads/)
 
+## Setup Python Virtual Environment
+
+To create a virtual environment use the following command:
+
+```bash
+python -m venv .venv
+```
+
+Activate the virtual environment and install the dependencies:
+
+```bash
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
 
 ## Regular Used Commands
 
@@ -21,13 +36,14 @@ Before you start you need to login to your pulumi account and your cloud provide
 
 Use the following commands to login to your pulumi account and Azure.
 
-#### Pulumi
+#### Pulumi Login
 
 ```bash
 pulumi login
 ```
 
-#### Azure
+#### Azure Login
+
 ```bash
 az login
 ```
