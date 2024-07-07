@@ -27,7 +27,6 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-
 ## Regular Used Commands
 
 Before you start you need to login to your pulumi account and your cloud provider.
