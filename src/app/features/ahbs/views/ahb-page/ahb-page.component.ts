@@ -7,6 +7,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
+import { FooterComponent } from '../../../../shared/components/footer/footer.component';
 import { AhbTableComponent } from '../../components/ahb-table/ahb-table.component';
 import { Ahb, AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
@@ -24,6 +25,7 @@ import { scrollToElement } from '../../../../core/helper/scroll-to-element';
     FormsModule,
     ReactiveFormsModule,
     HeaderComponent,
+    FooterComponent,
     AhbTableComponent,
     CommonModule,
     AhbSearchFormHeaderComponent,
