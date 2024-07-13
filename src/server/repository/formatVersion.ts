@@ -7,7 +7,7 @@ interface FormatVersionsWithPruefis {
   [formatVersion: string]: Set<string>;
 }
 
-// The FormatVersionRepository class is responsible for retreiving the format versions and their related pruefis.
+// The FormatVersionRepository class is responsible for retrieving the format versions and their related pruefis.
 // This could be done by just using the AHB Container, but this would require iterating over all blobs and formatting them for each request.
 // By storing the format versions in a separate container, we can reduce the number of requests to the blob storage and save computation time.
 // This repository creates the format version container itself if it does not exist.

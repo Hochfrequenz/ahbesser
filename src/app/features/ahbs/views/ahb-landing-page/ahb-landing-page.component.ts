@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
+import { FooterComponent } from '../../../../shared/components/footer/footer.component';
 import {
   FormControl,
   FormGroup,
@@ -16,6 +17,7 @@ import { PruefiInputComponent } from '../../components/pruefi-input/pruefi-input
   standalone: true,
   imports: [
     HeaderComponent,
+    FooterComponent,
     FormsModule,
     ReactiveFormsModule,
     FormatVersionSelectComponent,
