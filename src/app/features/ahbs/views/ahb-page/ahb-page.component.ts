@@ -17,7 +17,7 @@ import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-h
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { scrollToElement } from '../../../../core/helper/scroll-to-element';
-
+import { ExportButtonComponent } from '../../components/export-button/export-button.component';
 @Component({
   selector: 'app-ahb-page',
   standalone: true,
@@ -31,6 +31,7 @@ import { scrollToElement } from '../../../../core/helper/scroll-to-element';
     AhbSearchFormHeaderComponent,
     InputSearchEnhancedComponent,
     HighlightPipe,
+    ExportButtonComponent,
   ],
   templateUrl: './ahb-page.component.html',
 })

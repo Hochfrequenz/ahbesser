@@ -34,12 +34,9 @@
             [totalResults]="table()?.markElements()?.length"
           />
         </div>
-        <button
-          class="rounded-full bg-primary text-[16px] font-bold py-3 px-5 text-white mt-5"
-          (click)="onClickExport()"
-        >
-          Export XLSX
-        </button>
+        <div>
+          <app-export-button />
+        </div>
       </section>
     </div>
     <section class="flex-1 overflow-auto">
