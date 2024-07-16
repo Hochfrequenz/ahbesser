@@ -14,6 +14,9 @@
         Datenelement
       </th>
       <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
+        Qualifier
+      </th>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
         Name
       </th>
       <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
@@ -39,6 +42,10 @@
         <td
           class="px-6 py-4"
           [innerHTML]="line.data_element | highlight: highlight()"
+        ></td>
+        <td
+          class="px-6 py-4"
+          [innerHTML]="line.value_pool_entry | highlight: highlight()"
         ></td>
         <td
           class="px-6 py-4"
