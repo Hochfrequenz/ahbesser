@@ -4,7 +4,7 @@ Pulumi program that deploys a containerized web service to Azure Container Insta
 
 import pulumi_azure_native as azure_native
 import pulumi
-
+import pulumi_azure_native.web as web
 
 # Import the program's configuration settings.
 config = pulumi.Config()
@@ -35,8 +35,6 @@ resource_group = azure_native.resources.ResourceGroup("ahb-tabellen")
 
 # Create an Azure Storage Account
 storage_account = azure_native.storage.StorageAccount(
-    # Storage account name must be between 3 and 24 characters in length and use numbers and
-    # lower-case letters only.
     "ahbtabellen",
     resource_group_name=resource_group.name,
     sku=azure_native.storage.SkuArgs(
@@ -57,9 +55,7 @@ blob_container = azure_native.storage.BlobContainer(
 primary_key = pulumi.Output.all(resource_group.name, storage_account.name).apply(
     lambda args: azure_native.storage.list_storage_account_keys(
         resource_group_name=args[0], account_name=args[1]
-    )
-    .keys[0]
-    .value
+    ).keys[0].value
 )
 
 # Generate the connection string securely
@@ -69,61 +65,48 @@ azure_blob_storage_connection_string = pulumi.Output.all(
     lambda args: f"DefaultEndpointsProtocol=https;AccountName={args[0]};AccountKey={args[1]};EndpointSuffix=core.windows.net"
 )
 
-
-# Resource requirements for the container
-resource_requirements = azure_native.containerinstance.ResourceRequirementsArgs(
-    requests=azure_native.containerinstance.ResourceRequestsArgs(
-        cpu=0.5,
-        memory_in_gb=1.5,
-    )
-)
-
-# Port configuration for the container
-container_ports = [
-    azure_native.containerinstance.ContainerPortArgs(port=container_port)
-]
-
-ip_address_ports = [azure_native.containerinstance.PortArgs(port=container_port)]
-
-# Define environment variables for the container
+# Define environment variables for the web app
 environment_variables = [
-    azure_native.containerinstance.EnvironmentVariableArgs(
+    web.WebAppApplicationSettingsArgs(
         name="PORT", value=str(container_port)
     ),
-    azure_native.containerinstance.EnvironmentVariableArgs(
+    web.WebAppApplicationSettingsArgs(
         name="AZURE_BLOB_STORAGE_CONNECTION_STRING",
         value=azure_blob_storage_connection_string,
     ),
-    azure_native.containerinstance.EnvironmentVariableArgs(
+    web.WebAppApplicationSettingsArgs(
         name="AHB_CONTAINER_NAME", value=ahb_blob_container_name
     ),
-    azure_native.containerinstance.EnvironmentVariableArgs(
+    web.WebAppApplicationSettingsArgs(
         name="FORMAT_VERSION_CONTAINER_NAME", value=format_version_container_name
     ),
 ]
 
-# Container group definition
-container_group = azure_native.containerinstance.ContainerGroup(
+# Create an App Service Plan
+app_service_plan = web.AppServicePlan(
+    "ahb-tabellen-plan",
+    resource_group_name=resource_group.name,
+    sku=web.SkuDescriptionArgs(
+        name="B1",
+        tier="Basic",
+    ),
+)
+
+# Create a Web App
+web_app = web.WebApp(
     "ahb-tabellen",
     resource_group_name=resource_group.name,
-    os_type="Linux",
-    containers=[
-        azure_native.containerinstance.ContainerArgs(
-            name="ahb-tabellen-container",
-            image=image_name_with_tag,
-            resources=resource_requirements,
-            ports=container_ports,
-            environment_variables=environment_variables,
-        )
-    ],
-    ip_address=azure_native.containerinstance.IpAddressArgs(
-        ports=ip_address_ports, type="Public"
-    ),
-    image_registry_credentials=[
-        azure_native.containerinstance.ImageRegistryCredentialArgs(
+    server_farm_id=app_service_plan.id,
+    site_config=web.SiteConfigArgs(
+        app_settings=environment_variables,
+        container_registry_credentials=[web.RegistryCredentialArgs(
             server="ghcr.io",
             username="hf-krechan",
             password=ghcr_token,
-        ),
-    ],
+        )],
+        linux_fx_version=f"DOCKER|{image_name_with_tag}",
+    ),
 )
+
+# Export the endpoint of the web app
+pulumi.export("endpoint", web_app.default_host_name)
