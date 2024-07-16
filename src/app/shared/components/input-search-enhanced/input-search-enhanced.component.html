@@ -8,7 +8,7 @@
     class="bg-transparent mx-5 align-middle focus:outline-0 flex-1"
     type="text"
     [(ngModel)]="searchQuery"
-    placeholder="Zählernummer etc"
+    placeholder="Suchbegriff eingeben ..."
     (keyup.enter)="keyupEnter.emit()"
   />
   @if (totalResults()) {
