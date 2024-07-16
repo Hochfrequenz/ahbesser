@@ -1,4 +1,5 @@
 import { Component, effect, input, model, output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { IconMagnifyingGlassComponent } from '../icon-magnifying-glass/icon-magnifying-glass.component';
 import { IconArrowLeftComponent } from '../icon-arrow-left/icon-arrow-left.component';
@@ -26,9 +27,27 @@ export class InputSearchEnhancedComponent {
 
   searchQuery = model<string>();
 
-  constructor() {
+  constructor(private route: ActivatedRoute, private router: Router) {
+    // Read query parameters on initialization
+    this.route.queryParams.subscribe(params => {
+      const query = params['query'];
+      if (query) {
+        this.searchQuery.set(query);
+      }
+    });
+
+    // Emit search query changes and update the URL
     effect(() => {
-      this.searchQueryChange.emit(this.searchQuery());
+      const currentQuery = this.searchQuery();
+      this.searchQueryChange.emit(currentQuery);
+      this.updateURL(currentQuery);
+    });
+  }
+  updateURL(query: string | undefined): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { query: query || null },
+      queryParamsHandling: 'merge'
     });
   }
 }

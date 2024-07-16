@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import {InputSearchEnhancedComponent} from "./shared/components/input-search-enhanced/input-search-enhanced.component";
 
 export const routes: Routes = [
   {
@@ -12,4 +13,7 @@ export const routes: Routes = [
       (await import('./features/landingpage/landingpage.routes'))
         .LANDINGPAGE_ROUTES,
   },
+  {
+    path: 'search', component: InputSearchEnhancedComponent
+  }
 ];
