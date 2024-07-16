@@ -1,13 +1,13 @@
 config:
   ahb-tabellen:ahbBlobContainerName: ahb-tables
   ahb-tabellen:appPath: app
-  ahb-tabellen:containerPort: "4000"
+  ahb-tabellen:containerPort: "80"
   ahb-tabellen:cpu: "1"
   ahb-tabellen:formatVersionContainerName: format-versions
   ahb-tabellen:ghcr_token:
     secure: AAABAEg7fEk2P91sxA8mlsQ5AueGPcKpU5H8jCLGvH82HsWD1NkdQLT69wDwMfdI7Nc+jSdwJC4Wx/ym4m3HUMGxgeK9RJt0
   ahb-tabellen:imageName: ghcr.io/hochfrequenz/ahbesser
-  ahb-tabellen:imageTag: v0.0.1
+  ahb-tabellen:imageTag: v0.0.2
   ahb-tabellen:memory: "2"
   azure-native:location: germanywestcentral
   pulumi:template: container-azure-python
