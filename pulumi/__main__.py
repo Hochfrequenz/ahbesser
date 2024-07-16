@@ -71,7 +71,7 @@ app_service_plan = azure_native.web.AppServicePlan(
     "ahb-tabellen-plan",
     resource_group_name=resource_group.name,
     kind="Linux",
-    reserved=True,
+    reserved=True,  # Required for Linux App Service Plans, see https://stackoverflow.com/questions/66520937/pulumi-azure-native-provider-azure-webapp-the-parameter-linuxfxversion-has-an
     sku=azure_native.web.SkuDescriptionArgs(
         name="B1",
         tier="Basic",
