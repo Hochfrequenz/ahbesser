@@ -27,9 +27,12 @@ export class InputSearchEnhancedComponent {
 
   searchQuery = model<string>();
 
-  constructor(private route: ActivatedRoute, private router: Router) {
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
     // Read query parameters on initialization
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       const query = params['query'];
       if (query) {
         this.searchQuery.set(query);
@@ -47,7 +50,7 @@ export class InputSearchEnhancedComponent {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { query: query || null },
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'merge',
     });
   }
 }
