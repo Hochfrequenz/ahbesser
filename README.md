@@ -57,6 +57,21 @@ $ npm install -g @angular/cli
 - edit "Path" and add the node.js directory path
 - restart your PC and check if Angular CLI has been installed successfully by running `$ ng --version`
 
+> [!NOTE]
+> Be sure to run `$ npm ci` during the initial setup to install all required dependencies.
+
+### Starting the app via Docker 🐋
+
+Create an `.env` file in the root directory and paste the contents of the `.example.env` file.
+
+While having [Docker Desktop](https://www.docker.com/products/docker-desktop/) up and running, start the docker container using
+
+```bash
+$ docker compose up -d --build
+```
+
+and navigate to `http://localhost:4000/`.
+
 ### Starting the app using Angular CLI
 
 To start a dev server, run
@@ -68,15 +83,13 @@ $ ng serve
 and navigate to `http://localhost:4200/`.
 The application will automatically reload if you change any of the source files.
 
-### Starting the app via Docker 🐋
+In order to start both the dev server as well as the server-side watch process to access the blob storage, run
 
-While having [Docker Desktop](https://www.docker.com/products/docker-desktop/) up and running, start the docker container using
-
-```bash
-$ docker compose up -d --build
+```shell
+$ npm run start
 ```
 
-and navigate to `http://localhost:4000/`.
+For further commands, refer to the scripts located in `package.json`.
 
 ## 🛠️ Build & Development
 
