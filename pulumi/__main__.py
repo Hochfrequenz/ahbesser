@@ -5,7 +5,6 @@ Pulumi program that deploys a containerized web service to Azure Container Insta
 import pulumi_azure_native as azure_native
 import pulumi
 
-
 # Import the program's configuration settings.
 config = pulumi.Config()
 
@@ -35,8 +34,6 @@ resource_group = azure_native.resources.ResourceGroup("ahb-tabellen")
 
 # Create an Azure Storage Account
 storage_account = azure_native.storage.StorageAccount(
-    # Storage account name must be between 3 and 24 characters in length and use numbers and
-    # lower-case letters only.
     "ahbtabellen",
     resource_group_name=resource_group.name,
     sku=azure_native.storage.SkuArgs(
@@ -69,61 +66,50 @@ azure_blob_storage_connection_string = pulumi.Output.all(
     lambda args: f"DefaultEndpointsProtocol=https;AccountName={args[0]};AccountKey={args[1]};EndpointSuffix=core.windows.net"
 )
 
-
-# Resource requirements for the container
-resource_requirements = azure_native.containerinstance.ResourceRequirementsArgs(
-    requests=azure_native.containerinstance.ResourceRequestsArgs(
-        cpu=0.5,
-        memory_in_gb=1.5,
-    )
+# Create an App Service Plan
+app_service_plan = azure_native.web.AppServicePlan(
+    "ahb-tabellen-plan",
+    resource_group_name=resource_group.name,
+    kind="Linux",
+    reserved=True,  # Required for Linux App Service Plans, see https://stackoverflow.com/questions/66520937/pulumi-azure-native-provider-azure-webapp-the-parameter-linuxfxversion-has-an
+    sku=azure_native.web.SkuDescriptionArgs(
+        name="B1",
+        tier="Basic",
+    ),
 )
 
-# Port configuration for the container
-container_ports = [
-    azure_native.containerinstance.ContainerPortArgs(port=container_port)
-]
-
-ip_address_ports = [azure_native.containerinstance.PortArgs(port=container_port)]
-
-# Define environment variables for the container
-environment_variables = [
-    azure_native.containerinstance.EnvironmentVariableArgs(
-        name="PORT", value=str(container_port)
-    ),
-    azure_native.containerinstance.EnvironmentVariableArgs(
-        name="AZURE_BLOB_STORAGE_CONNECTION_STRING",
-        value=azure_blob_storage_connection_string,
-    ),
-    azure_native.containerinstance.EnvironmentVariableArgs(
-        name="AHB_CONTAINER_NAME", value=ahb_blob_container_name
-    ),
-    azure_native.containerinstance.EnvironmentVariableArgs(
-        name="FORMAT_VERSION_CONTAINER_NAME", value=format_version_container_name
-    ),
-]
-
-# Container group definition
-container_group = azure_native.containerinstance.ContainerGroup(
+# Create a Web App
+web_app = azure_native.web.WebApp(
     "ahb-tabellen",
     resource_group_name=resource_group.name,
-    os_type="Linux",
-    containers=[
-        azure_native.containerinstance.ContainerArgs(
-            name="ahb-tabellen-container",
-            image=image_name_with_tag,
-            resources=resource_requirements,
-            ports=container_ports,
-            environment_variables=environment_variables,
-        )
-    ],
-    ip_address=azure_native.containerinstance.IpAddressArgs(
-        ports=ip_address_ports, type="Public"
+    server_farm_id=app_service_plan.id,
+    site_config=azure_native.web.SiteConfigArgs(
+        app_settings=[
+            azure_native.web.NameValuePairArgs(
+                name="DOCKER_REGISTRY_SERVER_URL", value="https://ghcr.io"
+            ),
+            azure_native.web.NameValuePairArgs(
+                name="DOCKER_REGISTRY_SERVER_USERNAME", value="hf-krechan"
+            ),  # Provide GitHub username
+            azure_native.web.NameValuePairArgs(
+                name="DOCKER_REGISTRY_SERVER_PASSWORD", value=ghcr_token
+            ),  # Provide GitHub token or PAT
+            azure_native.web.NameValuePairArgs(name="PORT", value=str(container_port)),
+            azure_native.web.NameValuePairArgs(
+                name="AZURE_BLOB_STORAGE_CONNECTION_STRING",
+                value=azure_blob_storage_connection_string,
+            ),
+            azure_native.web.NameValuePairArgs(
+                name="AHB_CONTAINER_NAME", value=ahb_blob_container_name
+            ),
+            azure_native.web.NameValuePairArgs(
+                name="FORMAT_VERSION_CONTAINER_NAME",
+                value=format_version_container_name,
+            ),
+        ],
+        linux_fx_version=f"DOCKER|{image_name_with_tag}",
     ),
-    image_registry_credentials=[
-        azure_native.containerinstance.ImageRegistryCredentialArgs(
-            server="ghcr.io",
-            username="hf-krechan",
-            password=ghcr_token,
-        ),
-    ],
 )
+
+# Export the endpoint of the web app
+pulumi.export("endpoint", web_app.default_host_name)
