@@ -9,7 +9,7 @@ flowchart TD
     A("edi-energy-mirror:
     raw documents (PDF, docx)") -->|kohlrAHBi🥬| B("machine-readable-
     anwendungshandbücher")
-    A -->|kohlrAHBi🥬| C("Azure Blob Storage")
+    B -->|sync upload🔄| C("Azure Blob Storage")
     C <--> D("AHBesser
     (AHB tables)")
 ```
