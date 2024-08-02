@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   ElementRef,
   effect,
   input,
@@ -42,20 +43,52 @@ export class AhbPageComponent {
   scroll = viewChild<ElementRef>('scroll');
 
   searchQuery = signal<string | undefined>('');
+  edifactFormat = computed(() => this.getEdifactFormat(this.pruefi()));
 
   ahb$?: Observable<Ahb>;
   lines$?: Observable<Ahb['lines']>;
 
   constructor(private readonly ahbService: AhbService) {
     effect(() => {
+      const currentPruefi = this.pruefi();
+
       this.ahb$ = this.ahbService
         .getAhb({
           'format-version': this.formatVersion(),
-          pruefi: this.pruefi(),
+          pruefi: currentPruefi,
         })
         .pipe(shareReplay());
       this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
     });
+  }
+
+  // mapping provided by mig_ahb_utility_stack
+  private getEdifactFormat(pruefi: string): string {
+    const mapping: { [key: string]: string } = {
+      '99': 'APERAK',
+      '29': 'COMDIS',
+      '21': 'IFTSTA',
+      '23': 'INSRPT',
+      '31': 'INVOIC',
+      '13': 'MSCONS',
+      '39': 'ORDCHG',
+      '17': 'ORDERS',
+      '19': 'ORDRSP',
+      '27': 'PRICAT',
+      '15': 'QUOTES',
+      '33': 'REMADV',
+      '35': 'REQOTE',
+      '37': 'PARTIN',
+      '11': 'UTILMD',
+      '25': 'UTILTS',
+      '91': 'CONTRL',
+      '92': 'APERAK',
+      '44': 'UTILMD', // UTILMD for GAS since FV2310
+      '55': 'UTILMD', // UTILMD for STROM since FV2310
+    };
+
+    const key = pruefi.substring(0, 2);
+    return mapping[key];
   }
 
   onClickExport() {
