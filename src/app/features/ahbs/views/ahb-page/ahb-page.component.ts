@@ -81,8 +81,8 @@ export class AhbPageComponent {
       '25': 'UTILTS',
       '91': 'CONTRL',
       '92': 'APERAK',
-      '44': 'UTILMD', // UTILMD for GAS since FV2310
-      '55': 'UTILMD', // UTILMD for STROM since FV2310
+      '44': 'UTILMD Gas', // UTILMD for GAS since FV2310
+      '55': 'UTILMD Strom', // UTILMD for STROM since FV2310
     };
 
     const key = pruefi.substring(0, 2);
