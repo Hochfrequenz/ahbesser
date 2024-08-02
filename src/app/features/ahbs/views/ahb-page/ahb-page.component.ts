@@ -50,12 +50,10 @@ export class AhbPageComponent {
 
   constructor(private readonly ahbService: AhbService) {
     effect(() => {
-      const currentPruefi = this.pruefi();
-
       this.ahb$ = this.ahbService
         .getAhb({
           'format-version': this.formatVersion(),
-          pruefi: currentPruefi,
+          pruefi: this.pruefi(),
         })
         .pipe(shareReplay());
       this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
