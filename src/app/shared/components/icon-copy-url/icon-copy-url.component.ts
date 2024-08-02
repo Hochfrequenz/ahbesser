@@ -12,13 +12,11 @@ export class IconCopyUrlComponent {
 
   onClickCopyUrl() {
     const currentUrl = window.location.href;
-    
-    navigator.clipboard.writeText(currentUrl).then(
-      () => {
-        this.showPopover();
-        setTimeout(() => this.hidePopover(), 3000);
-      },
-    );
+
+    navigator.clipboard.writeText(currentUrl).then(() => {
+      this.showPopover();
+      setTimeout(() => this.hidePopover(), 3000);
+    });
   }
 
   private showPopover() {
