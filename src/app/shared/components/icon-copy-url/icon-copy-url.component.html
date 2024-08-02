@@ -1,0 +1,30 @@
+<div class="relative">
+  <div class="flex items-center">
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      fill="none" 
+      viewBox="0 0 24 24" 
+      stroke-width="1.5" 
+      stroke="currentColor" 
+      class="size-6"
+    >
+      <path 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+      />
+    </svg>
+    <ng-content></ng-content>
+  </div>
+
+  <div 
+    #popover
+    id="popover-click" 
+    role="tooltip" 
+    class="absolute -left-5 mt-6 z-10 invisible inline-block w-44 py-2 transition-opacity duration-300 bg-primary rounded-full shadow-sm opacity-0 before:content-[''] before:absolute before:top-0 before:left-6 before:-translate-y-full before:border-8 before:border-x-transparent before:border-t-transparent before:border-b-primary"
+  >
+    <h3 class="text-sm text-white">
+      Link erfolgreich kopiert.
+    </h3>
+  </div>
+</div>

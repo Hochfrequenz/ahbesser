@@ -38,12 +38,21 @@
             [totalResults]="table()?.markElements()?.length"
           />
         </div>
-        <button
-          class="rounded-full bg-primary text-[16px] font-bold py-3 px-5 text-white mt-5"
-          (click)="onClickExport()"
-        >
-          Export XLSX
-        </button>
+        <div class="flex justify-end items-center space-x-3 mt-3">
+          <button
+            class="rounded-full bg-primary py-3 px-5 text-white"
+            (click)="iconCopyUrl.onClickCopyUrl()"
+          >
+            <app-icon-copy-url #iconCopyUrl>
+            </app-icon-copy-url>
+          </button>
+          <button
+            class="rounded-full bg-primary text-[16px] font-bold py-3 px-5 text-white"
+            (click)="onClickExport()"
+          >
+            Export XLSX
+          </button>
+        </div>
       </section>
     </div>
     <section class="flex-1 overflow-auto">
