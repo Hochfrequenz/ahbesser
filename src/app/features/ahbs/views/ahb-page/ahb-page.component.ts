@@ -18,6 +18,7 @@ import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-h
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { scrollToElement } from '../../../../core/helper/scroll-to-element';
+import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-url/icon-copy-url.component';
 
 @Component({
   selector: 'app-ahb-page',
@@ -32,6 +33,7 @@ import { scrollToElement } from '../../../../core/helper/scroll-to-element';
     AhbSearchFormHeaderComponent,
     InputSearchEnhancedComponent,
     HighlightPipe,
+    IconCopyUrlComponent,
   ],
   templateUrl: './ahb-page.component.html',
 })
