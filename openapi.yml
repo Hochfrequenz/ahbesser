@@ -43,6 +43,14 @@ paths:
           schema:
             type: string
             example: "25007"
+        - name: format
+          in: query
+          description: Format of the AHB file to return
+          required: false
+          schema:
+            type: string
+            enum: [json, xlsx, csv]
+            default: json
       responses:
         "200":
           description: successful operation
@@ -50,6 +58,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Ahb"
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+            text/csv:
+              schema:
+                type: string
+                format: binary
       security:
         - ahbesser_auth:
             - read:ahb
