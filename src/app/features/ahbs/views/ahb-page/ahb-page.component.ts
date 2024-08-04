@@ -55,7 +55,7 @@ export class AhbPageComponent {
   constructor(private readonly ahbService: AhbService) {
     effect(() => {
       this.ahb$ = this.ahbService
-        .getAhb({
+        .getAhb$Json({
           'format-version': this.formatVersion(),
           pruefi: this.pruefi(),
         })
