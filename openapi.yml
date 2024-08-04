@@ -134,6 +134,8 @@ components:
               ahb_expression:
                 type: string
                 example: "Must"
+              conditions:
+                type: string
               data_element:
                 type: string
                 example: "0062"
