@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   ElementRef,
   effect,
   input,
@@ -18,6 +19,8 @@ import { InputSearchEnhancedComponent } from '../../../../shared/components/inpu
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { scrollToElement } from '../../../../core/helper/scroll-to-element';
 import { ExportButtonComponent } from '../../components/export-button/export-button.component';
+import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-url/icon-copy-url.component';
+
 @Component({
   selector: 'app-ahb-page',
   standalone: true,
@@ -32,6 +35,7 @@ import { ExportButtonComponent } from '../../components/export-button/export-but
     InputSearchEnhancedComponent,
     HighlightPipe,
     ExportButtonComponent,
+    IconCopyUrlComponent,
   ],
   templateUrl: './ahb-page.component.html',
 })
@@ -43,6 +47,7 @@ export class AhbPageComponent {
   scroll = viewChild<ElementRef>('scroll');
 
   searchQuery = signal<string | undefined>('');
+  edifactFormat = computed(() => this.getEdifactFormat(this.pruefi()));
 
   ahb$?: Observable<Ahb>;
   lines$?: Observable<Ahb['lines']>;
@@ -57,6 +62,35 @@ export class AhbPageComponent {
         .pipe(shareReplay());
       this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
     });
+  }
+
+  // mapping provided by mig_ahb_utility_stack
+  private getEdifactFormat(pruefi: string): string {
+    const mapping: { [key: string]: string } = {
+      '99': 'APERAK',
+      '29': 'COMDIS',
+      '21': 'IFTSTA',
+      '23': 'INSRPT',
+      '31': 'INVOIC',
+      '13': 'MSCONS',
+      '39': 'ORDCHG',
+      '17': 'ORDERS',
+      '19': 'ORDRSP',
+      '27': 'PRICAT',
+      '15': 'QUOTES',
+      '33': 'REMADV',
+      '35': 'REQOTE',
+      '37': 'PARTIN',
+      '11': 'UTILMD',
+      '25': 'UTILTS',
+      '91': 'CONTRL',
+      '92': 'APERAK',
+      '44': 'UTILMD Gas', // UTILMD for GAS since FV2310
+      '55': 'UTILMD Strom', // UTILMD for STROM since FV2310
+    };
+
+    const key = pruefi.substring(0, 2);
+    return mapping[key];
   }
 
   onClickExport() {

@@ -1,4 +1,4 @@
-<div class="inline-block bg-tint rounded-full py-3 px-5 w-full flex">
+<div class="bg-tint rounded-full py-3 px-5 w-full flex">
   <!-- search-icon -->
   <button class="align-middle cursor-default">
     <app-icon-magnifying-glass />
@@ -8,7 +8,7 @@
     class="bg-transparent mx-5 align-middle focus:outline-0 flex-1"
     type="text"
     [(ngModel)]="searchQuery"
-    placeholder="Zählernummer etc"
+    placeholder="Suchbegriff eingeben ..."
     (keyup.enter)="keyupEnter.emit()"
   />
   @if (totalResults()) {
