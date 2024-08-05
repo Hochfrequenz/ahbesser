@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { AhbService } from '../../../../core/api';
 
 @Component({
   selector: 'app-export-button',
@@ -6,10 +7,29 @@ import { Component } from '@angular/core';
   templateUrl: './export-button.component.html',
 })
 export class ExportButtonComponent {
-  constructor() {}
+  @Input() formatVersion!: string;
+  @Input() pruefi!: string;
+
+  constructor(private ahbService: AhbService) {}
 
   onClickExport(): void {
-    // Implement the export functionality here
-    console.log('Export button clicked');
+    this.ahbService.getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet({
+      'format-version': this.formatVersion,
+      pruefi: this.pruefi,
+      format: 'xlsx'
+    }).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `AHB_${this.formatVersion}_${this.pruefi}.xlsx`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (error) => {
+        console.error('Error downloading XLSX:', error);
+        // You might want to show an error message to the user here
+      }
+    });
   }
 }

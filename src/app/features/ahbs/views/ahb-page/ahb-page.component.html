@@ -40,7 +40,10 @@
         </div>
         <div class="flex justify-end items-center space-x-3 mt-3">
           <app-icon-copy-url />
-          <app-export-button />
+          <app-export-button 
+            [formatVersion]="formatVersion()" 
+            [pruefi]="pruefi()"
+          />
         </div>
       </section>
     </div>
