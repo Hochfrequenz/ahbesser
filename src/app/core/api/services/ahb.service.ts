@@ -10,8 +10,12 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { Ahb } from '../models/ahb';
-import { getAhb } from '../fn/ahb/get-ahb';
-import { GetAhb$Params } from '../fn/ahb/get-ahb';
+import { getAhb$Csv } from '../fn/ahb/get-ahb-csv';
+import { GetAhb$Csv$Params } from '../fn/ahb/get-ahb-csv';
+import { getAhb$Json } from '../fn/ahb/get-ahb-json';
+import { GetAhb$Json$Params } from '../fn/ahb/get-ahb-json';
+import { getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet } from '../fn/ahb/get-ahb-vnd-openxmlformats-officedocument-spreadsheetml-sheet';
+import { GetAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet$Params } from '../fn/ahb/get-ahb-vnd-openxmlformats-officedocument-spreadsheetml-sheet';
 import { getFormatVersions } from '../fn/ahb/get-format-versions';
 import { GetFormatVersions$Params } from '../fn/ahb/get-format-versions';
 import { getPruefis } from '../fn/ahb/get-pruefis';
@@ -36,12 +40,12 @@ export class AhbService extends BaseService {
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAhb()` instead.
+   * To access only the response body, use `getAhb$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAhb$Response(params: GetAhb$Params, context?: HttpContext): Observable<StrictHttpResponse<Ahb>> {
-    return getAhb(this.http, this.rootUrl, params, context);
+  getAhb$Json$Response(params: GetAhb$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Ahb>> {
+    return getAhb$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
@@ -50,13 +54,73 @@ export class AhbService extends BaseService {
    *
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getAhb$Response()` instead.
+   * To access the full response (for headers, for example), `getAhb$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAhb(params: GetAhb$Params, context?: HttpContext): Observable<Ahb> {
-    return this.getAhb$Response(params, context).pipe(
+  getAhb$Json(params: GetAhb$Json$Params, context?: HttpContext): Observable<Ahb> {
+    return this.getAhb$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Ahb>): Ahb => r.body)
+    );
+  }
+
+  /**
+   * Get an AHB document for a Pruefidentifikator from the provided Formatversion.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet$Response(params: GetAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    return getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get an AHB document for a Pruefidentifikator from the provided Formatversion.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet(params: GetAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet$Params, context?: HttpContext): Observable<Blob> {
+    return this.getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
+    );
+  }
+
+  /**
+   * Get an AHB document for a Pruefidentifikator from the provided Formatversion.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAhb$Csv()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAhb$Csv$Response(params: GetAhb$Csv$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    return getAhb$Csv(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get an AHB document for a Pruefidentifikator from the provided Formatversion.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAhb$Csv$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAhb$Csv(params: GetAhb$Csv$Params, context?: HttpContext): Observable<Blob> {
+    return this.getAhb$Csv$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 

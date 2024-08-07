@@ -3,7 +3,7 @@
 export interface Ahb {
   lines: Array<{
 'ahb_expression': string;
-'conditions': string;
+'conditions'?: string;
 'data_element': string;
 'guid': string;
 'index': number;
