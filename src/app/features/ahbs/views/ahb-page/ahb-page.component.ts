@@ -91,6 +91,17 @@ export class AhbPageComponent {
     return mapping[key];
   }
 
+  // splitting meta.direction into sender and empfaenger
+  getSenderEmpfaenger(direction: string): {
+    sender: string;
+    empfaenger: string;
+  } {
+    const [sender, empfaenger] = direction
+      .split(' an ')
+      .map((part) => part.trim());
+    return { sender, empfaenger: empfaenger || '' };
+  }
+
   onClickExport() {
     alert('not implemented');
   }
