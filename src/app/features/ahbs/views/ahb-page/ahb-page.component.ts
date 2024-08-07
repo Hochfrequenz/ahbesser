@@ -91,7 +91,7 @@ export class AhbPageComponent {
     return mapping[key];
   }
 
-  // to split meta.direction into sender and empfaenger
+  // splitting meta.direction into sender and empfaenger
   getSenderEmpfaenger(direction: string): {
     sender: string;
     empfaenger: string;
