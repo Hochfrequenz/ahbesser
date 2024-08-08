@@ -12,7 +12,6 @@ You can access the **stage** version of the application on [ahb-tabellen.stage.h
 
 This is our test environment where we deploy the latest changes to test them before deploying them to production.
 
-
 ### 🏛 Architecture
 
 ```mermaid
