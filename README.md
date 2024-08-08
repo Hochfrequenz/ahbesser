@@ -1,6 +1,17 @@
-# AHBesser
+# AHBesser (AHB-Tabellen) Web Application
 
 ## ℹ️ Overview
+
+### Production
+
+The service is not production-ready yet. We will provide a production version soon and add the link here.
+
+### Stage
+
+You can access the **stage** version of the application on [ahb-tabellen.stage.hochfrequenz.de](https://ahb-tabellen.stage.hochfrequenz.de).
+
+This is our test environment where we deploy the latest changes to test them before deploying them to production.
+
 
 ### 🏛 Architecture
 
@@ -16,7 +27,7 @@ flowchart TD
 
 ### 📂 Project Structure
 
-```
+```plaintext
 .
 ├── azure-mock/
     ├── data/                     # contains AHB data stored in machine-readable_anwendungshandbuecher repository
