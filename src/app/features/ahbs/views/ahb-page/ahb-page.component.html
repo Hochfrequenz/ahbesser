@@ -18,8 +18,14 @@
         </h3>
         <p class="text-[20px] mb-5">{{ ahb.meta.description }}</p>
         <p class="text-[14px]">
-          <span class="font-bold"> Sender/Empfänger: </span>
-          {{ ahb.meta.direction }}
+          <span class="font-bold">Sender:</span>
+          {{ getSenderEmpfaenger(ahb.meta.direction).sender }}<br />
+          <span class="font-bold">Empfänger:</span>
+          {{ getSenderEmpfaenger(ahb.meta.direction).empfaenger }}
+        </p>
+        <p class="text-[14px]">
+          <span class="font-bold"> Format: </span>
+          {{ edifactFormat() }}
         </p>
       </section>
       <section class="pt-10 mx-5 text-right flex-1">
@@ -34,12 +40,15 @@
             [totalResults]="table()?.markElements()?.length"
           />
         </div>
-        <button
-          class="rounded-full bg-primary text-[16px] font-bold py-3 px-5 text-white mt-5"
-          (click)="onClickExport()"
-        >
-          Export XLSX
-        </button>
+        <div class="flex justify-end items-center space-x-3 mt-3">
+          <app-icon-copy-url />
+          <button
+            class="rounded-full bg-primary text-[16px] font-bold py-3 px-5 text-white"
+            (click)="onClickExport()"
+          >
+            Export XLSX
+          </button>
+        </div>
       </section>
     </div>
     <section class="flex-1 overflow-auto">
