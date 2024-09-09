@@ -70,7 +70,7 @@
     "karma": "~6.4.4",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
-    "ng-mocks": "^14.13.0",
+    "ng-mocks": "^14.13.1",
     "ng-openapi-gen": "^0.51.0",
     "npm-watch": "^0.13.0",
     "postcss": "^8.4.43",
