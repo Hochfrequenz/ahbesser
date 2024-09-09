@@ -59,7 +59,7 @@
     "@angular/cli": "^18.2.3",
     "@angular/compiler-cli": "^18.2.3",
     "@types/jest": "^29.5.12",
-    "@typescript-eslint/eslint-plugin": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.4.0",
     "@typescript-eslint/parser": "^8.3.0",
     "autoprefixer": "^10.4.20",
     "concurrently": "^8.2.2",
