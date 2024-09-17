@@ -5,6 +5,15 @@
       [formatVersion]="formatVersion()"
       [pruefi]="pruefi()"
     />
+    <app-input-search-enhanced
+      class="inline-block w-full md:w-96"
+      (searchQueryChange)="searchQuery.set($event)"
+      (keyupEnter)="table()?.nextResult()"
+      (nextClick)="table()?.nextResult()"
+      (previousClick)="table()?.previousResult()"
+      [selectedPosition]="(table()?.markIndex() ?? 0) + 1"
+      [totalResults]="table()?.markElements()?.length"
+    />
   </app-header>
 
   @if (ahb$ | async; as ahb) {
@@ -29,18 +38,7 @@
         </p>
       </section>
       <section class="pt-10 mx-5 text-right flex-1">
-        <div>
-          <app-input-search-enhanced
-            class="inline-block w-full md:w-96"
-            (searchQueryChange)="searchQuery.set($event)"
-            (keyupEnter)="table()?.nextResult()"
-            (nextClick)="table()?.nextResult()"
-            (previousClick)="table()?.previousResult()"
-            [selectedPosition]="(table()?.markIndex() ?? 0) + 1"
-            [totalResults]="table()?.markElements()?.length"
-          />
-        </div>
-        <div class="flex justify-end items-center space-x-3 mt-3">
+        <div class="flex justify-end items-center space-x-3">
           <app-icon-copy-url />
           <button
             class="rounded-full bg-primary text-[16px] font-bold py-3 px-5 text-white"
