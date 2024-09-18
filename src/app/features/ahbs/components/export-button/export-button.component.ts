@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AhbService } from '../../../../core/api';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-export-button',
@@ -13,17 +14,18 @@ export class ExportButtonComponent {
   constructor(private ahbService: AhbService) {}
 
   async onClickExport(): Promise<void> {
-    const blob = firstValueFrom(this.ahbService
-      .getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet({
+    const blob = await firstValueFrom(
+      this.ahbService.getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet({
         'format-version': this.formatVersion,
         pruefi: this.pruefi,
         format: 'xlsx',
-      }));
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `AHB_${this.formatVersion}_${this.pruefi}.xlsx`;
-        link.click();
-        URL.revokeObjectURL(url);
+      }),
+    );
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `AHB_${this.formatVersion}_${this.pruefi}.xlsx`;
+    link.click();
+    URL.revokeObjectURL(url);
   }
 }
