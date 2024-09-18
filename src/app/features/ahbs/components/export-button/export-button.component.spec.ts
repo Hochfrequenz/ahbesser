@@ -15,6 +15,14 @@ describe('ExportButtonComponent', () => {
     }),
   );
 
+  beforeAll(() => {
+    // Mock window.URL.createObjectURL and window.URL.revokeObjectURL
+    window.URL.createObjectURL = jest.fn(
+      () => 'blob:http://localhost/export.xlsx',
+    );
+    window.URL.revokeObjectURL = jest.fn();
+  });
+
   it('should render', () => {
     const component = MockRender(ExportButtonComponent, {
       formatVersion: 'testFormatVersion',
@@ -23,16 +31,26 @@ describe('ExportButtonComponent', () => {
     expect(ngMocks.formatHtml(component)).toContain('Export XLSX');
   });
 
-  it('should call getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet when button is clicked', () => {
-    MockRender(ExportButtonComponent, {
+  it('should call getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet when button is clicked', async () => {
+    const component = MockRender(ExportButtonComponent, {
       formatVersion: 'testFormatVersion',
       pruefi: 'testPruefi',
     });
     const ahbService = ngMocks.findInstance(AhbService);
 
+    // Find the button
     const button = ngMocks.find('button');
+
+    // Trigger click event
     ngMocks.click(button);
 
+    // Ensure the click triggers Angular's change detection
+    component.detectChanges();
+
+    // Wait for any async actions to complete
+    await component.whenStable();
+
+    // Check if the service method was called
     expect(
       ahbService.getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet,
     ).toHaveBeenCalledWith({
@@ -40,5 +58,8 @@ describe('ExportButtonComponent', () => {
       pruefi: 'testPruefi',
       format: 'xlsx',
     });
+
+    // Ensure window.URL.createObjectURL was called
+    expect(window.URL.createObjectURL).toHaveBeenCalled();
   });
 });
