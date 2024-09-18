@@ -18,6 +18,7 @@ import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-h
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { scrollToElement } from '../../../../core/helper/scroll-to-element';
+import { ExportButtonComponent } from '../../components/export-button/export-button.component';
 import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-url/icon-copy-url.component';
 
 @Component({
@@ -33,6 +34,7 @@ import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-ur
     AhbSearchFormHeaderComponent,
     InputSearchEnhancedComponent,
     HighlightPipe,
+    ExportButtonComponent,
     IconCopyUrlComponent,
   ],
   templateUrl: './ahb-page.component.html',
@@ -53,7 +55,7 @@ export class AhbPageComponent {
   constructor(private readonly ahbService: AhbService) {
     effect(() => {
       this.ahb$ = this.ahbService
-        .getAhb({
+        .getAhb$Json({
           'format-version': this.formatVersion(),
           pruefi: this.pruefi(),
         })

@@ -40,12 +40,10 @@
       <section class="pt-10 mx-5 text-right flex-1">
         <div class="flex justify-end items-center space-x-3">
           <app-icon-copy-url />
-          <button
-            class="rounded-full bg-primary text-[16px] font-bold py-3 px-5 text-white"
-            (click)="onClickExport()"
-          >
-            Export XLSX
-          </button>
+          <app-export-button
+            [formatVersion]="formatVersion()"
+            [pruefi]="pruefi()"
+          />
         </div>
       </section>
     </div>

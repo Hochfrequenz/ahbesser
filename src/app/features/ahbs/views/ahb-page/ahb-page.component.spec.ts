@@ -8,13 +8,18 @@ describe('AhbPageComponent', () => {
     MockBuilder(AhbPageComponent).mock(
       AhbService,
       MockService(AhbService, {
-        getAhb: (params) =>
+        getAhb$Json: jest.fn((params) =>
           of({
             meta: {
               pruefidentifikator: params.pruefi,
+              description: '',
+              direction: '',
+              maus_version: '',
             },
+            lines: [],
           }),
-      } as AhbService),
+        ),
+      } as Partial<AhbService>),
     ),
   );
 
