@@ -1,9 +1,14 @@
 <header class="bg-primary">
-  <nav class="mx-auto flex px-6 py-2" aria-label="Global">
+  <nav class="mx-auto flex items-center px-6 py-2" aria-label="Global">
     <a routerLink="/" title="Homepage" class="flex-none flex items-center">
       <app-icon-logo [size]="23" />
     </a>
-    <span class="text-xl flex items-center me-14">AHB Tabelle</span>
-    <ng-content />
+    <span class="text-xl flex items-center me-14">AHB Tabellen</span>
+    <div class="flex-grow">
+      <ng-content select="app-ahb-search-form-header"></ng-content>
+    </div>
+    <div class="flex-none">
+      <ng-content select="app-input-search-enhanced"></ng-content>
+    </div>
   </nav>
 </header>
