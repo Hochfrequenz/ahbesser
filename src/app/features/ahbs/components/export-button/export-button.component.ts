@@ -12,25 +12,18 @@ export class ExportButtonComponent {
 
   constructor(private ahbService: AhbService) {}
 
-  onClickExport(): void {
-    this.ahbService
+  async onClickExport(): Promise<void> {
+    const blob = firstValueFrom(this.ahbService
       .getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet({
         'format-version': this.formatVersion,
         pruefi: this.pruefi,
         format: 'xlsx',
-      })
-      .subscribe({
-        next: (blob: Blob) => {
-          const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `AHB_${this.formatVersion}_${this.pruefi}.xlsx`;
-          link.click();
-          window.URL.revokeObjectURL(url);
-        },
-        error: (error) => {
-          console.error('error downloading XLSX:', error);
-        },
-      });
+      }));
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `AHB_${this.formatVersion}_${this.pruefi}.xlsx`;
+        link.click();
+        URL.revokeObjectURL(url);
   }
 }
