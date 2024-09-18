@@ -12,23 +12,13 @@ describe('AhbPageComponent', () => {
           of({
             meta: {
               pruefidentifikator: params.pruefi,
-              description: 'Test description',
-              direction: 'Test direction',
-              maus_version: '1.0.0',
+              description: '',
+              direction: '',
+              maus_version: '',
             },
             lines: [],
           }),
         ),
-        getAhb$Json$Response: jest.fn(),
-        getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet: jest.fn(),
-        getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet$Response:
-          jest.fn(),
-        getAhb$Csv: jest.fn(),
-        getAhb$Csv$Response: jest.fn(),
-        getFormatVersions: jest.fn(),
-        getFormatVersions$Response: jest.fn(),
-        getPruefis: jest.fn(),
-        getPruefis$Response: jest.fn(),
       } as Partial<AhbService>),
     ),
   );

@@ -16,7 +16,7 @@ describe('ExportButtonComponent', () => {
   );
 
   beforeAll(() => {
-    // Mock window.URL.createObjectURL and window.URL.revokeObjectURL
+    // Mock window.URL.createObjectURL
     window.URL.createObjectURL = jest.fn(
       () => 'blob:http://localhost/export.xlsx',
     );
@@ -38,19 +38,12 @@ describe('ExportButtonComponent', () => {
     });
     const ahbService = ngMocks.findInstance(AhbService);
 
-    // Find the button
     const button = ngMocks.find('button');
 
-    // Trigger click event
     ngMocks.click(button);
-
-    // Ensure the click triggers Angular's change detection
     component.detectChanges();
-
-    // Wait for any async actions to complete
     await component.whenStable();
 
-    // Check if the service method was called
     expect(
       ahbService.getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet,
     ).toHaveBeenCalledWith({
@@ -59,7 +52,6 @@ describe('ExportButtonComponent', () => {
       format: 'xlsx',
     });
 
-    // Ensure window.URL.createObjectURL was called
     expect(window.URL.createObjectURL).toHaveBeenCalled();
   });
 });
