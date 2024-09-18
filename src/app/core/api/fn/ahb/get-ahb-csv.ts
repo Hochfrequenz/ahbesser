@@ -6,10 +6,9 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Ahb } from '../../models/ahb';
 import { FormatVersion } from '../../models/format-version';
 
-export interface GetAhb$Params {
+export interface GetAhb$Csv$Params {
 
 /**
  * Formatversion of the AHB to return
@@ -20,23 +19,29 @@ export interface GetAhb$Params {
  * Pruefidentifikator of the AHB to return
  */
   pruefi: string;
+
+/**
+ * Format of the AHB file to return
+ */
+  format?: 'json' | 'xlsx' | 'csv';
 }
 
-export function getAhb(http: HttpClient, rootUrl: string, params: GetAhb$Params, context?: HttpContext): Observable<StrictHttpResponse<Ahb>> {
-  const rb = new RequestBuilder(rootUrl, getAhb.PATH, 'get');
+export function getAhb$Csv(http: HttpClient, rootUrl: string, params: GetAhb$Csv$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+  const rb = new RequestBuilder(rootUrl, getAhb$Csv.PATH, 'get');
   if (params) {
     rb.path('format-version', params['format-version'], {});
     rb.path('pruefi', params.pruefi, {});
+    rb.query('format', params.format, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
+    rb.build({ responseType: 'blob', accept: 'text/csv', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Ahb>;
+      return r as StrictHttpResponse<Blob>;
     })
   );
 }
 
-getAhb.PATH = '/api/ahb/{format-version}/{pruefi}';
+getAhb$Csv.PATH = '/api/ahb/{format-version}/{pruefi}';

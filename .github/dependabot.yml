@@ -25,3 +25,9 @@ updates:
       interval: "weekly"
     reviewers:
       - "hf-krechan"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    reviewers:
+      - "@Hochfrequenz/frontend-developers-review-team"
