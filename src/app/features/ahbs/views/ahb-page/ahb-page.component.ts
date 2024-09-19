@@ -58,7 +58,7 @@ export class AhbPageComponent implements OnInit {
 
   constructor(
     private readonly ahbService: AhbService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
   ) {
     effect(() => {
       this.loadAhbData();
@@ -66,7 +66,7 @@ export class AhbPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       const query = params['query'];
       if (query) {
         this.initialSearchQuery = query;
@@ -87,19 +87,40 @@ export class AhbPageComponent implements OnInit {
             setTimeout(() => this.triggerSearch(this.initialSearchQuery!), 0);
           }
         }),
-        shareReplay(1)
+        shareReplay(1),
       );
 
     this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
   }
 
-  triggerSearch(query: string) {
+  triggerSearch(query: string | undefined) {
+    if (!query) return;
+
     const tableComponent = this.table();
     if (tableComponent) {
       tableComponent.setHighlight(query);
       tableComponent.nextResult();
     }
     this.initialSearchQuery = null; // Reset after first use
+  }
+
+  onSearchQueryChange(query: string | undefined) {
+    this.searchQuery.set(query);
+    this.triggerSearch(query);
+  }
+
+  onNextClick() {
+    const tableComponent = this.table();
+    if (tableComponent) {
+      tableComponent.nextResult();
+    }
+  }
+
+  onPreviousClick() {
+    const tableComponent = this.table();
+    if (tableComponent) {
+      tableComponent.previousResult();
+    }
   }
 
   // mapping provided by mig_ahb_utility_stack

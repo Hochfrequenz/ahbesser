@@ -94,7 +94,8 @@ export class AhbTableComponent {
   previousResult() {
     const markElements = this.markElements();
     if (markElements.length > 0) {
-      const previousIndex = (this.markIndex() - 1 + markElements.length) % markElements.length;
+      const previousIndex =
+        (this.markIndex() - 1 + markElements.length) % markElements.length;
       this.markIndex.set(previousIndex);
     }
   }
