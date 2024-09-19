@@ -6,14 +6,16 @@ import {
   input,
   signal,
   viewChild,
+  OnInit,
 } from '@angular/core';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { FooterComponent } from '../../../../shared/components/footer/footer.component';
+import { ActivatedRoute } from '@angular/router';
 import { AhbTableComponent } from '../../components/ahb-table/ahb-table.component';
 import { Ahb, AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Observable, map, shareReplay } from 'rxjs';
+import { Observable, map, shareReplay, tap } from 'rxjs';
 import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-header/ahb-search-form-header.component';
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
@@ -39,7 +41,7 @@ import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-ur
   ],
   templateUrl: './ahb-page.component.html',
 })
-export class AhbPageComponent {
+export class AhbPageComponent implements OnInit {
   formatVersion = input.required<string>();
   pruefi = input.required<string>();
 
@@ -52,16 +54,73 @@ export class AhbPageComponent {
   ahb$?: Observable<Ahb>;
   lines$?: Observable<Ahb['lines']>;
 
-  constructor(private readonly ahbService: AhbService) {
+  private initialSearchQuery: string | null = null;
+
+  constructor(
+    private readonly ahbService: AhbService,
+    private readonly route: ActivatedRoute,
+  ) {
     effect(() => {
-      this.ahb$ = this.ahbService
-        .getAhb$Json({
-          'format-version': this.formatVersion(),
-          pruefi: this.pruefi(),
-        })
-        .pipe(shareReplay());
-      this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
+      this.loadAhbData();
     });
+  }
+
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      const query = params['query'];
+      if (query) {
+        this.initialSearchQuery = query;
+        this.searchQuery.set(query);
+      }
+    });
+  }
+
+  private loadAhbData() {
+    this.ahb$ = this.ahbService
+      .getAhb$Json({
+        'format-version': this.formatVersion(),
+        pruefi: this.pruefi(),
+      })
+      .pipe(
+        tap(() => {
+          if (this.initialSearchQuery) {
+            setTimeout(() => this.triggerSearch(this.initialSearchQuery!), 0);
+          }
+        }),
+        shareReplay(1),
+      );
+
+    this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
+  }
+
+  triggerSearch(query: string | undefined) {
+    if (!query) return;
+
+    const tableComponent = this.table();
+    if (tableComponent) {
+      tableComponent.setHighlight(query);
+      tableComponent.nextResult();
+    }
+    this.initialSearchQuery = null; // Reset after first use
+  }
+
+  onSearchQueryChange(query: string | undefined) {
+    this.searchQuery.set(query);
+    this.triggerSearch(query);
+  }
+
+  onNextClick() {
+    const tableComponent = this.table();
+    if (tableComponent) {
+      tableComponent.nextResult();
+    }
+  }
+
+  onPreviousClick() {
+    const tableComponent = this.table();
+    if (tableComponent) {
+      tableComponent.previousResult();
+    }
   }
 
   // mapping provided by mig_ahb_utility_stack

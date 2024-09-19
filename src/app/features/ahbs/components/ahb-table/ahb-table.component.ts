@@ -27,15 +27,16 @@ export class AhbTableComponent {
 
   selectElement = output<{ element: HTMLElement; offsetY: number }>();
 
+  private highlightSignal = signal<string | undefined>(undefined);
   markIndex = signal(0);
 
   markElements = computed<HTMLElement[]>(() => {
-    const highlight = this.highlight();
+    const highlight = this.getHighlight();
     const nativeElement = this.elementRef.nativeElement;
     if (!highlight || !nativeElement) {
       return [];
     }
-    return nativeElement.querySelectorAll('mark');
+    return Array.from(nativeElement.querySelectorAll('mark'));
   });
 
   selectedMarkElement = computed(() => {
@@ -48,16 +49,11 @@ export class AhbTableComponent {
   });
 
   constructor(private readonly elementRef: ElementRef) {
-    // reset index on highlight change
-    effect(
-      () => {
-        this.highlight();
-        this.markIndex.set(0);
-      },
-      {
-        allowSignalWrites: true,
-      },
-    );
+    effect(() => {
+      this.highlightSignal.set(this.highlight());
+      this.markIndex.set(0);
+    });
+
     effect(() => {
       const selectedMarkElement = this.selectedMarkElement();
       if (selectedMarkElement === null) {
@@ -78,22 +74,29 @@ export class AhbTableComponent {
     });
   }
 
-  nextResult() {
-    const markIndex = this.markIndex() + 1;
-    const markElements = this.markElements();
-    if (markIndex < markElements.length) {
-      this.markIndex.set(markIndex);
-      return;
-    }
+  setHighlight(value: string | undefined) {
+    this.highlightSignal.set(value);
     this.markIndex.set(0);
   }
 
-  previousResult() {
-    const markIndex = this.markIndex() - 1;
-    if (markIndex >= 0) {
-      this.markIndex.set(markIndex);
-      return;
+  getHighlight(): string | undefined {
+    return this.highlightSignal();
+  }
+
+  nextResult() {
+    const markElements = this.markElements();
+    if (markElements.length > 0) {
+      const nextIndex = (this.markIndex() + 1) % markElements.length;
+      this.markIndex.set(nextIndex);
     }
-    this.markIndex.set(this.markElements().length - 1);
+  }
+
+  previousResult() {
+    const markElements = this.markElements();
+    if (markElements.length > 0) {
+      const previousIndex =
+        (this.markIndex() - 1 + markElements.length) % markElements.length;
+      this.markIndex.set(previousIndex);
+    }
   }
 }

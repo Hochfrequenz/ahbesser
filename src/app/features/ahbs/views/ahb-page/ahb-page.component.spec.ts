@@ -1,26 +1,31 @@
 import { AhbPageComponent } from './ahb-page.component';
 import { MockBuilder, MockRender, MockService, ngMocks } from 'ng-mocks';
 import { AhbService } from '../../../../core/api';
+import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 describe('AhbPageComponent', () => {
   beforeEach(() =>
-    MockBuilder(AhbPageComponent).mock(
-      AhbService,
-      MockService(AhbService, {
-        getAhb$Json: jest.fn((params) =>
-          of({
-            meta: {
-              pruefidentifikator: params.pruefi,
-              description: '',
-              direction: '',
-              maus_version: '',
-            },
-            lines: [],
-          }),
-        ),
-      } as Partial<AhbService>),
-    ),
+    MockBuilder(AhbPageComponent)
+      .mock(
+        AhbService,
+        MockService(AhbService, {
+          getAhb$Json: jest.fn((params) =>
+            of({
+              meta: {
+                pruefidentifikator: params.pruefi,
+                description: '',
+                direction: '',
+                maus_version: '',
+              },
+              lines: [],
+            }),
+          ),
+        } as Partial<AhbService>),
+      )
+      .mock(ActivatedRoute, {
+        queryParams: of({}),
+      } as Partial<ActivatedRoute>),
   );
 
   it('should render', () => {
@@ -77,5 +82,5 @@ describe('AhbPageComponent', () => {
     expect(result.empfaenger).toBe('');
   });
 
-  // todo add more tests
+  // Add more tests here
 });
