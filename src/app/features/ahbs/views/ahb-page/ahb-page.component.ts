@@ -6,9 +6,11 @@ import {
   input,
   signal,
   viewChild,
+  OnInit,
 } from '@angular/core';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { FooterComponent } from '../../../../shared/components/footer/footer.component';
+import { ActivatedRoute } from '@angular/router';
 import { AhbTableComponent } from '../../components/ahb-table/ahb-table.component';
 import { Ahb, AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
@@ -39,7 +41,7 @@ import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-ur
   ],
   templateUrl: './ahb-page.component.html',
 })
-export class AhbPageComponent {
+export class AhbPageComponent implements OnInit {
   formatVersion = input.required<string>();
   pruefi = input.required<string>();
 
@@ -52,7 +54,10 @@ export class AhbPageComponent {
   ahb$?: Observable<Ahb>;
   lines$?: Observable<Ahb['lines']>;
 
-  constructor(private readonly ahbService: AhbService) {
+  constructor(
+    private readonly ahbService: AhbService,
+    private readonly route: ActivatedRoute
+  ) {
     effect(() => {
       this.ahb$ = this.ahbService
         .getAhb$Json({
@@ -61,6 +66,26 @@ export class AhbPageComponent {
         })
         .pipe(shareReplay());
       this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
+    });
+  }
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      const query = params['query'];
+      if (query) {
+        this.searchQuery.set(query);
+        this.triggerSearch(query);
+      }
+    });
+  }
+
+  triggerSearch(query: string) {
+    setTimeout(() => {
+      const tableComponent = this.table();
+      if (tableComponent) {
+        tableComponent.setHighlight(query);
+        tableComponent.nextResult();
+      }
     });
   }
 
