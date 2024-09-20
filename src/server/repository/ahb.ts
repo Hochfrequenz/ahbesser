@@ -31,17 +31,30 @@ export default class AHBRepository extends BlobStorageBacked {
     pruefi: string,
     formatVersion: string,
     type: FileType,
-  ): Promise<Ahb> {
+  ): Promise<Buffer> {
     const containerClient = this.client.getContainerClient(
       this.ahbContainerName,
     );
     const blobName = await this.getBlobName(pruefi, formatVersion, type);
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const downloadBlockBlobResponse = await blockBlobClient.download(0);
-    const downloadedContent = await this.streamToString(
+
+    return this.streamToBuffer(
       downloadBlockBlobResponse.readableStreamBody as Readable,
     );
-    return JSON.parse(downloadedContent);
+  }
+
+  private async streamToBuffer(readableStream: Readable): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      const chunks: any[] = [];
+      readableStream.on('data', (data) => {
+        chunks.push(data instanceof Buffer ? data : Buffer.from(data));
+      });
+      readableStream.on('end', () => {
+        resolve(Buffer.concat(chunks));
+      });
+      readableStream.on('error', reject);
+    });
   }
 
   // Get the blob name based on the pruefi, formatVersion and file type.
