@@ -1,5 +1,5 @@
 # BUILDER IMAGE
-FROM node:22.8-alpine as builder
+FROM node:22.9-alpine as builder
 
 WORKDIR /service
 
@@ -11,7 +11,7 @@ RUN npm run ng:build
 RUN npm run server:build
 
 # PRODUCTION IMAGE
-FROM node:22.8-alpine
+FROM node:22.9-alpine
 
 WORKDIR /service
 
