@@ -1,5 +1,4 @@
 import { BlobServiceClient } from '@azure/storage-blob';
-import { Ahb } from '../../app/core/api/models';
 import { Readable } from 'stream';
 import { NotFoundError } from '../infrastructure/errors';
 import BlobStorageBacked from './abstract/blobStorageBacked';
@@ -46,9 +45,9 @@ export default class AHBRepository extends BlobStorageBacked {
 
   private async streamToBuffer(readableStream: Readable): Promise<Buffer> {
     return new Promise((resolve, reject) => {
-      const chunks: any[] = [];
-      readableStream.on('data', (data) => {
-        chunks.push(data instanceof Buffer ? data : Buffer.from(data));
+      const chunks: Buffer[] = [];
+      readableStream.on('data', (data: Buffer | string) => {
+        chunks.push(Buffer.isBuffer(data) ? data : Buffer.from(data));
       });
       readableStream.on('end', () => {
         resolve(Buffer.concat(chunks));
