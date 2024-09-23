@@ -1,5 +1,6 @@
 import { BlobServiceClient } from '@azure/storage-blob';
 import { Readable } from 'stream';
+import { Ahb } from '../../app/core/api/models';
 import { NotFoundError } from '../infrastructure/errors';
 import BlobStorageBacked from './abstract/blobStorageBacked';
 
@@ -30,7 +31,7 @@ export default class AHBRepository extends BlobStorageBacked {
     pruefi: string,
     formatVersion: string,
     type: FileType,
-  ): Promise<Buffer> {
+  ): Promise<Ahb | Buffer> {
     const containerClient = this.client.getContainerClient(
       this.ahbContainerName,
     );
@@ -38,9 +39,16 @@ export default class AHBRepository extends BlobStorageBacked {
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const downloadBlockBlobResponse = await blockBlobClient.download(0);
 
-    return this.streamToBuffer(
+    const content = await this.streamToBuffer(
       downloadBlockBlobResponse.readableStreamBody as Readable,
     );
+
+    if (type === FileType.JSON) {
+      const jsonString = content.toString('utf-8');
+      return JSON.parse(jsonString) as Ahb;
+    }
+
+    return content;
   }
 
   private async streamToBuffer(readableStream: Readable): Promise<Buffer> {
