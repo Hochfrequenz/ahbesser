@@ -99,4 +99,12 @@ export class AhbTableComponent {
       this.markIndex.set(previousIndex);
     }
   }
+
+  // required to add new separators to table grid in case the section name has changed
+  hasSectionNameChanged(currentIndex: number): boolean {
+    if (currentIndex === 0) return false;
+    const currentLine = this.lines()[currentIndex];
+    const previousLine = this.lines()[currentIndex - 1];
+    return currentLine.section_name !== previousLine.section_name;
+  }
 }
