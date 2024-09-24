@@ -120,14 +120,22 @@ export class AhbTableComponent {
     );
   }
 
-  // determines the appropriate class for each row overwrite dashed lines with bold lines
+  // determines the appropriate class for each row
   getRowClass(index: number): string {
+    const classes: string[] = [];
+
     if (this.hasSectionNameChanged(index)) {
-      return 'border-t-2 border-gray-300';
+      classes.push('border-t-2 border-gray-300');
     } else if (this.hasDataElementChanged(index)) {
-      return 'border-t border-gray-400 border-dashed';
+      classes.push('border-t border-gray-400 border-dashed');
     } else {
-      return 'border-b';
+      classes.push('border-b');
     }
+
+    return classes.join(' ');
+  }
+
+  isNewSegment(index: number): boolean {
+    return this.hasSectionNameChanged(index);
   }
 }

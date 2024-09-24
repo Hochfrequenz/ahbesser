@@ -29,7 +29,7 @@
   </thead>
   <tbody>
     @for (line of lines(); track line.index; let i = $index) {
-      <tr [class]="getRowClass(i)">
+      <tr [class]="getRowClass(i)" [class.font-bold]="isNewSegment(i)">
         <td
           class="px-6 py-4"
           [innerHTML]="line.segment_group_key | highlight: highlight()"
