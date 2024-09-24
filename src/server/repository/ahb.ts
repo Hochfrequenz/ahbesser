@@ -1,6 +1,6 @@
 import { BlobServiceClient } from '@azure/storage-blob';
-import { Ahb } from '../../app/core/api/models';
 import { Readable } from 'stream';
+import { Ahb } from '../../app/core/api/models';
 import { NotFoundError } from '../infrastructure/errors';
 import BlobStorageBacked from './abstract/blobStorageBacked';
 
@@ -31,17 +31,37 @@ export default class AHBRepository extends BlobStorageBacked {
     pruefi: string,
     formatVersion: string,
     type: FileType,
-  ): Promise<Ahb> {
+  ): Promise<Ahb | Buffer> {
     const containerClient = this.client.getContainerClient(
       this.ahbContainerName,
     );
     const blobName = await this.getBlobName(pruefi, formatVersion, type);
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const downloadBlockBlobResponse = await blockBlobClient.download(0);
-    const downloadedContent = await this.streamToString(
+
+    const content = await this.streamToBuffer(
       downloadBlockBlobResponse.readableStreamBody as Readable,
     );
-    return JSON.parse(downloadedContent);
+
+    if (type === FileType.JSON) {
+      const jsonString = content.toString('utf-8');
+      return JSON.parse(jsonString) as Ahb;
+    }
+
+    return content;
+  }
+
+  private async streamToBuffer(readableStream: Readable): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      const chunks: Buffer[] = [];
+      readableStream.on('data', (data: Buffer | string) => {
+        chunks.push(Buffer.isBuffer(data) ? data : Buffer.from(data));
+      });
+      readableStream.on('end', () => {
+        resolve(Buffer.concat(chunks));
+      });
+      readableStream.on('error', reject);
+    });
   }
 
   // Get the blob name based on the pruefi, formatVersion and file type.

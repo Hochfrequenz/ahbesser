@@ -21,11 +21,12 @@ export class ExportButtonComponent {
         format: 'xlsx',
       }),
     );
-    const url = URL.createObjectURL(blob);
+
+    const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = `AHB_${this.formatVersion}_${this.pruefi}.xlsx`;
     link.click();
-    URL.revokeObjectURL(url);
+    window.URL.revokeObjectURL(url);
   }
 }
