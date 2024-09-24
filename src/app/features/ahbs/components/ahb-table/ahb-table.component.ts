@@ -122,14 +122,12 @@ export class AhbTableComponent {
 
   // determines the appropriate class for each row
   getRowClass(index: number): string {
-    const classes: string[] = [];
+    const classes: string[] = ['border-b border-gray-300']; // default rule for each row (if not overwritten by other classes)
 
     if (this.hasSectionNameChanged(index)) {
-      classes.push('border-t-2 border-gray-300');
+      classes.push('border-t-2 border-gray-300'); // bold line between different segment_names
     } else if (this.hasDataElementChanged(index)) {
-      classes.push('border-t border-gray-400 border-dashed');
-    } else {
-      classes.push('border-b');
+      classes.push('border-t border-gray-400 border-dashed'); // dashed line between different data_elements
     }
 
     return classes.join(' ');
