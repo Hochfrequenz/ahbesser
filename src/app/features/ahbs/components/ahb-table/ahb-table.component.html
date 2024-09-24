@@ -29,11 +29,7 @@
   </thead>
   <tbody>
     @for (line of lines(); track line.index; let i = $index) {
-      <tr
-        [class]="
-          hasSectionNameChanged(i) ? 'border-t-2 border-gray-300' : 'border-b'
-        "
-      >
+      <tr [class]="getRowClass(i)">
         <td
           class="px-6 py-4"
           [innerHTML]="line.segment_group_key | highlight: highlight()"

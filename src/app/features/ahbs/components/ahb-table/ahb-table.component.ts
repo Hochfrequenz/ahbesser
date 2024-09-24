@@ -100,11 +100,34 @@ export class AhbTableComponent {
     }
   }
 
-  // required to add new separators to table grid in case the section name has changed
+  // determines each time the section_name changes to add a bold rule in ahb-table.component.html
   hasSectionNameChanged(currentIndex: number): boolean {
     if (currentIndex === 0) return false;
     const currentLine = this.lines()[currentIndex];
     const previousLine = this.lines()[currentIndex - 1];
     return currentLine.section_name !== previousLine.section_name;
+  }
+
+  // determines each time the data_element changes to add a dashed rule in ahb-table.component.html
+  hasDataElementChanged(currentIndex: number): boolean {
+    if (currentIndex === 0) return false;
+    const currentLine = this.lines()[currentIndex];
+    const previousLine = this.lines()[currentIndex - 1];
+    return (
+      currentLine.data_element !== previousLine.data_element &&
+      currentLine.data_element !== '' &&
+      !this.hasSectionNameChanged(currentIndex)
+    );
+  }
+
+  // determines the appropriate class for each row overwrite dashed lines with bold lines
+  getRowClass(index: number): string {
+    if (this.hasSectionNameChanged(index)) {
+      return 'border-t-2 border-gray-300';
+    } else if (this.hasDataElementChanged(index)) {
+      return 'border-t border-gray-400 border-dashed';
+    } else {
+      return 'border-b';
+    }
   }
 }
