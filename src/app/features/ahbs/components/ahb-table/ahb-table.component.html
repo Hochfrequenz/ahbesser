@@ -54,10 +54,15 @@
           class="px-6 py-4"
           [innerHTML]="line.name | highlight: highlight()"
         ></td>
-        <td
-          class="px-6 py-4"
-          [innerHTML]="line.ahb_expression | highlight: highlight()"
-        ></td>
+        <td class="px-6 py-4">
+          <a
+            [href]="generateBedingungsbaumDeepLink(line.ahb_expression)"
+            target="_blank"
+            class="hover:underline"
+          >
+            {{ line.ahb_expression }}
+          </a>
+        </td>
         <td
           class="px-6 py-4"
           [innerHTML]="line.conditions | highlight: highlight()"

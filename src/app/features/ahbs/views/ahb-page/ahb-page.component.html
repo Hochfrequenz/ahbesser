@@ -55,6 +55,8 @@
             <app-ahb-table
               [lines]="lines"
               [highlight]="searchQuery()"
+              [formatVersion]="formatVersion()"
+              [pruefi]="pruefi()"
               (selectElement)="scrollToElement($event.element, $event.offsetY)"
             />
           }
