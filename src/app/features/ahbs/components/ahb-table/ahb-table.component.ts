@@ -173,4 +173,8 @@ export class AhbTableComponent {
     const key = pruefi.substring(0, 2);
     return mapping[key] || '';
   }
+
+  addConditionLineBreaks(conditions: string): string[] {
+    return conditions ? conditions.split('\n') : [];
+  }
 }

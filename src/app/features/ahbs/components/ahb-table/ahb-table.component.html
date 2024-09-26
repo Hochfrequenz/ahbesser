@@ -66,10 +66,16 @@
             {{ line.ahb_expression }}
           </a>
         </td>
-        <td
-          class="px-6 py-4"
-          [innerHTML]="line.conditions | highlight: highlight()"
-        ></td>
+        <td class="px-6 py-4 conditions-column">
+          @if (line.conditions) {
+            @for (
+              condition of addConditionLineBreaks(line.conditions);
+              track $index
+            ) {
+              <p [innerHTML]="condition | highlight: highlight()"></p>
+            }
+          }
+        </td>
       </tr>
     }
   </tbody>
