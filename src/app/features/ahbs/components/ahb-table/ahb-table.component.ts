@@ -117,24 +117,23 @@ export class AhbTableComponent {
     const previousLine = this.lines()[currentIndex - 1];
     return (
       currentLine.data_element !== previousLine.data_element &&
-      currentLine.data_element !== '' &&
-      !this.hasSectionNameChanged(currentIndex)
+      currentLine.data_element !== ''
     );
   }
 
   // determines the appropriate class for each row
   getRowClass(index: number): string {
-    const classes: string[] = [];
+    if (index === 0) return '';
 
     if (this.hasSectionNameChanged(index)) {
-      classes.push('border-t-2 border-gray-300');
-    } else if (this.hasDataElementChanged(index)) {
-      classes.push('border-t border-gray-400 border-dashed');
-    } else {
-      classes.push('border-b');
+      return 'border-t-2 border-gray-300'; // bold line between different segment_names
     }
 
-    return classes.join(' ');
+    if (this.hasDataElementChanged(index)) {
+      return 'border-t border-gray-400 border-dashed'; // dashed line between different data_elements
+    }
+
+    return 'border-t border-gray-300'; // thin solid horizontal line between all rows (if not overwritten by the bold/dashed lines)
   }
 
   isNewSegment(index: number): boolean {
