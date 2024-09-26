@@ -4,8 +4,9 @@
     type="number"
     list="pruefi-list"
     [formControl]="control"
-    (change)="onChange ? onChange(control.value) : null"
+    (input)="onInputChange($event)"
     placeholder="Bitte auswählen"
+    maxlength="5"
   />
   <label
     for="format-version-select"
