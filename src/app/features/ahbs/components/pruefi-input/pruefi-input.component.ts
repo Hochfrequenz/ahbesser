@@ -70,11 +70,15 @@ export class PruefiInputComponent implements ControlValueAccessor {
 
   onInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, '');
+    let value = input.value.replace(/[^0-9]/g, '');
     value = value.slice(0, 5);
     this.control.setValue(value);
-    if (this.onChange) {
+
+    // incomplete pruefids should not trigger the ahb-page to search for AHBs
+    if (value.length === 5 && this.onChange) {
       this.onChange(value);
+    } else if (this.onChange) {
+      this.onChange(null);
     }
   }
 }
