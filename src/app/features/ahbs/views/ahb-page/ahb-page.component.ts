@@ -163,10 +163,6 @@ export class AhbPageComponent implements OnInit {
     return { sender, empfaenger: empfaenger || '' };
   }
 
-  onClickExport() {
-    alert('not implemented');
-  }
-
   scrollToElement(element: HTMLElement, offsetY: number): void {
     const scrollContainer = this.scroll();
     if (!scrollContainer?.nativeElement) {
