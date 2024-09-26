@@ -70,7 +70,7 @@ export class PruefiInputComponent implements ControlValueAccessor {
 
   onInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/[^0-9]/g, '');
+    let value = input.value.replace(/\D/g, '');
     value = value.slice(0, 5);
     this.control.setValue(value);
 
