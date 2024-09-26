@@ -11,6 +11,7 @@ import {
 import { Ahb } from '../../../../core/api';
 import { JsonPipe } from '@angular/common';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-ahb-table',
@@ -24,6 +25,8 @@ export class AhbTableComponent {
 
   lines = input.required<Ahb['lines']>();
   highlight = input<string | undefined>();
+  formatVersion = input.required<string>();
+  pruefi = input.required<string>();
 
   selectElement = output<{ element: HTMLElement; offsetY: number }>();
 
@@ -136,5 +139,38 @@ export class AhbTableComponent {
 
   isNewSegment(index: number): boolean {
     return this.hasSectionNameChanged(index);
+  }
+
+  generateBedingungsbaumDeepLink(expression: string): string {
+    const encodedExpression = encodeURIComponent(expression);
+    return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.formatVersion()}&format_version=${this.getFormatVersion(this.pruefi())}&expression=${encodedExpression}`;
+  }
+
+  private getFormatVersion(pruefi: string): string {
+    const mapping: { [key: string]: string } = {
+      '99': 'APERAK',
+      '29': 'COMDIS',
+      '21': 'IFTSTA',
+      '23': 'INSRPT',
+      '31': 'INVOIC',
+      '13': 'MSCONS',
+      '39': 'ORDCHG',
+      '17': 'ORDERS',
+      '19': 'ORDRSP',
+      '27': 'PRICAT',
+      '15': 'QUOTES',
+      '33': 'REMADV',
+      '35': 'REQOTE',
+      '37': 'PARTIN',
+      '11': 'UTILMD',
+      '25': 'UTILTS',
+      '91': 'CONTRL',
+      '92': 'APERAK',
+      '44': 'UTILMD Gas',
+      '55': 'UTILMD Strom',
+    };
+
+    const key = pruefi.substring(0, 2);
+    return mapping[key] || '';
   }
 }

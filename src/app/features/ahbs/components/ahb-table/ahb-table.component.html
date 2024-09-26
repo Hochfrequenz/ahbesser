@@ -29,17 +29,20 @@
   </thead>
   <tbody>
     @for (line of lines(); track line.index; let i = $index) {
-      <tr [class]="getRowClass(i)" [class.font-bold]="isNewSegment(i)">
+      <tr [class]="getRowClass(i)">
         <td
           class="px-6 py-4"
+          [class.font-bold]="isNewSegment(i)"
           [innerHTML]="line.segment_group_key | highlight: highlight()"
         ></td>
         <td
           class="px-6 py-4"
+          [class.font-bold]="isNewSegment(i)"
           [innerHTML]="line.section_name | highlight: highlight()"
         ></td>
         <td
           class="px-6 py-4"
+          [class.font-bold]="isNewSegment(i)"
           [innerHTML]="line.segment_code | highlight: highlight()"
         ></td>
         <td
@@ -54,10 +57,15 @@
           class="px-6 py-4"
           [innerHTML]="line.name | highlight: highlight()"
         ></td>
-        <td
-          class="px-6 py-4"
-          [innerHTML]="line.ahb_expression | highlight: highlight()"
-        ></td>
+        <td class="px-6 py-4">
+          <a
+            [href]="generateBedingungsbaumDeepLink(line.ahb_expression)"
+            target="_blank"
+            class="hover:underline"
+          >
+            {{ line.ahb_expression }}
+          </a>
+        </td>
         <td
           class="px-6 py-4"
           [innerHTML]="line.conditions | highlight: highlight()"
