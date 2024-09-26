@@ -166,8 +166,8 @@ export class AhbTableComponent {
       '25': 'UTILTS',
       '91': 'CONTRL',
       '92': 'APERAK',
-      '44': 'UTILMD Gas',
-      '55': 'UTILMD Strom',
+      '44': 'UTILMD',
+      '55': 'UTILMD',
     };
 
     const key = pruefi.substring(0, 2);
