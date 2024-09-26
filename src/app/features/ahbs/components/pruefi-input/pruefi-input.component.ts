@@ -67,4 +67,14 @@ export class PruefiInputComponent implements ControlValueAccessor {
       this.control.enable();
     }
   }
+
+  onInputChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/[^0-9]/g, '');
+    value = value.slice(0, 5);
+    this.control.setValue(value);
+    if (this.onChange) {
+      this.onChange(value);
+    }
+  }
 }
