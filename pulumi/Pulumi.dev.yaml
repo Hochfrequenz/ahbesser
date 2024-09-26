@@ -9,5 +9,6 @@ config:
   ahb-tabellen:imageName: ghcr.io/hochfrequenz/ahbesser
   ahb-tabellen:imageTag: v0.0.5
   ahb-tabellen:memory: "2"
+  ahb-tabellen:bedingungsbaumBaseUrl: https://bedingungsbaum.stage.hochfrequenz.de
   azure-native:location: germanywestcentral
   pulumi:template: container-azure-python

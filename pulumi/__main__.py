@@ -26,6 +26,9 @@ assert format_version_container_name, "formatVersionContainerName must be set"
 container_port = config.get_int("containerPort")
 assert container_port, "containerPort must be set"
 
+bedingungsbaum_base_url = config.get("bedingungsbaumBaseUrl")
+assert bedingungsbaum_base_url, "bedingungsbaumBaseUrl must be set"
+
 cpu = config.get_int("cpu", 1)
 memory = config.get_int("memory", 2)
 
@@ -105,6 +108,9 @@ web_app = azure_native.web.WebApp(
             azure_native.web.NameValuePairArgs(
                 name="FORMAT_VERSION_CONTAINER_NAME",
                 value=format_version_container_name,
+            ),
+            azure_native.web.NameValuePairArgs(
+                name="BEDINGUNGSBAUM_BASE_URL", value=bedingungsbaum_base_url
             ),
         ],
         linux_fx_version=f"DOCKER|{image_name_with_tag}",
