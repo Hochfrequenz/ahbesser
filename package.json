@@ -40,7 +40,7 @@
     "@angular/platform-browser": "^18.2.5",
     "@angular/platform-browser-dynamic": "^18.2.5",
     "@angular/router": "^18.2.5",
-    "@azure/storage-blob": "^12.24.0",
+    "@azure/storage-blob": "^12.25.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
