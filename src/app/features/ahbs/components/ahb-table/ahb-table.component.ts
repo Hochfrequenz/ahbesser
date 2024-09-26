@@ -11,6 +11,7 @@ import {
 import { Ahb } from '../../../../core/api';
 import { JsonPipe } from '@angular/common';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-ahb-table',
@@ -142,7 +143,7 @@ export class AhbTableComponent {
 
   generateBedingungsbaumDeepLink(expression: string): string {
     const encodedExpression = encodeURIComponent(expression);
-    return `https://bedingungsbaum.stage.hochfrequenz.de/tree/?format=${this.formatVersion()}&format_version=${this.getFormatVersion(this.pruefi())}&expression=${encodedExpression}`;
+    return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.formatVersion()}&format_version=${this.getFormatVersion(this.pruefi())}&expression=${encodedExpression}`;
   }
 
   private getFormatVersion(pruefi: string): string {
