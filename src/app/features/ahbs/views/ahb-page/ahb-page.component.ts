@@ -19,7 +19,6 @@ import { Observable, map, shareReplay, tap } from 'rxjs';
 import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-header/ahb-search-form-header.component';
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
-import { scrollToElement } from '../../../../core/helper/scroll-to-element';
 import { ExportButtonComponent } from '../../components/export-button/export-button.component';
 import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-url/icon-copy-url.component';
 
@@ -99,7 +98,10 @@ export class AhbPageComponent implements OnInit {
     const tableComponent = this.table();
     if (tableComponent) {
       tableComponent.resetMarkIndex();
-      tableComponent.nextResult();
+      setTimeout(() => {
+        tableComponent.nextResult();
+        tableComponent.scrollToHighlightedElement();
+      }, 0);
     }
     this.initialSearchQuery = null; // Reset after first use
   }
@@ -177,6 +179,16 @@ export class AhbPageComponent implements OnInit {
     if (!scrollContainer?.nativeElement) {
       return;
     }
-    scrollToElement(element, offsetY, scrollContainer.nativeElement);
+    const containerRect = scrollContainer.nativeElement.getBoundingClientRect();
+    const elementRect = element.getBoundingClientRect();
+    const scrollTop =
+      elementRect.top -
+      containerRect.top +
+      scrollContainer.nativeElement.scrollTop -
+      offsetY;
+    scrollContainer.nativeElement.scrollTo({
+      top: scrollTop,
+      behavior: 'smooth',
+    });
   }
 }

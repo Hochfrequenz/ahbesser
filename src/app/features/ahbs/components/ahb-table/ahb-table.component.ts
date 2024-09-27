@@ -90,6 +90,7 @@ export class AhbTableComponent {
     if (markElements.length > 0) {
       const nextIndex = (this.markIndex() + 1) % markElements.length;
       this.markIndex.set(nextIndex);
+      this.scrollToHighlightedElement();
     }
   }
 
@@ -99,7 +100,19 @@ export class AhbTableComponent {
       const previousIndex =
         (this.markIndex() - 1 + markElements.length) % markElements.length;
       this.markIndex.set(previousIndex);
+      this.scrollToHighlightedElement();
     }
+  }
+
+  scrollToHighlightedElement() {
+    const selectedElement = this.selectedMarkElement();
+    const header = this.header();
+    const headerHeight =
+      header?.nativeElement.getBoundingClientRect().height ?? 0;
+    this.selectElement.emit({
+      element: selectedElement || this.elementRef.nativeElement,
+      offsetY: headerHeight,
+    });
   }
 
   // determines each time the section_name changes to add a bold rule in ahb-table.component.html
