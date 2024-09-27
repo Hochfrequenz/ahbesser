@@ -79,16 +79,6 @@ export class FormatVersionSelectComponent
       FV2410: 'Oktober 2024 (FV2410)',
       FV2504: 'April 2025 (FV2504)',
       FV2510: 'Oktober 2025 (FV2510)',
-      FV2604: 'April 2026 (FV2604)',
-      FV2610: 'Oktober 2026 (FV2610)',
-      FV2704: 'April 2027 (FV2704)',
-      FV2710: 'Oktober 2027 (FV2710)',
-      FV2804: 'April 2028 (FV2804)',
-      FV2810: 'Oktober 2028 (FV2810)',
-      FV2904: 'April 2029 (FV2904)',
-      FV2910: 'Oktober 2029 (FV2910)',
-      FV3004: 'April 2030 (FV3004)',
-      FV3010: 'Oktober 2030 (FV3010)',
     };
     return mapping[formatVersion] || formatVersion;
   }
