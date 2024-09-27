@@ -8,9 +8,8 @@ describe('PruefiNavigationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PruefiNavigationComponent]
-    })
-    .compileComponents();
+      imports: [PruefiNavigationComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PruefiNavigationComponent);
     component = fixture.componentInstance;

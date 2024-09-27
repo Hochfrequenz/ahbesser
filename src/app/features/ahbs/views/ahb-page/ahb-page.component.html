@@ -1,10 +1,11 @@
 <div class="h-screen flex flex-col">
-  <app-header class="flex-none">
+  <app-header>
     <app-ahb-search-form-header
       class="flex-1 hidden md:inline"
       [formatVersion]="formatVersion()"
       [pruefi]="pruefi()"
     />
+    <app-pruefi-navigation/>
     <app-input-search-enhanced
       class="inline-block w-full md:w-96"
       [searchQuery]="searchQuery()"

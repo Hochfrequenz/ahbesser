@@ -22,6 +22,7 @@ import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { scrollToElement } from '../../../../core/helper/scroll-to-element';
 import { ExportButtonComponent } from '../../components/export-button/export-button.component';
 import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-url/icon-copy-url.component';
+import { PruefiNavigationComponent } from '../../components/pruefi-navigation/pruefi-navigation.component';
 
 @Component({
   selector: 'app-ahb-page',
@@ -38,6 +39,7 @@ import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-ur
     HighlightPipe,
     ExportButtonComponent,
     IconCopyUrlComponent,
+    PruefiNavigationComponent,
   ],
   templateUrl: './ahb-page.component.html',
 })
