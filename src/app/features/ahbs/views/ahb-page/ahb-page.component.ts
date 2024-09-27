@@ -97,13 +97,29 @@ export class AhbPageComponent implements OnInit {
 
     const tableComponent = this.table();
     if (tableComponent) {
-      tableComponent.resetMarkIndex();
       setTimeout(() => {
-        tableComponent.nextResult();
-        tableComponent.scrollToHighlightedElement();
+        tableComponent.resetMarkIndex();
       }, 0);
     }
     this.initialSearchQuery = null; // Reset after first use
+  }
+
+  scrollToElement(element: HTMLElement, offsetY: number): void {
+    const scrollContainer = this.scroll();
+    if (!scrollContainer?.nativeElement) {
+      return;
+    }
+    const containerRect = scrollContainer.nativeElement.getBoundingClientRect();
+    const elementRect = element.getBoundingClientRect();
+    const scrollTop =
+      elementRect.top -
+      containerRect.top +
+      scrollContainer.nativeElement.scrollTop -
+      offsetY;
+    scrollContainer.nativeElement.scrollTo({
+      top: scrollTop,
+      behavior: 'smooth',
+    });
   }
 
   onSearchQueryChange(query: string | undefined) {
@@ -172,23 +188,5 @@ export class AhbPageComponent implements OnInit {
       .split(' an ')
       .map((part) => part.trim());
     return { sender, empfaenger: empfaenger || '' };
-  }
-
-  scrollToElement(element: HTMLElement, offsetY: number): void {
-    const scrollContainer = this.scroll();
-    if (!scrollContainer?.nativeElement) {
-      return;
-    }
-    const containerRect = scrollContainer.nativeElement.getBoundingClientRect();
-    const elementRect = element.getBoundingClientRect();
-    const scrollTop =
-      elementRect.top -
-      containerRect.top +
-      scrollContainer.nativeElement.scrollTop -
-      offsetY;
-    scrollContainer.nativeElement.scrollTo({
-      top: scrollTop,
-      behavior: 'smooth',
-    });
   }
 }

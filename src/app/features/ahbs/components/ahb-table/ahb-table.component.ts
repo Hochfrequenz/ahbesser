@@ -53,11 +53,6 @@ export class AhbTableComponent {
 
   constructor(private readonly elementRef: ElementRef) {
     effect(() => {
-      this.highlight();
-      this.resetMarkIndex();
-    });
-
-    effect(() => {
       const selectedMarkElement = this.selectedMarkElement();
       if (selectedMarkElement === null) {
         return;
@@ -67,18 +62,13 @@ export class AhbTableComponent {
       markElements.forEach((el) => el.classList.remove('bg-orange-500'));
       selectedMarkElement.classList.add('bg-orange-500');
       // notify outer scroll container
-      const header = this.header();
-      const headerHeight =
-        header?.nativeElement.getBoundingClientRect().height ?? 0;
-      this.selectElement.emit({
-        element: selectedMarkElement,
-        offsetY: headerHeight,
-      });
+      this.scrollToHighlightedElement();
     });
   }
 
   resetMarkIndex() {
     this.markIndex.set(0);
+    this.scrollToHighlightedElement();
   }
 
   getHighlight(): string | undefined {
