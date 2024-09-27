@@ -12,6 +12,7 @@ const createBlobServiceClient = () => {
 const edifactFormats = [
   'COMDIS',
   'IFTSTA',
+  'INSRPT',
   'INVOIC',
   'MSCONS',
   'ORDCHG',
