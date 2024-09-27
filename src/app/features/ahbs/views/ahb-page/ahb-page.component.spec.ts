@@ -78,8 +78,12 @@ describe('AhbPageComponent', () => {
     const testDirection = '';
     const result = component.getSenderEmpfaenger(testDirection);
 
-    expect(result.sender).toBe('');
-    expect(result.empfaenger).toBe('');
+    expect(result.sender).toBe(
+      'MSCONS-Nachrichten können von verschiedenen Marktrollen gesendet werden.',
+    );
+    expect(result.empfaenger).toBe(
+      'MSCONS-Nachrichten können von verschiedenen Marktrollen empfangen werden.',
+    );
   });
 
   // Add more tests here

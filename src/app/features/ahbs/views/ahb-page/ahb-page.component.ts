@@ -153,10 +153,19 @@ export class AhbPageComponent implements OnInit {
   }
 
   // splitting meta.direction into sender and empfaenger
-  getSenderEmpfaenger(direction: string): {
+  getSenderEmpfaenger(direction: string | null): {
     sender: string;
     empfaenger: string;
   } {
+    if (!direction) {
+      return {
+        sender:
+          'MSCONS-Nachrichten können von verschiedenen Marktrollen gesendet werden.',
+        empfaenger:
+          'MSCONS-Nachrichten können von verschiedenen Marktrollen empfangen werden.',
+      };
+    }
+
     const [sender, empfaenger] = direction
       .split(' an ')
       .map((part) => part.trim());
