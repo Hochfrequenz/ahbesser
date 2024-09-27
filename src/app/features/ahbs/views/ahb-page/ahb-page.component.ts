@@ -159,8 +159,10 @@ export class AhbPageComponent implements OnInit {
   } {
     if (!direction) {
       return {
-        sender: 'MSCONS-Nachrichten können von verschiedenen Marktrollen gesendet werden.',
-        empfaenger: 'MSCONS-Nachrichten können von verschiedenen Marktrollen empfangen werden.',
+        sender:
+          'MSCONS-Nachrichten können von verschiedenen Marktrollen gesendet werden.',
+        empfaenger:
+          'MSCONS-Nachrichten können von verschiedenen Marktrollen empfangen werden.',
       };
     }
 
