@@ -30,11 +30,11 @@ export class AhbTableComponent {
 
   selectElement = output<{ element: HTMLElement; offsetY: number }>();
 
-  private highlightSignal = signal<string | undefined>(undefined);
+  private highlightSignal = computed(() => this.highlight());
   markIndex = signal(0);
 
   markElements = computed<HTMLElement[]>(() => {
-    const highlight = this.getHighlight();
+    const highlight = this.highlight();
     const nativeElement = this.elementRef.nativeElement;
     if (!highlight || !nativeElement) {
       return [];
@@ -53,8 +53,8 @@ export class AhbTableComponent {
 
   constructor(private readonly elementRef: ElementRef) {
     effect(() => {
-      this.highlightSignal.set(this.highlight());
-      this.markIndex.set(0);
+      this.highlight();
+      this.resetMarkIndex();
     });
 
     effect(() => {
@@ -77,8 +77,7 @@ export class AhbTableComponent {
     });
   }
 
-  setHighlight(value: string | undefined) {
-    this.highlightSignal.set(value);
+  resetMarkIndex() {
     this.markIndex.set(0);
   }
 

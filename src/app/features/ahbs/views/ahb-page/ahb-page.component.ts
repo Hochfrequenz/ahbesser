@@ -98,7 +98,7 @@ export class AhbPageComponent implements OnInit {
 
     const tableComponent = this.table();
     if (tableComponent) {
-      tableComponent.setHighlight(query);
+      tableComponent.resetMarkIndex();
       tableComponent.nextResult();
     }
     this.initialSearchQuery = null; // Reset after first use
