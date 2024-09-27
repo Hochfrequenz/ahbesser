@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { AhbService } from '../../../../core/api';
-import { Observable, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -28,7 +28,7 @@ export class FormatVersionSelectComponent
 {
   control = new FormControl<string>('');
 
-  formatVersions$!: Observable<string[]>;
+  formatVersions$!: Observable<{ value: string; label: string }[]>;
 
   public onChange?: (formatVersion: string | null) => void;
 
@@ -36,9 +36,15 @@ export class FormatVersionSelectComponent
 
   ngOnInit(): void {
     this.control.disable();
-    this.formatVersions$ = this.ahbService
-      .getFormatVersions()
-      .pipe(tap(() => this.control.enable()));
+    this.formatVersions$ = this.ahbService.getFormatVersions().pipe(
+      map((versions) =>
+        versions.map((v) => ({
+          value: v,
+          label: this.getFormatVersionDate(v),
+        })),
+      ),
+      tap(() => this.control.enable()),
+    );
   }
 
   writeValue(formatVersion: string): void {
@@ -59,5 +65,31 @@ export class FormatVersionSelectComponent
     } else {
       this.control.enable();
     }
+  }
+
+  private getFormatVersionDate(formatVersion: string): string {
+    const mapping: { [key: string]: string } = {
+      FV2104: 'April 2021 (FV2104)',
+      FV2110: 'Oktober 2021 (FV2110)',
+      FV2204: 'April 2022 (FV2204)',
+      FV2210: 'Oktober 2022 (FV2210)',
+      FV2304: 'April 2023 (FV2304)',
+      FV2310: 'Oktober 2023 (FV2310)',
+      FV2404: 'April 2024 (FV2404)',
+      FV2410: 'Oktober 2024 (FV2410)',
+      FV2504: 'April 2025 (FV2504)',
+      FV2510: 'Oktober 2025 (FV2510)',
+      FV2604: 'April 2026 (FV2604)',
+      FV2610: 'Oktober 2026 (FV2610)',
+      FV2704: 'April 2027 (FV2704)',
+      FV2710: 'Oktober 2027 (FV2710)',
+      FV2804: 'April 2028 (FV2804)',
+      FV2810: 'Oktober 2028 (FV2810)',
+      FV2904: 'April 2029 (FV2904)',
+      FV2910: 'Oktober 2029 (FV2910)',
+      FV3004: 'April 2030 (FV3004)',
+      FV3010: 'Oktober 2030 (FV3010)',
+    };
+    return mapping[formatVersion] || formatVersion;
   }
 }
