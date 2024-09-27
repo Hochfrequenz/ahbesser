@@ -153,15 +153,15 @@ export class AhbPageComponent implements OnInit {
   }
 
   // splitting meta.direction into sender and empfaenger
-  getSenderEmpfaenger(direction: string): {
-    sender: string;
-    empfaenger: string;
-  } {
-    const [sender, empfaenger] = direction
-      .split(' an ')
-      .map((part) => part.trim());
+  getSenderEmpfaenger(direction: string | null): { sender: string; empfaenger: string } {
+    if (!direction) {
+      return { sender: '<Information aktuell nicht verfügbar>', empfaenger: '<Information aktuell nicht verfügbar>' };
+    }
+    
+    const [sender, empfaenger] = direction.split(' an ').map((part) => part.trim());
     return { sender, empfaenger: empfaenger || '' };
   }
+  
 
   scrollToElement(element: HTMLElement, offsetY: number): void {
     const scrollContainer = this.scroll();
