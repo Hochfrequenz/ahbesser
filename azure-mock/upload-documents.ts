@@ -1,4 +1,8 @@
-import { BlobServiceClient, StorageSharedKeyCredential, newPipeline } from '@azure/storage-blob';
+import {
+  BlobServiceClient,
+  StorageSharedKeyCredential,
+  newPipeline,
+} from '@azure/storage-blob';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -6,8 +10,12 @@ import * as path from 'path';
 const createBlobServiceClient = () => {
   const azureHost = process.env['AZURE_STORAGE_HOST'] || 'http://127.0.0.1';
   const accountName = 'devstoreaccount1';
-  const accountKey = 'Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==';
-  const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
+  const accountKey =
+    'Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==';
+  const sharedKeyCredential = new StorageSharedKeyCredential(
+    accountName,
+    accountKey,
+  );
   const pipeline = newPipeline(sharedKeyCredential, {
     retryOptions: { maxTries: 4 }, // Retry options
     userAgentOptions: { userAgentPrefix: 'Sample V1.0.0' }, // User agent options
