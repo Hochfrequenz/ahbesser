@@ -1,12 +1,16 @@
 import { AhbPageComponent } from './ahb-page.component';
 import { MockBuilder, MockRender, MockService, ngMocks } from 'ng-mocks';
 import { AhbService } from '../../../../core/api';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
 describe('AhbPageComponent', () => {
-  beforeEach(() =>
-    MockBuilder(AhbPageComponent)
+  let mockRouter: { navigate: jest.Mock };
+
+  beforeEach(() => {
+    mockRouter = { navigate: jest.fn() };
+
+    return MockBuilder(AhbPageComponent)
       .mock(
         AhbService,
         MockService(AhbService, {
@@ -25,8 +29,9 @@ describe('AhbPageComponent', () => {
       )
       .mock(ActivatedRoute, {
         queryParams: of({}),
-      } as Partial<ActivatedRoute>),
-  );
+      } as Partial<ActivatedRoute>)
+      .mock(Router, mockRouter as Partial<Router>);
+  });
 
   it('should render', () => {
     const fixture = MockRender(AhbPageComponent, {
@@ -84,6 +89,21 @@ describe('AhbPageComponent', () => {
     expect(result.empfaenger).toBe(
       'MSCONS-Nachrichten können von verschiedenen Marktrollen empfangen werden.',
     );
+  });
+
+  it('should refresh table and redirect URL upon formatversion change', () => {
+    const fixture = MockRender(AhbPageComponent, {
+      formatVersion: 'FV123',
+      pruefi: '456',
+    });
+    const component = fixture.point.componentInstance;
+    const router = ngMocks.findInstance(Router);
+
+    const navigateSpy = jest.spyOn(router, 'navigate');
+
+    component.onFormatVersionChange('FV456');
+
+    expect(navigateSpy).toHaveBeenCalledWith(['/ahb', 'FV456', '456']);
   });
 
   // Add more tests here

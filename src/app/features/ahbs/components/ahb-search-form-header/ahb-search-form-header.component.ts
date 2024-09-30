@@ -1,4 +1,4 @@
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, input, output } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -25,6 +25,8 @@ export class AhbSearchFormHeaderComponent {
   formatVersion = input.required<string>();
   pruefi = input.required<string>();
 
+  formatVersionChange = output<string>();
+
   headerSearchForm = new FormGroup({
     formatVersion: new FormControl('', Validators.required),
     pruefi: new FormControl('', Validators.required),
@@ -37,6 +39,14 @@ export class AhbSearchFormHeaderComponent {
         pruefi: this.pruefi(),
       });
     });
+
+    this.headerSearchForm
+      .get('formatVersion')
+      ?.valueChanges.subscribe((value) => {
+        if (value) {
+          this.formatVersionChange.emit(value);
+        }
+      });
   }
 
   onPruefiSelect() {
