@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { FooterComponent } from '../../../../shared/components/footer/footer.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AhbTableComponent } from '../../components/ahb-table/ahb-table.component';
 import { Ahb, AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
@@ -58,6 +58,7 @@ export class AhbPageComponent implements OnInit {
   constructor(
     private readonly ahbService: AhbService,
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
   ) {
     effect(() => {
       this.loadAhbData();
@@ -90,6 +91,10 @@ export class AhbPageComponent implements OnInit {
       );
 
     this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
+  }
+
+  onFormatVersionChange(newFormatVersion: string) {
+    this.router.navigate(['/ahb', newFormatVersion, this.pruefi()]);
   }
 
   triggerSearch(query: string | undefined) {

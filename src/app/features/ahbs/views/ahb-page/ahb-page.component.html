@@ -4,6 +4,7 @@
       class="flex-1 hidden md:inline"
       [formatVersion]="formatVersion()"
       [pruefi]="pruefi()"
+      (formatVersionChange)="onFormatVersionChange($event)"
     />
     <app-input-search-enhanced
       class="inline-block w-full md:w-96"
