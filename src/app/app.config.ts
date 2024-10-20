@@ -17,8 +17,8 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideAuth0({
-      domain: 'hochfrequenz.eu.auth0.com',
-      clientId: 'di7tHFfTV4ZXMWXfY4DHhCcJvgJcor8k',
+      domain: environment.auth0Domain,
+      clientId: environment.auth0ClientId,
       authorizationParams: {
         redirect_uri: window.location.origin,
       },
