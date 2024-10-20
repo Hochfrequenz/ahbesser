@@ -1,12 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginButtonComponent } from './login-button.component';
 import { AuthService } from '@auth0/auth0-angular';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+
+type MockAuthService = {
+  isAuthenticated$: Observable<boolean>;
+  loginWithRedirect: jest.Mock;
+  logout: jest.Mock;
+};
 
 describe('LoginButtonComponent', () => {
   let component: LoginButtonComponent;
   let fixture: ComponentFixture<LoginButtonComponent>;
-  let mockAuthService: any;
+  let mockAuthService: MockAuthService;
 
   beforeEach(async () => {
     mockAuthService = {
