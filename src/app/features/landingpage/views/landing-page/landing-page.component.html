@@ -1,3 +1,9 @@
+<div class="relative">
+  <div class="absolute top-4 right-4 z-10">
+    <app-login-button />
+  </div>
+</div>
+
 <div class="min-h-screen flex flex-col">
   <section class="bg-primary py-28 flex flex-grow items-center justify-center">
     <div class="rounded-lg bg-tint p-12 shadow-md">
@@ -10,7 +16,7 @@
       <h3 class="font-bold pb-2">Finde dein AHB</h3>
       <button
         class="rounded-full bg-primary text-white px-5 py-2 shadow-md"
-        routerLink="/ahb"
+        (click)="onOpenClick()"
       >
         Jetzt öffnen
       </button>

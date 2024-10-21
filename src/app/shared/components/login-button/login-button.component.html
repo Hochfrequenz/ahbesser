@@ -1,0 +1,9 @@
+<ng-container *ngIf="authState$ | async as authState">
+  <button
+    class="rounded-full bg-tint text-primary text-[16px] font-bold py-3 px-5 text-secondary"
+    (click)="loginOrLogout()"
+    [disabled]="authState.isLoading"
+  >
+    {{ buttonText$ | async }}
+  </button>
+</ng-container>
