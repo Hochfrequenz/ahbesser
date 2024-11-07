@@ -59,20 +59,20 @@ jobs:
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
-      - name: Login to Octopus
+      - name: Login to Octopus Deploy 🐙
         uses: OctopusDeploy/login@v1
         with:
           server: ${{ secrets.OCTOPUS_SERVER }}
           service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
 
-      - name: Create Release in Octopus Deploy
+      - name: Create a release in Octopus Deploy 🐙
         uses: OctopusDeploy/create-release-action@v3
         with:
           space: GitHub Actions
           project: ${{ env.PROJECT_NAME }}
           release_notes: "Release created from GitHub Actions. Version: ${{ steps.release_info.outputs.tag }}"
 
-      - name: Deploy to Staging Environment
+      - name: Deploy a release in Octopus Deploy 🐙
         run: |
           octo deploy-release \
             --project "${{ env.PROJECT_NAME }}" \
