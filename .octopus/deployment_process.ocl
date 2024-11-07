@@ -1,0 +1,19 @@
+step "run-pulumi-linux" {
+    name = "Run Pulumi (Linux)"
+    properties = {
+        Octopus.Action.TargetRoles = "ahh-tabellen"
+    }
+
+    action {
+        properties = {
+            Octopus.Action.RunOnServer = "false"
+            Octopus.Action.Template.Id = "ActionTemplates-1"
+            Octopus.Action.Template.Version = "3"
+            Pulumi.Command = "up"
+            Pulumi.CreateStack = "false"
+            Pulumi.Restore = "False"
+            Pulumi.StackName = "Hochfrequenz/ahb-tabellen/dev"
+        }
+        worker_pool_variable = ""
+    }
+}
