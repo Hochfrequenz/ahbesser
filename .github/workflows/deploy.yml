@@ -62,7 +62,7 @@ jobs:
 
       - name: Set Pulumi Tag Variable
         run: |
-          pulumi config set tag ${steps.release_info.outputs.tag}
+          pulumi config set tag ${{ steps.release_info.outputs.tag }}
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
