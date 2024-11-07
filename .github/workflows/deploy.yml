@@ -4,6 +4,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   PROJECT_NAME: ahb-tabellen
+  OCTOPUS_SPACE: GitHubActions
 
 on:
   release:
@@ -68,7 +69,7 @@ jobs:
       - name: Create a release in Octopus Deploy 🐙
         uses: OctopusDeploy/create-release-action@v3
         with:
-          space: GitHub Actions
+          space: ${{ env.OCTOPUS_SPACE }}
           project: ${{ env.PROJECT_NAME }}
           release_notes: "Release created from GitHub Actions. Version: ${{ steps.release_info.outputs.tag }}"
 
