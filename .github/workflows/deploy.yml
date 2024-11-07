@@ -68,6 +68,7 @@ jobs:
         with:
           space: ${{ env.OCTOPUS_SPACE }}
           project: ${{ env.PROJECT_NAME }}
+          release_number: ${{ steps.release_info.outputs.tag }}
           git_ref: ${{ github.ref }}
           git_commit: ${{ github.sha }}
           release_notes: "Release created from GitHub Actions. Version: ${{ steps.release_info.outputs.tag }}"
