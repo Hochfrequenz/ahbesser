@@ -9,6 +9,7 @@ step "run-pulumi-linux" {
             Octopus.Action.RunOnServer = "false"
             Octopus.Action.Template.Id = "ActionTemplates-1"
             Octopus.Action.Template.Version = "3"
+            Pulumi.AccessToken = "#{pulumi_pat}"
             Pulumi.Command = "up"
             Pulumi.CreateStack = "false"
             Pulumi.Restore = "False"
