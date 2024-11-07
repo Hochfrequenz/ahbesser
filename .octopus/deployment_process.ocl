@@ -5,6 +5,7 @@ step "set-imagetag-version" {
     }
 
     action {
+        is_required = true
         properties = {
             Octopus.Action.RunOnServer = "false"
             Octopus.Action.Template.Id = "ActionTemplates-1"
