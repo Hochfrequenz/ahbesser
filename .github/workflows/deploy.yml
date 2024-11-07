@@ -1,0 +1,93 @@
+name: Deploy on Release or Pre-release
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  PROJECT_NAME: ahb-tabellen
+  OCTOPUS_SPACE: GitHubActions
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3.3.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Release Information
+        id: release_info
+        run: |
+          echo "::set-output name=tag::${GITHUB_REF#refs/tags/}"
+          echo "::set-output name=prerelease::${{ github.event.release.prerelease }}"
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5.5.1
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6.9.0
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+      - name: Install Pulumi
+        uses: pulumi/actions@v6
+
+      - name: Set Pulumi Tag Variable
+        run: |
+          pulumi config set tag ${steps.release_info.outputs.tag}
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+
+      - name: Login to Octopus Deploy 🐙
+        uses: OctopusDeploy/login@v1
+        with:
+          server: ${{ secrets.OCTOPUS_SERVER }}
+          service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
+
+      - name: Create a release in Octopus Deploy 🐙
+        uses: OctopusDeploy/create-release-action@v3
+        with:
+          space: ${{ env.OCTOPUS_SPACE }}
+          project: ${{ env.PROJECT_NAME }}
+          git_ref: ${{ github.ref }}
+          git_commit: ${{ github.sha }}
+          release_notes: "Release created from GitHub Actions. Version: ${{ steps.release_info.outputs.tag }}"
+
+      - name: Deploy a release in Octopus Deploy 🐙
+        uses: OctopusDeploy/deploy-release-action@v3
+        with:
+          space: ${{ env.OCTOPUS_SPACE }}
+          project: ${{ env.PROJECT_NAME }}
+          release_number: ${{ steps.release_info.outputs.tag }}
+          environments: |
+            Staging
+
+      - name: Notify for Production Deployment Approval
+        if: ${{ steps.release_info.outputs.prerelease == 'false' }}
+        run: |
+          echo "Release ${{ steps.release_info.outputs.tag }} created. Awaiting manual approval for production deployment."
