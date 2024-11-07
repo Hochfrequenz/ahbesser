@@ -71,6 +71,8 @@ jobs:
         with:
           space: ${{ env.OCTOPUS_SPACE }}
           project: ${{ env.PROJECT_NAME }}
+          git_ref: ${{ github.ref }}
+          git_commit: ${{ github.sha }}
           release_notes: "Release created from GitHub Actions. Version: ${{ steps.release_info.outputs.tag }}"
 
       - name: Deploy a release in Octopus Deploy 🐙
