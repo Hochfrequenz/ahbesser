@@ -76,14 +76,13 @@ jobs:
           release_notes: "Release created from GitHub Actions. Version: ${{ steps.release_info.outputs.tag }}"
 
       - name: Deploy a release in Octopus Deploy 🐙
-        run: |
-          octo deploy-release \
-            --project "${{ env.PROJECT_NAME }}" \
-            --releaseNumber "${{ steps.release_info.outputs.tag }}" \
-            --deployto "Staging" \
-            --progress \
-            --server "${{ secrets.OCTOPUS_SERVER }}" \
-            --apiKey "${{ secrets.OCTOPUS_API_KEY }}"
+        uses: OctopusDeploy/deploy-release-action@v3
+        with:
+          space: ${{ env.OCTOPUS_SPACE }}
+          project: ${{ env.PROJECT_NAME }}
+          release_number: ${{ steps.release_info.outputs.tag }}
+          environments: |
+            Staging
 
       - name: Notify for Production Deployment Approval
         if: ${{ steps.release_info.outputs.prerelease == 'false' }}
