@@ -57,16 +57,6 @@ jobs:
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
 
-      - name: Install Pulumi
-        uses: pulumi/actions@v6
-
-      - name: Set Pulumi Tag Variable
-        run: |
-          cd pulumi
-          pulumi config set tag ${{ steps.release_info.outputs.tag }}
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-
       - name: Login to Octopus Deploy 🐙
         uses: OctopusDeploy/login@v1
         with:
