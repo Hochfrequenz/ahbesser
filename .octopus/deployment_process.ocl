@@ -1,7 +1,7 @@
 step "run-pulumi-linux" {
     name = "Run Pulumi (Linux)"
     properties = {
-        Octopus.Action.TargetRoles = "ahh-tabellen"
+        Octopus.Action.TargetRoles = "ahb-tabellen"
     }
 
     action {
