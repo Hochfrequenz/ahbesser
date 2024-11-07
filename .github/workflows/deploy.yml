@@ -12,6 +12,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -57,16 +59,18 @@ jobs:
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
+      - name: Login to Octopus
+        uses: OctopusDeploy/login@v1
+        with:
+          server: ${{ secrets.OCTOPUS_SERVER }}
+          service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
+
       - name: Create Release in Octopus Deploy
-        id: octopus_release
-        run: |
-          octo create-release \
-            --project "${{ env.PROJECT_NAME }}" \
-            --version "${{ steps.release_info.outputs.tag }}" \
-            --packageversion "${{ steps.release_info.outputs.tag }}" \
-            --server "${{ secrets.OCTOPUS_SERVER }}" \
-            --apiKey "${{ secrets.OCTOPUS_API_KEY }}" \
-            --releaseNotes "Release created from GitHub Actions. Version: ${{ steps.release_info.outputs.tag }}"
+        uses: OctopusDeploy/create-release-action@v3
+        with:
+          space: GitHub Actions
+          project: ${{ env.PROJECT_NAME }}
+          release_notes: "Release created from GitHub Actions. Version: ${{ steps.release_info.outputs.tag }}"
 
       - name: Deploy to Staging Environment
         run: |
