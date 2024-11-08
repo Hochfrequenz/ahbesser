@@ -21,6 +21,19 @@ step "set-imagetag-version" {
     }
 }
 
+step "manual-approval-for-prod-deployment" {
+    name = "Manual Approval For Prod Deployment"
+
+    action {
+        action_type = "Octopus.Manual"
+        environments = ["production"]
+        properties = {
+            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
+            Octopus.Action.Manual.Instructions = "Bitte den Output des pulumi preview prüfen und freigeben"
+        }
+    }
+}
+
 step "run-pulumi-linux" {
     name = "Run Pulumi (Linux)"
     properties = {
