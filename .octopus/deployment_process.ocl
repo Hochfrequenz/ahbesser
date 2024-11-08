@@ -5,13 +5,17 @@ step "set-imagetag-version" {
     }
 
     action {
+        is_required = true
         properties = {
             Octopus.Action.Template.Id = "ActionTemplates-1"
             Octopus.Action.Template.Version = "3"
             Pulumi.AccessToken = "#{pulumi_pat}"
-            Pulumi.Command = "config set imageTag #{Octopus.Release.Git.TagName}"
+            Pulumi.Args = "set imageTag #{Octopus.Release.Git.TagName}"
+            Pulumi.Command = "config"
             Pulumi.CreateStack = "false"
             Pulumi.Restore = "true"
+            Pulumi.StackName = "#{pulumi_stack}"
+            Pulumi.WorkingDirectory = "/tmp/ahb-tabellen"
         }
         worker_pool = "hf"
     }
