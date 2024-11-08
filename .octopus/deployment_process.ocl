@@ -5,15 +5,33 @@ step "set-imagetag-version" {
     }
 
     action {
+        is_required = true
         properties = {
             Octopus.Action.Template.Id = "ActionTemplates-1"
             Octopus.Action.Template.Version = "3"
             Pulumi.AccessToken = "#{pulumi_pat}"
-            Pulumi.Command = "config set imageTag #{Octopus.Release.Git.TagName}"
+            Pulumi.Args = "set imageTag #{Octopus.Release.Git.TagName}"
+            Pulumi.Command = "config"
             Pulumi.CreateStack = "false"
             Pulumi.Restore = "true"
+            Pulumi.StackName = "#{pulumi_stack}"
+            Pulumi.WorkingDirectory = "/tmp/ahb-tabellen"
         }
         worker_pool = "hf"
+    }
+}
+
+step "manual-approval-for-prod-deployment" {
+    name = "Manual Approval For Prod Deployment"
+
+    action {
+        action_type = "Octopus.Manual"
+        environments = ["production"]
+        properties = {
+            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
+            Octopus.Action.Manual.Instructions = "Bitte den Output des pulumi preview prüfen und freigeben"
+            Octopus.Action.RunOnServer = "false"
+        }
     }
 }
 
@@ -24,16 +42,18 @@ step "run-pulumi-linux" {
     }
 
     action {
+        is_required = true
         properties = {
-            Octopus.Action.RunOnServer = "false"
             Octopus.Action.Template.Id = "ActionTemplates-1"
             Octopus.Action.Template.Version = "3"
             Pulumi.AccessToken = "#{pulumi_pat}"
+            Pulumi.Args = "--yes"
             Pulumi.Command = "up"
             Pulumi.CreateStack = "false"
-            Pulumi.Restore = "False"
-            Pulumi.StackName = "Hochfrequenz/ahb-tabellen/dev"
+            Pulumi.Restore = "True"
+            Pulumi.StackName = "#{pulumi_stack}"
+            Pulumi.WorkingDirectory = "/tmp/ahb-tabellen"
         }
-        worker_pool_variable = ""
+        worker_pool = "hf"
     }
 }
