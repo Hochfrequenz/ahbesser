@@ -1,0 +1,5 @@
+variable "pulumi_stack" {
+    value "Hochfrequenz/ahb-tabellen/dev" {
+        environment = ["staging"]
+    }
+}
