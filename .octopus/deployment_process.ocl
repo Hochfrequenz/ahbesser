@@ -6,16 +6,14 @@ step "set-imagetag-version" {
 
     action {
         properties = {
-            Octopus.Action.RunOnServer = "false"
             Octopus.Action.Template.Id = "ActionTemplates-1"
             Octopus.Action.Template.Version = "3"
             Pulumi.AccessToken = "#{pulumi_pat}"
             Pulumi.Command = "config set imageTag #{Octopus.Release.Git.TagName}"
             Pulumi.CreateStack = "false"
             Pulumi.Restore = "true"
-            Pulumi.StackName = "Hochfrequenz/ahb-tabellen/dev"
         }
-        worker_pool_variable = ""
+        worker_pool = "hf"
     }
 }
 
