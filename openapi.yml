@@ -98,16 +98,47 @@ paths:
           required: true
           schema:
             $ref: "#/components/schemas/FormatVersion"
+        - name: include_descriptions
+          in: query
+          description: Whether to include descriptions with the Pruefidentifikators
+          required: false
+          schema:
+            type: boolean
+            default: false
       responses:
         "200":
           description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-                example: ["31001", "31002", "31003"]
+                oneOf:
+                  - type: array
+                    items:
+                      type: string
+                    example: ["31001", "31002", "31003"]
+                  - type: array
+                    items:
+                      type: object
+                      properties:
+                        pruefi:
+                          type: string
+                        description:
+                          type: string
+                    example:
+                      [
+                        {
+                          "pruefi": "31001",
+                          "description": "Description for 31001",
+                        },
+                        {
+                          "pruefi": "31002",
+                          "description": "Description for 31002",
+                        },
+                        {
+                          "pruefi": "31003",
+                          "description": "Description for 31003",
+                        },
+                      ]
   /version:
     get:
       tags:
