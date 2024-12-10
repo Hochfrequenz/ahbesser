@@ -5,5 +5,7 @@ variable "pulumi_stack" {
 }
 
 variable "Azure" {
-    value "AzureHF" {}
+    type = "AzureAccount"
+
+    value "azurehf" {}
 }
