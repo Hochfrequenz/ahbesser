@@ -3,3 +3,9 @@ variable "pulumi_stack" {
         environment = ["staging"]
     }
 }
+
+variable "Azure" {
+    type = "AzureAccount"
+
+    value "azurehf" {}
+}

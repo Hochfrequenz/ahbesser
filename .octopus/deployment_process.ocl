@@ -29,7 +29,7 @@ step "copy-repo-to-tmp-directory" {
 step "set-imagetag-version" {
     name = "Set ImageTag Version"
     properties = {
-        Octopus.Action.TargetRoles = "ahb-tabellen"
+        Octopus.Action.TargetRoles = "utilibee.io"
     }
 
     action {
