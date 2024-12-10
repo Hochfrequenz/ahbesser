@@ -1,7 +1,7 @@
 step "copy-repo-to-tmp-directory" {
     name = "Copy repo to tmp directory"
     properties = {
-        Octopus.Action.TargetRoles = "ahb-tabellen"
+        Octopus.Action.TargetRoles = "utilibee.io"
     }
 
     action {
@@ -43,7 +43,7 @@ step "set-imagetag-version" {
             Pulumi.CreateStack = "false"
             Pulumi.Restore = "true"
             Pulumi.StackName = "#{pulumi_stack}"
-            Pulumi.WorkingDirectory = "/tmp/ahb-tabellen"
+            Pulumi.WorkingDirectory = "/tmp/ahb-tabellen/pulumi"
         }
         worker_pool = "hf"
     }
@@ -80,7 +80,7 @@ step "run-pulumi-linux" {
             Pulumi.CreateStack = "false"
             Pulumi.Restore = "True"
             Pulumi.StackName = "#{pulumi_stack}"
-            Pulumi.WorkingDirectory = "/tmp/ahb-tabellen"
+            Pulumi.WorkingDirectory = "/tmp/ahb-tabellen/pulumi"
         }
         worker_pool = "hf"
     }
