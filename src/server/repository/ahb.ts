@@ -72,7 +72,7 @@ export default class AHBRepository extends BlobStorageBacked {
     formatVersion: string,
     type: FileType,
   ): Promise<string> {
-    const format = await this.getFormatName(pruefi, formatVersion);
+    const format = await this.getFormatName(pruefi);
     const fileFormatDirectoryName = this.getFileTypeDirectoryName(type);
     return `${formatVersion}/${format}/${fileFormatDirectoryName}/${pruefi}.${type.toString()}`;
   }
@@ -93,26 +93,31 @@ export default class AHBRepository extends BlobStorageBacked {
 
   // Retrieve the format name by looking at the blobs names in the container.
   // Assuming each pruefi is unique for a formatVersion.
-  private async getFormatName(
+  private getFormatName(
     pruefi: string,
-    formatVersion: string,
-  ): Promise<string> {
-    const containerClient = this.client.getContainerClient(
-      this.ahbContainerName,
-    );
-    let blobsFound = false;
-    for await (const blob of containerClient.listBlobsFlat({
-      prefix: `${formatVersion}/`,
-    })) {
-      blobsFound = true;
-      if (blob.name.includes(pruefi)) {
-        return blob.name.split('/')[1];
-      }
-    }
-    throw blobsFound
-      ? new NotFoundError(
-          `Pruefi ${pruefi} does not exist on Format Version ${formatVersion}`,
-        )
-      : new NotFoundError(`Format Version ${formatVersion} does not exist`);
+  ): string {
+    const mapping: { [key: string]: string } = {
+      '99': 'APERAK',
+      '29': 'COMDIS',
+      '21': 'IFTSTA',
+      '23': 'INSRPT',
+      '31': 'INVOIC',
+      '13': 'MSCONS',
+      '39': 'ORDCHG',
+      '17': 'ORDERS',
+      '19': 'ORDRSP',
+      '27': 'PRICAT',
+      '15': 'QUOTES',
+      '33': 'REMADV',
+      '35': 'REQOTE',
+      '37': 'PARTIN',
+      '11': 'UTILMD',
+      '25': 'UTILTS',
+      '91': 'CONTRL',
+      '92': 'APERAK',
+      '44': 'UTILMD', // UTILMD for GAS since FV2310
+      '55': 'UTILMD', // UTILMD for STROM since FV2310
+    };
+    return mapping[pruefi.slice(0, 2)];
   }
 }
