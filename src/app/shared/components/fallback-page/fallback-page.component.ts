@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './fallback-page.component.html',
 })
-export class FallbackPageComponent {
-
-}
+export class FallbackPageComponent {}

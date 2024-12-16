@@ -8,9 +8,8 @@ describe('FallbackPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FallbackPageComponent]
-    })
-    .compileComponents();
+      imports: [FallbackPageComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(FallbackPageComponent);
     component = fixture.componentInstance;
