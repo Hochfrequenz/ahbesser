@@ -68,11 +68,18 @@
         </td>
         <td class="px-6 py-4 conditions-column">
           @if (line.conditions) {
-            @for (
-              condition of addConditionLineBreaks(line.conditions);
-              track $index
-            ) {
-              <p [innerHTML]="condition | highlight: highlight()"></p>
+            <p
+              [innerHTML]="
+                getDisplayText(line.conditions, i) | highlight: highlight()
+              "
+            ></p>
+            @if (shouldShowToggle(line.conditions)) {
+              <button
+                (click)="toggleExpand(i)"
+                class="text-secondary hover:text-primary text-sm mt-1"
+              >
+                {{ isExpanded(i) ? "weniger anzeigen" : "mehr anzeigen" }}
+              </button>
             }
           }
         </td>

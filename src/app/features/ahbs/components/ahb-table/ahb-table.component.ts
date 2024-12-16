@@ -9,14 +9,17 @@ import {
   viewChild,
 } from '@angular/core';
 import { Ahb } from '../../../../core/api';
-import { JsonPipe } from '@angular/common';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { environment } from '../../../../environments/environment';
+
+interface ExpandedState {
+  [key: number]: boolean;
+}
 
 @Component({
   selector: 'app-ahb-table',
   standalone: true,
-  imports: [JsonPipe, HighlightPipe],
+  imports: [HighlightPipe],
   templateUrl: './ahb-table.component.html',
   styleUrl: './ahb-table.component.scss',
 })
@@ -32,6 +35,10 @@ export class AhbTableComponent {
 
   private highlightSignal = computed(() => this.highlight());
   markIndex = signal(0);
+  expandedRows = signal<ExpandedState>({});
+
+  // max. string length of 'Bedingung/Hinweis' entries
+  readonly COLLAPSE_LENGTH = 80;
 
   markElements = computed<HTMLElement[]>(() => {
     const highlight = this.highlight();
@@ -178,5 +185,34 @@ export class AhbTableComponent {
 
   addConditionLineBreaks(conditions: string): string[] {
     return conditions ? conditions.split('\n') : [];
+  }
+
+  toggleExpand(index: number) {
+    const currentState = this.expandedRows();
+    this.expandedRows.set({
+      ...currentState,
+      [index]: !currentState[index],
+    });
+  }
+
+  isExpanded(index: number): boolean {
+    return this.expandedRows()[index] || false;
+  }
+
+  // "mehr/weniger anzeigen" toggle for 'Bedingungen/Hinweise' column if len > COLLAPSE_LENGTH
+  shouldShowToggle(conditions: string): boolean {
+    if (!conditions) return false;
+    return conditions.length > this.COLLAPSE_LENGTH;
+  }
+
+  getDisplayText(conditions: string, rowIndex: number): string {
+    if (!conditions) return '';
+    if (
+      this.isExpanded(rowIndex) ||
+      conditions.length <= this.COLLAPSE_LENGTH
+    ) {
+      return conditions;
+    }
+    return conditions.substring(0, this.COLLAPSE_LENGTH) + ' ...';
   }
 }
