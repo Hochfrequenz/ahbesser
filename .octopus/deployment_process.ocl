@@ -13,7 +13,7 @@ step "copy-repo-to-tmp-directory" {
             Octopus.Action.Script.ScriptFileName = "CopyToTmp.sh"
             Octopus.Action.Script.ScriptSource = "Package"
         }
-        worker_pool = "hf"
+        worker_pool = "hf-workers"
 
         packages {
             acquisition_location = "Server"
@@ -45,7 +45,7 @@ step "set-imagetag-version" {
             Pulumi.StackName = "#{pulumi_stack}"
             Pulumi.WorkingDirectory = "/tmp/ahb-tabellen"
         }
-        worker_pool = "hf"
+        worker_pool = "hf-workers"
     }
 }
 
@@ -82,6 +82,6 @@ step "run-pulumi-linux" {
             Pulumi.StackName = "#{pulumi_stack}"
             Pulumi.WorkingDirectory = "/tmp/ahb-tabellen"
         }
-        worker_pool = "hf"
+        worker_pool = "hf-workers"
     }
 }
