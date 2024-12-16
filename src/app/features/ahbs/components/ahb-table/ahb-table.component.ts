@@ -140,10 +140,10 @@ export class AhbTableComponent {
     }
 
     if (this.hasDataElementChanged(index)) {
-      return 'border-t border-gray-400 border-dashed'; // dashed line between different data_elements
+      return 'border-t border-gray-300'; // thin solid line between different data_elements
     }
 
-    return 'border-t border-gray-300'; // thin solid horizontal line between all rows (if not overwritten by the bold/dashed lines)
+    return 'border-t border-gray-400 border-dashed'; //  by default: dashed line between all rows (if not overwritten by the bold/thin solid lines)
   }
 
   isNewSegment(index: number): boolean {
