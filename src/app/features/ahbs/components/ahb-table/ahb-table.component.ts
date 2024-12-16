@@ -120,6 +120,14 @@ export class AhbTableComponent {
     return currentLine.section_name !== previousLine.section_name;
   }
 
+  // determines each time the section changes
+  hasSegmentChanged(currentIndex: number): boolean {
+    if (currentIndex === 0) return false;
+    const currentLine = this.lines()[currentIndex];
+    const previousLine = this.lines()[currentIndex - 1];
+    return currentLine.segment_code !== previousLine.segment_code;
+  }
+
   // determines each time the data_element changes to add a dashed rule in ahb-table.component.html
   hasDataElementChanged(currentIndex: number): boolean {
     if (currentIndex === 0) return false;
@@ -139,11 +147,11 @@ export class AhbTableComponent {
       return 'border-t-2 border-gray-300'; // bold line between different segment_names
     }
 
-    if (this.hasDataElementChanged(index)) {
+    if (this.hasDataElementChanged(index) || this.hasSegmentChanged(index)) {
       return 'border-t border-gray-300'; // thin solid line between different data_elements
     }
 
-    return 'border-t border-gray-400 border-dashed'; //  by default: dashed line between all rows (if not overwritten by the bold/thin solid lines)
+    return 'border-t border-gray-250 border-dashed'; //  by default: dashed line between all rows (if not overwritten by the bold/thin solid lines)
   }
 
   isNewSegment(index: number): boolean {
