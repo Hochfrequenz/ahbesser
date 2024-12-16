@@ -9,7 +9,6 @@ import {
   viewChild,
 } from '@angular/core';
 import { Ahb } from '../../../../core/api';
-import { JsonPipe } from '@angular/common';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { environment } from '../../../../environments/environment';
 
