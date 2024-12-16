@@ -1,6 +1,16 @@
 # BUILDER IMAGE
 FROM node:23.4-alpine as builder
 
+# Set build arguments
+ARG BUILD_DATE
+ARG COMMIT_ID
+ARG VERSION
+
+# Set environment variables
+ENV BUILD_DATE=$BUILD_DATE
+ENV COMMIT_ID=$COMMIT_ID
+ENV VERSION=$VERSION
+
 WORKDIR /service
 
 COPY . .
@@ -16,7 +26,7 @@ FROM node:23.4-alpine
 WORKDIR /service
 
 RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nodejs
+  adduser --system --uid 1001 nodejs
 
 COPY --chown=nodejs:nodejs --from=builder /service/dist dist
 COPY --chown=nodejs:nodejs --from=builder /service/node_modules node_modules
