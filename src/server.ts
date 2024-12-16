@@ -17,10 +17,10 @@ const indexHtml = 'index.html';
 
 server.get('/version', (_, res) =>
   res.send({
-    buildDate: '',
-    commitId: '',
-    name: 'ahbesser',
-    version: '0.0.0',
+    buildDate: process.env['BUILD_DATE'] || 'unknown',
+    commitId: process.env['COMMIT_ID'] || 'unknown',
+    version: process.env['VERSION'] || 'unknown',
+    name: 'ahb-tabellen',
   }),
 );
 server.get('/health', (_, res) => res.send());
