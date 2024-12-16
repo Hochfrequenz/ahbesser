@@ -16,7 +16,7 @@ import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-ahb-table',
   standalone: true,
-  imports: [JsonPipe, HighlightPipe],
+  imports: [HighlightPipe],
   templateUrl: './ahb-table.component.html',
   styleUrl: './ahb-table.component.scss',
 })
