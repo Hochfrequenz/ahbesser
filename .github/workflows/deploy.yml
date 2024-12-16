@@ -25,10 +25,12 @@ jobs:
       - name: Set build and release information
         id: build_release_info
         run: |
-          echo "BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_ENV
-          echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
-          echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          echo "::set-output name=tag::${GITHUB_REF#refs/tags/}"
+          BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          COMMIT_ID=$(git rev-parse HEAD)
+          VERSION_TAG=${GITHUB_REF#refs/tags/}
+          echo "::set-output name=build_date::$BUILD_DATE"
+          echo "::set-output name=commit_id::$COMMIT_ID"
+          echo "::set-output name=version_tag::$VERSION_TAG"
           echo "::set-output name=prerelease::${{ github.event.release.prerelease }}"
 
       - name: Log in to the Container registry
@@ -52,6 +54,10 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            BUILD_DATE=${{ steps.build_release_info.outputs.build_date }}
+            COMMIT_ID=${{ steps.build_release_info.outputs.commit_id }}
+            VERSION=${{ steps.build_release_info.outputs.version_tag }}
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
@@ -71,21 +77,21 @@ jobs:
         with:
           space: ${{ env.OCTOPUS_SPACE }}
           project: ${{ env.PROJECT_NAME }}
-          release_number: ${{ steps.release_info.outputs.tag }}
+          release_number: ${{ steps.build_release_info.outputs.version_tag }}
           git_ref: ${{ github.ref }}
           git_commit: ${{ github.sha }}
-          release_notes: "Release created from GitHub Actions. Version: ${{ steps.release_info.outputs.tag }}"
+          release_notes: "Release created from GitHub Actions. Version: ${{ steps.build_release_info.outputs.version_tag }}"
 
       - name: Deploy a release in Octopus Deploy 🐙
         uses: OctopusDeploy/deploy-release-action@v3
         with:
           space: ${{ env.OCTOPUS_SPACE }}
           project: ${{ env.PROJECT_NAME }}
-          release_number: ${{ steps.release_info.outputs.tag }}
+          release_number: ${{ steps.build_release_info.outputs.version_tag }}
           environments: |
             Staging
 
       - name: Notify for Production Deployment Approval
-        if: ${{ steps.release_info.outputs.prerelease == 'false' }}
+        if: ${{ steps.build_release_info.outputs.prerelease == 'false' }}
         run: |
-          echo "Release ${{ steps.release_info.outputs.tag }} created. Awaiting manual approval for production deployment."
+          echo "Release ${{ steps.build_release_info.outputs.version_tag }} created. Awaiting manual approval for production deployment."
