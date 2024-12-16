@@ -93,9 +93,7 @@ export default class AHBRepository extends BlobStorageBacked {
 
   // Retrieve the format name by looking at the blobs names in the container.
   // Assuming each pruefi is unique for a formatVersion.
-  private getFormatName(
-    pruefi: string,
-  ): string {
+  private getFormatName(pruefi: string): string {
     const mapping: { [key: string]: string } = {
       '99': 'APERAK',
       '29': 'COMDIS',
