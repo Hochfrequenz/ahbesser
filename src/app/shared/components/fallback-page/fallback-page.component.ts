@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-fallback-page',
   standalone: true,
-  imports: [],
   templateUrl: './fallback-page.component.html',
+  styleUrls: ['./fallback-page.component.css']
 })
-export class FallbackPageComponent {}
+export class FallbackPageComponent {
+  @Input() pruefi!: string;
+  @Input() formatVersion!: string;
+}
