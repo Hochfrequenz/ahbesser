@@ -73,8 +73,9 @@
     </div>
   </div>
 
-  <div *ngIf="errorOccurred">
+  <div *ngIf="errorOccurred" class="flex-1 flex items-center justify-center">
     <app-fallback-page
+      class="w-1/2"
       [pruefi]="pruefi()"
       [formatVersion]="formatVersion()"
     ></app-fallback-page>
