@@ -21,6 +21,7 @@ import { InputSearchEnhancedComponent } from '../../../../shared/components/inpu
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { ExportButtonComponent } from '../../components/export-button/export-button.component';
 import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-url/icon-copy-url.component';
+import { LoginButtonComponent } from '../../../../shared/components/login-button/login-button.component';
 
 @Component({
   selector: 'app-ahb-page',
@@ -37,6 +38,7 @@ import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-ur
     HighlightPipe,
     ExportButtonComponent,
     IconCopyUrlComponent,
+    LoginButtonComponent
   ],
   templateUrl: './ahb-page.component.html',
 })

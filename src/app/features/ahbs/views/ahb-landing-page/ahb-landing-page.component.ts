@@ -11,6 +11,7 @@ import {
 import { Router } from '@angular/router';
 import { FormatVersionSelectComponent } from '../../components/format-version-select/format-version-select.component';
 import { PruefiInputComponent } from '../../components/pruefi-input/pruefi-input.component';
+import {LoginButtonComponent} from "../../../../shared/components/login-button/login-button.component";
 
 @Component({
   selector: 'app-ahb-landing-page',
@@ -22,6 +23,7 @@ import { PruefiInputComponent } from '../../components/pruefi-input/pruefi-input
     ReactiveFormsModule,
     FormatVersionSelectComponent,
     PruefiInputComponent,
+    LoginButtonComponent,
   ],
   templateUrl: './ahb-landing-page.component.html',
 })
