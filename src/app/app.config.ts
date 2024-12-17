@@ -7,6 +7,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { environment } from './environments/environment';
 import { provideAuth0 } from '@auth0/auth0-angular';
 
+function isDevelopmentEnvironment(): boolean {
+  return !environment.production || window.location.hostname === 'localhost';
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withComponentInputBinding()),
@@ -22,6 +26,20 @@ export const appConfig: ApplicationConfig = {
       authorizationParams: {
         redirect_uri: window.location.origin,
       },
+      ...(isDevelopmentEnvironment() && {
+        skipRedirectCallback: true,
+        _overrideIsAuthenticated: true,
+        isAuthenticated: () => Promise.resolve(true),
+        getUser: () =>
+          Promise.resolve({
+            email: 'local@development.com',
+            name: 'Local Development User',
+            sub: 'local-development',
+          }),
+        handleRedirectCallback: () => Promise.resolve({ appState: {} }),
+        loginWithRedirect: () => Promise.resolve(),
+        logout: () => Promise.resolve(),
+      }),
     }),
   ],
 };
