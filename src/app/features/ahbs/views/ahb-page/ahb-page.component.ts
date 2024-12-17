@@ -38,7 +38,7 @@ import { LoginButtonComponent } from '../../../../shared/components/login-button
     HighlightPipe,
     ExportButtonComponent,
     IconCopyUrlComponent,
-    LoginButtonComponent
+    LoginButtonComponent,
   ],
   templateUrl: './ahb-page.component.html',
 })
