@@ -22,6 +22,7 @@ import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { ExportButtonComponent } from '../../components/export-button/export-button.component';
 import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-url/icon-copy-url.component';
 import { FallbackPageComponent } from '../../../../shared/components/fallback-page/fallback-page.component';
+import { LoginButtonComponent } from '../../../../shared/components/login-button/login-button.component';
 
 @Component({
   selector: 'app-ahb-page',
@@ -39,6 +40,7 @@ import { FallbackPageComponent } from '../../../../shared/components/fallback-pa
     ExportButtonComponent,
     IconCopyUrlComponent,
     FallbackPageComponent,
+    LoginButtonComponent,
   ],
   templateUrl: './ahb-page.component.html',
 })
