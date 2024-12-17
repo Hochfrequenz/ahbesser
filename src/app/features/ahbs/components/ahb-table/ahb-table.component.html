@@ -68,11 +68,14 @@
         </td>
         <td class="px-6 py-4 conditions-column">
           @if (line.conditions) {
-            <p
-              [innerHTML]="
-                getDisplayText(line.conditions, i) | highlight: highlight()
-              "
-            ></p>
+            @for (
+              condition of addConditionLineBreaks(
+                getDisplayText(line.conditions, i)
+              );
+              track $index
+            ) {
+              <div [innerHTML]="condition | highlight: highlight()"></div>
+            }
             @if (shouldShowToggle(line.conditions)) {
               <button
                 (click)="toggleExpand(i)"

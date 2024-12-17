@@ -191,8 +191,13 @@ export class AhbTableComponent {
     return mapping[key] || '';
   }
 
+  // split before [<condition>] and remove empty strings
   addConditionLineBreaks(conditions: string): string[] {
-    return conditions ? conditions.split('\n') : [];
+    if (!conditions) return [];
+    return conditions
+      .split(/(?=\[\d+\])/)
+      .map((s) => s.trim())
+      .filter((s) => s);
   }
 
   toggleExpand(index: number) {
@@ -210,17 +215,18 @@ export class AhbTableComponent {
   // "mehr/weniger anzeigen" toggle for 'Bedingungen/Hinweise' column if len > COLLAPSE_LENGTH
   shouldShowToggle(conditions: string): boolean {
     if (!conditions) return false;
-    return conditions.length > this.COLLAPSE_LENGTH;
+    const allConditions = this.addConditionLineBreaks(conditions);
+    return allConditions.length > 1;
   }
 
   getDisplayText(conditions: string, rowIndex: number): string {
     if (!conditions) return '';
-    if (
-      this.isExpanded(rowIndex) ||
-      conditions.length <= this.COLLAPSE_LENGTH
-    ) {
+    const allConditions = this.addConditionLineBreaks(conditions);
+
+    if (this.isExpanded(rowIndex)) {
       return conditions;
     }
-    return conditions.substring(0, this.COLLAPSE_LENGTH) + ' ...';
+
+    return allConditions[0];
   }
 }
