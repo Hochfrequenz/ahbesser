@@ -15,13 +15,13 @@ import { AhbTableComponent } from '../../components/ahb-table/ahb-table.componen
 import { Ahb, AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {Observable, map, shareReplay, tap, catchError, of} from 'rxjs';
+import { Observable, map, shareReplay, tap, catchError, of } from 'rxjs';
 import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-header/ahb-search-form-header.component';
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { ExportButtonComponent } from '../../components/export-button/export-button.component';
 import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-url/icon-copy-url.component';
-import {FallbackPageComponent} from "../../../../shared/components/fallback-page/fallback-page.component";
+import { FallbackPageComponent } from '../../../../shared/components/fallback-page/fallback-page.component';
 
 @Component({
   selector: 'app-ahb-page',
@@ -78,32 +78,32 @@ export class AhbPageComponent implements OnInit {
     });
   }
 
-private loadAhbData() {
-  this.errorOccurred = false;
+  private loadAhbData() {
+    this.errorOccurred = false;
 
-  this.ahb$ = this.ahbService
-    .getAhb$Json({
-      'format-version': this.formatVersion(),
-      pruefi: this.pruefi(),
-    })
-    .pipe(
-      tap(() => {
-        if (this.initialSearchQuery) {
-          setTimeout(() => this.triggerSearch(this.initialSearchQuery!), 0);
-        }
-      }),
-      shareReplay(1),
-      catchError((error) => {
-        if (error.status === 404) {
-          this.errorOccurred = true;
-        }
-        // Return an empty object of type Ahb if there's an error
-        return of({} as Ahb); // Returning a fallback object of type Ahb
+    this.ahb$ = this.ahbService
+      .getAhb$Json({
+        'format-version': this.formatVersion(),
+        pruefi: this.pruefi(),
       })
-    );
+      .pipe(
+        tap(() => {
+          if (this.initialSearchQuery) {
+            setTimeout(() => this.triggerSearch(this.initialSearchQuery!), 0);
+          }
+        }),
+        shareReplay(1),
+        catchError((error) => {
+          if (error.status === 404) {
+            this.errorOccurred = true;
+          }
+          // Return an empty object of type Ahb if there's an error
+          return of({} as Ahb); // Returning a fallback object of type Ahb
+        }),
+      );
 
-  this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
-}
+    this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
+  }
 
   onFormatVersionChange(newFormatVersion: string) {
     this.router.navigate(['/ahb', newFormatVersion, this.pruefi()]);
