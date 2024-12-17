@@ -15,12 +15,13 @@ import { AhbTableComponent } from '../../components/ahb-table/ahb-table.componen
 import { Ahb, AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Observable, map, shareReplay, tap } from 'rxjs';
+import { Observable, map, shareReplay, tap, catchError, of } from 'rxjs';
 import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-header/ahb-search-form-header.component';
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { ExportButtonComponent } from '../../components/export-button/export-button.component';
 import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-url/icon-copy-url.component';
+import { FallbackPageComponent } from '../../../../shared/components/fallback-page/fallback-page.component';
 import { LoginButtonComponent } from '../../../../shared/components/login-button/login-button.component';
 
 @Component({
@@ -38,6 +39,7 @@ import { LoginButtonComponent } from '../../../../shared/components/login-button
     HighlightPipe,
     ExportButtonComponent,
     IconCopyUrlComponent,
+    FallbackPageComponent,
     LoginButtonComponent,
   ],
   templateUrl: './ahb-page.component.html',
@@ -54,6 +56,7 @@ export class AhbPageComponent implements OnInit {
 
   ahb$?: Observable<Ahb>;
   lines$?: Observable<Ahb['lines']>;
+  errorOccurred = false;
 
   private initialSearchQuery: string | null = null;
 
@@ -78,6 +81,8 @@ export class AhbPageComponent implements OnInit {
   }
 
   private loadAhbData() {
+    this.errorOccurred = false;
+
     this.ahb$ = this.ahbService
       .getAhb$Json({
         'format-version': this.formatVersion(),
@@ -90,6 +95,13 @@ export class AhbPageComponent implements OnInit {
           }
         }),
         shareReplay(1),
+        catchError((error) => {
+          if (error.status === 404) {
+            this.errorOccurred = true;
+          }
+          // Return an empty object of type Ahb if there's an error
+          return of({} as Ahb); // Returning a fallback object of type Ahb
+        }),
       );
 
     this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));

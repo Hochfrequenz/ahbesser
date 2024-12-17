@@ -21,57 +21,67 @@
     />
   </app-header>
 
-  <div class="flex-1 flex flex-col overflow-auto" #scroll>
-    <div>
-      @if (ahb$ | async; as ahb) {
-        <div class="flex-none flex flex-col md:flex-row mb-10">
-          <section class="pt-10 mx-5">
-            <h2 class="border-b inline-block pb-[12px] mb-[20px] uppercase">
-              Anwendungshandbücher für Menschen
-            </h2>
-            <h3 class="font-bold text-[20px]">
-              Anwendungshandbuch {{ ahb.meta.pruefidentifikator }}
-            </h3>
-            <p class="text-[20px] mb-5">{{ ahb.meta.description }}</p>
-            <p class="text-[14px]">
-              <span class="font-bold">Sender:</span>
-              {{ getSenderEmpfaenger(ahb.meta.direction).sender }}<br />
-              <span class="font-bold">Empfänger:</span>
-              {{ getSenderEmpfaenger(ahb.meta.direction).empfaenger }}
-            </p>
-            <p class="text-[14px]">
-              <span class="font-bold"> Format: </span>
-              {{ edifactFormat() }}
-            </p>
-          </section>
-          <section class="pt-10 mx-5 text-right flex-1">
-            <div class="flex justify-end items-center space-x-3">
-              <app-icon-copy-url />
-              <app-export-button
-                [formatVersion]="formatVersion()"
-                [pruefi]="pruefi()"
-              />
-            </div>
-          </section>
-        </div>
-      }
-    </div>
+  <div *ngIf="!errorOccurred">
+    <div class="flex-1 flex flex-col overflow-auto" #scroll>
+      <div>
+        @if (ahb$ | async; as ahb) {
+          <div class="flex-none flex flex-col md:flex-row mb-10">
+            <section class="pt-10 mx-5">
+              <h2 class="border-b inline-block pb-[12px] mb-[20px] uppercase">
+                Anwendungshandbücher für Menschen
+              </h2>
+              <h3 class="font-bold text-[20px]">
+                Anwendungshandbuch {{ ahb.meta.pruefidentifikator }}
+              </h3>
+              <p class="text-[20px] mb-5">{{ ahb.meta.description }}</p>
+              <p class="text-[14px]">
+                <span class="font-bold">Sender:</span>
+                {{ getSenderEmpfaenger(ahb.meta.direction).sender }}<br />
+                <span class="font-bold">Empfänger:</span>
+                {{ getSenderEmpfaenger(ahb.meta.direction).empfaenger }}
+              </p>
+              <p class="text-[14px]">
+                <span class="font-bold"> Format: </span>
+                {{ edifactFormat() }}
+              </p>
+            </section>
+            <section class="pt-10 mx-5 text-right flex-1">
+              <div class="flex justify-end items-center space-x-3">
+                <app-icon-copy-url />
+                <app-export-button
+                  [formatVersion]="formatVersion()"
+                  [pruefi]="pruefi()"
+                />
+              </div>
+            </section>
+          </div>
+        }
+      </div>
 
-    <div>
-      @if (lines$ | async; as lines) {
-        <app-ahb-table
-          [lines]="lines"
-          [highlight]="searchQuery()"
-          [formatVersion]="formatVersion()"
-          [pruefi]="pruefi()"
-          (selectElement)="scrollToElement($event.element, $event.offsetY)"
-        />
-      } @else {
-        <div class="flex-1 flex items-center justify-center">
-          <p class="text-xl">loading ...</p>
-        </div>
-      }
+      <div>
+        @if (lines$ | async; as lines) {
+          <app-ahb-table
+            [lines]="lines"
+            [highlight]="searchQuery()"
+            [formatVersion]="formatVersion()"
+            [pruefi]="pruefi()"
+            (selectElement)="scrollToElement($event.element, $event.offsetY)"
+          />
+        } @else {
+          <div class="flex-1 flex items-center justify-center">
+            <p class="text-xl">loading ...</p>
+          </div>
+        }
+      </div>
     </div>
+  </div>
+
+  <div *ngIf="errorOccurred" class="flex-1 flex items-center justify-center">
+    <app-fallback-page
+      class="w-1/2"
+      [pruefi]="pruefi()"
+      [formatVersion]="formatVersion()"
+    ></app-fallback-page>
   </div>
 
   <app-footer class="flex-none" />
