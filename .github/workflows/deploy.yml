@@ -5,9 +5,9 @@ env:
   IMAGE_NAME: ${{ github.repository }}
   PROJECT_NAME: ahb-tabellen
   OCTOPUS_SPACE: Default
-  BUILD_DATE: ""
-  COMMIT_ID: ""
-  VERSION_TAG: ""
+  BUILD_DATE: "set by build_release_info step"
+  COMMIT_ID: "set by build_release_info step"
+  VERSION_TAG: "set by build_release_info step"
   DOCKER_METADATA_OUTPUT_TAGS: "set by metadata action"
   DOCKER_METADATA_OUTPUT_LABELS: "set by metadata action"
 
