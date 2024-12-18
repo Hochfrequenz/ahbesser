@@ -18,6 +18,11 @@ services:
   server:
     build:
       dockerfile: ./Dockerfile
+      context: .
+      args:
+        BUILD_DATE: ${BUILD_DATE}
+        COMMIT_ID: ${COMMIT_ID}
+        VERSION: ${VERSION}
     ports:
       - 4000:4000
     environment:
@@ -25,6 +30,9 @@ services:
       - AZURE_BLOB_STORAGE_CONNECTION_STRING=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://host.docker.internal:10000/devstoreaccount1;
       - AHB_CONTAINER_NAME=uploaded-files
       - FORMAT_VERSION_CONTAINER_NAME=format-versions
+      - BUILD_DATE=foo
+      - COMMIT_ID=bar
+      - VERSION=v1.0.0
     depends_on:
       - upload-documents
       - azurite
