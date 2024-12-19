@@ -68,6 +68,7 @@ jobs:
         # The build-push-action does not output the digest as environment variable only as output.
         # But the output way is deprecated. So we need to set it manually
         # https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
+        # I opened an issue in the build-push-action repository: https://github.com/docker/build-push-action/issues/1285
       - name: Set DIGEST environment variable
         run: echo "DIGEST=${{ steps.push.outputs.digest }}" >> $GITHUB_ENV
 
