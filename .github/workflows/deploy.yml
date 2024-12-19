@@ -12,7 +12,6 @@ env:
   DOCKER_METADATA_OUTPUT_LABELS: "set by metadata action"
   DIGEST: "set by output of push step"
 
-
 on:
   release:
     types: [published]
