@@ -1,15 +1,5 @@
 # BUILDER IMAGE
-FROM node:23.4-alpine as builder
-
-# Set build arguments
-ARG BUILD_DATE
-ARG COMMIT_ID
-ARG VERSION
-
-# Set environment variables
-ENV BUILD_DATE=$BUILD_DATE
-ENV COMMIT_ID=$COMMIT_ID
-ENV VERSION=$VERSION
+FROM node:23.4-alpine AS builder
 
 WORKDIR /service
 
@@ -22,6 +12,16 @@ RUN npm run server:build
 
 # PRODUCTION IMAGE
 FROM node:23.4-alpine
+
+# Set build arguments
+ARG BUILD_DATE
+ARG COMMIT_ID
+ARG VERSION
+
+# Set environment variables
+ENV BUILD_DATE=$BUILD_DATE
+ENV COMMIT_ID=$COMMIT_ID
+ENV VERSION=$VERSION
 
 WORKDIR /service
 
