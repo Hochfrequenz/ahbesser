@@ -20,7 +20,7 @@ export class LoginButtonComponent implements OnInit {
   buttonText$ = new BehaviorSubject<string>('Einloggen');
 
   private isDevelopment =
-    !environment.production || window.location.hostname === 'localhost';
+    !environment.isProduction || window.location.hostname === 'localhost';
 
   constructor(public auth: AuthService) {}
 

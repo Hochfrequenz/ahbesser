@@ -8,7 +8,7 @@ import { environment } from './environments/environment';
 import { provideAuth0 } from '@auth0/auth0-angular';
 
 function isDevelopmentEnvironment(): boolean {
-  return !environment.production || window.location.hostname === 'localhost';
+  return !environment.isProduction || window.location.hostname === 'localhost';
 }
 
 export const appConfig: ApplicationConfig = {

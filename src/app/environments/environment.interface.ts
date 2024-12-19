@@ -1,5 +1,5 @@
 export interface EnvironmentInterface {
-  production: boolean;
+  isProduction: boolean;
   apiUrl: string;
   bedingungsbaumBaseUrl: string;
   auth0Domain: string;

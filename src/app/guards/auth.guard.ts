@@ -14,7 +14,7 @@ import { environment } from '../environments/environment';
 })
 export class AuthGuard implements CanActivate {
   private isDevelopment =
-    !environment.production || window.location.hostname === 'localhost';
+    !environment.isProduction || window.location.hostname === 'localhost';
 
   constructor(private auth: AuthService) {}
 

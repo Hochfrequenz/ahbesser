@@ -19,7 +19,7 @@ export class LandingPageComponent {
   ) {}
 
   onOpenClick() {
-    if (!environment.production || window.location.hostname === 'localhost') {
+    if (!environment.isProduction || window.location.hostname === 'localhost') {
       this.router.navigate(['/ahb']);
       return;
     }
