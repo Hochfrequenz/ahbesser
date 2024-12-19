@@ -4,6 +4,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { FooterComponent } from '../../../../shared/components/footer/footer.component';
 import { LoginButtonComponent } from '../../../../shared/components/login-button/login-button.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-landing-page',
@@ -18,6 +19,11 @@ export class LandingPageComponent {
   ) {}
 
   onOpenClick() {
+    if (!environment.isProduction || window.location.hostname === 'localhost') {
+      this.router.navigate(['/ahb']);
+      return;
+    }
+
     this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
       if (isAuthenticated) {
         this.router.navigate(['/ahb']);
