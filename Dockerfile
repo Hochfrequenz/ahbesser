@@ -1,5 +1,5 @@
 # BUILDER IMAGE
-FROM node:23.4-alpine as builder
+FROM node:23.4-alpine AS builder
 
 # Set build arguments
 ARG BUILD_DATE
