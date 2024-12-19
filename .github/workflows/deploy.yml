@@ -5,6 +5,12 @@ env:
   IMAGE_NAME: ${{ github.repository }}
   PROJECT_NAME: ahb-tabellen
   OCTOPUS_SPACE: Default
+  BUILD_DATE: "set by build_release_info step"
+  COMMIT_ID: "set by build_release_info step"
+  VERSION_TAG: "set by build_release_info step"
+  DOCKER_METADATA_OUTPUT_TAGS: "set by metadata action"
+  DOCKER_METADATA_OUTPUT_LABELS: "set by metadata action"
+  DIGEST: "set by output of push step"
 
 on:
   release:
@@ -28,10 +34,9 @@ jobs:
           BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
           COMMIT_ID=$(git rev-parse HEAD)
           VERSION_TAG=${GITHUB_REF#refs/tags/}
-          echo "::set-output name=build_date::$BUILD_DATE"
-          echo "::set-output name=commit_id::$COMMIT_ID"
-          echo "::set-output name=version_tag::$VERSION_TAG"
-          echo "::set-output name=prerelease::${{ github.event.release.prerelease }}"
+          echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
+          echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
+          echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_ENV
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3.3.0
@@ -52,18 +57,25 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.DOCKER_METADATA_OUTPUT_TAGS }}
+          labels: ${{ env.DOCKER_METADATA_OUTPUT_LABELS }}
           build-args: |
-            BUILD_DATE=${{ steps.build_release_info.outputs.build_date }}
-            COMMIT_ID=${{ steps.build_release_info.outputs.commit_id }}
-            VERSION=${{ steps.build_release_info.outputs.version_tag }}
+            BUILD_DATE=${{ env.BUILD_DATE }}
+            COMMIT_ID=${{ env.COMMIT_ID }}
+            VERSION=${{ env.VERSION_TAG }}
+
+        # The build-push-action does not output the digest as environment variable only as output.
+        # But the output way is deprecated. So we need to set it manually
+        # https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
+        # I opened an issue in the build-push-action repository: https://github.com/docker/build-push-action/issues/1285
+      - name: Set DIGEST environment variable
+        run: echo "DIGEST=${{ steps.push.outputs.digest }}" >> $GITHUB_ENV
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.push.outputs.digest }}
+          subject-digest: ${{ env.DIGEST }}
           push-to-registry: true
 
       - name: Login to Octopus Deploy 🐙
@@ -77,21 +89,21 @@ jobs:
         with:
           space: ${{ env.OCTOPUS_SPACE }}
           project: ${{ env.PROJECT_NAME }}
-          release_number: ${{ steps.build_release_info.outputs.version_tag }}
+          release_number: ${{ env.VERSION_TAG }}
           git_ref: ${{ github.ref }}
           git_commit: ${{ github.sha }}
-          release_notes: "Release created from GitHub Actions. Version: ${{ steps.build_release_info.outputs.version_tag }}"
+          release_notes: "Release created from GitHub Actions. Version: ${{ env.VERSION_TAG }}"
 
       - name: Deploy a release in Octopus Deploy 🐙
         uses: OctopusDeploy/deploy-release-action@v3
         with:
           space: ${{ env.OCTOPUS_SPACE }}
           project: ${{ env.PROJECT_NAME }}
-          release_number: ${{ steps.build_release_info.outputs.version_tag }}
+          release_number: ${{ env.VERSION_TAG }}
           environments: |
             Staging
 
       - name: Notify for Production Deployment Approval
-        if: ${{ steps.build_release_info.outputs.prerelease == 'false' }}
+        if: ${{ github.event.release.prerelease == 'false' }}
         run: |
-          echo "Release ${{ steps.build_release_info.outputs.version_tag }} created. Awaiting manual approval for production deployment."
+          echo "Release ${{ env.VERSION_TAG }} created. Awaiting manual approval for production deployment."
