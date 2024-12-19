@@ -10,6 +10,7 @@ env:
   VERSION_TAG: "set by build_release_info step"
   DOCKER_METADATA_OUTPUT_TAGS: "set by metadata action"
   DOCKER_METADATA_OUTPUT_LABELS: "set by metadata action"
+  DIGEST: "set by output of push step"
 
 
 on:
@@ -64,11 +65,17 @@ jobs:
             COMMIT_ID=${{ env.COMMIT_ID }}
             VERSION=${{ env.VERSION_TAG }}
 
+        # The build-push-action does not output the digest as environment variable only as output.
+        # But the output way is deprecated. So we need to set it manually
+        # https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
+      - name: Set DIGEST environment variable
+        run: echo "DIGEST=${{ steps.push.outputs.digest }}" >> $GITHUB_ENV
+
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.push.outputs.digest }}
+          subject-digest: ${{ env.DIGEST }}
           push-to-registry: true
 
       - name: Login to Octopus Deploy 🐙
