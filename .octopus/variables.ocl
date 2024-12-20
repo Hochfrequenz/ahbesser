@@ -2,6 +2,11 @@ variable "pulumi_stack" {
     value "hochfrequenz/ahb-tabellen/dev" {
         environment = ["staging"]
     }
+
+    value "hochfrequenz/ahb-tabellen/prod" {
+        description = ""
+        environment = ["production"]
+    }
 }
 
 variable "Azure" {

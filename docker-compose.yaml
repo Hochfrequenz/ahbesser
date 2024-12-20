@@ -3,7 +3,7 @@ services:
     image: mcr.microsoft.com/azure-storage/azurite:latest
     ports:
       - 10000:10000
-    command: azurite-blob --blobHost 0.0.0.0
+    command: azurite-blob --blobHost 0.0.0.0 --skipApiVersionCheck
     restart: unless-stopped
 
   upload-documents:
@@ -18,6 +18,11 @@ services:
   server:
     build:
       dockerfile: ./Dockerfile
+      context: .
+      args:
+        BUILD_DATE: dummy
+        COMMIT_ID: wip
+        VERSION: v0.0.0-local
     ports:
       - 4000:4000
     environment:

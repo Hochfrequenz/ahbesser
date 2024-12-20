@@ -9,14 +9,17 @@ import {
   viewChild,
 } from '@angular/core';
 import { Ahb } from '../../../../core/api';
-import { JsonPipe } from '@angular/common';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { environment } from '../../../../environments/environment';
+
+interface ExpandedState {
+  [key: number]: boolean;
+}
 
 @Component({
   selector: 'app-ahb-table',
   standalone: true,
-  imports: [JsonPipe, HighlightPipe],
+  imports: [HighlightPipe],
   templateUrl: './ahb-table.component.html',
   styleUrl: './ahb-table.component.scss',
 })
@@ -32,6 +35,10 @@ export class AhbTableComponent {
 
   private highlightSignal = computed(() => this.highlight());
   markIndex = signal(0);
+  expandedRows = signal<ExpandedState>({});
+
+  // max. string length of 'Bedingung/Hinweis' entries
+  readonly COLLAPSE_LENGTH = 80;
 
   markElements = computed<HTMLElement[]>(() => {
     const highlight = this.highlight();
@@ -113,6 +120,14 @@ export class AhbTableComponent {
     return currentLine.section_name !== previousLine.section_name;
   }
 
+  // determines each time the section changes
+  hasSegmentChanged(currentIndex: number): boolean {
+    if (currentIndex === 0) return false;
+    const currentLine = this.lines()[currentIndex];
+    const previousLine = this.lines()[currentIndex - 1];
+    return currentLine.segment_code !== previousLine.segment_code;
+  }
+
   // determines each time the data_element changes to add a dashed rule in ahb-table.component.html
   hasDataElementChanged(currentIndex: number): boolean {
     if (currentIndex === 0) return false;
@@ -132,11 +147,11 @@ export class AhbTableComponent {
       return 'border-t-2 border-gray-300'; // bold line between different segment_names
     }
 
-    if (this.hasDataElementChanged(index)) {
-      return 'border-t border-gray-400 border-dashed'; // dashed line between different data_elements
+    if (this.hasDataElementChanged(index) || this.hasSegmentChanged(index)) {
+      return 'border-t border-gray-300'; // thin solid line between different data_elements
     }
 
-    return 'border-t border-gray-300'; // thin solid horizontal line between all rows (if not overwritten by the bold/dashed lines)
+    return 'border-t border-gray-250 border-dashed'; //  by default: dashed line between all rows (if not overwritten by the bold/thin solid lines)
   }
 
   isNewSegment(index: number): boolean {
@@ -176,7 +191,42 @@ export class AhbTableComponent {
     return mapping[key] || '';
   }
 
+  // split before [<condition>] and remove empty strings
   addConditionLineBreaks(conditions: string): string[] {
-    return conditions ? conditions.split('\n') : [];
+    if (!conditions) return [];
+    return conditions
+      .split(/(?=\[\d+\])/)
+      .map((s) => s.trim())
+      .filter((s) => s);
+  }
+
+  toggleExpand(index: number) {
+    const currentState = this.expandedRows();
+    this.expandedRows.set({
+      ...currentState,
+      [index]: !currentState[index],
+    });
+  }
+
+  isExpanded(index: number): boolean {
+    return this.expandedRows()[index] || false;
+  }
+
+  // "mehr/weniger anzeigen" toggle for 'Bedingungen/Hinweise' column if len > COLLAPSE_LENGTH
+  shouldShowToggle(conditions: string): boolean {
+    if (!conditions) return false;
+    const allConditions = this.addConditionLineBreaks(conditions);
+    return allConditions.length > 1;
+  }
+
+  getDisplayText(conditions: string, rowIndex: number): string {
+    if (!conditions) return '';
+    const allConditions = this.addConditionLineBreaks(conditions);
+
+    if (this.isExpanded(rowIndex)) {
+      return conditions;
+    }
+
+    return allConditions[0];
   }
 }
