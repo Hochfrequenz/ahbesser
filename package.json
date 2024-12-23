@@ -43,7 +43,7 @@
     "@auth0/auth0-angular": "^2.2.3",
     "@azure/storage-blob": "^12.26.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "prettier": "^3.4.2",
     "rxjs": "~7.8.0",
