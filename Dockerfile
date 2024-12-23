@@ -1,5 +1,5 @@
 # BUILDER IMAGE
-FROM node:23.4-alpine AS builder
+FROM node:23.5-alpine AS builder
 
 WORKDIR /service
 
@@ -11,7 +11,7 @@ RUN npm run ng:build
 RUN npm run server:build
 
 # PRODUCTION IMAGE
-FROM node:23.4-alpine
+FROM node:23.5-alpine
 
 # Set build arguments
 ARG BUILD_DATE
