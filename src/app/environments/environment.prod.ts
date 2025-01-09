@@ -5,5 +5,5 @@ export const environment: EnvironmentInterface = {
   apiUrl: '',
   bedingungsbaumBaseUrl: 'https://bedingungsbaum.hochfrequenz.de',
   auth0Domain: 'auth.hochfrequenz.de',
-  auth0ClientId: 'Hku0EniRjy4B2krnx1sCwTIOzAiVta1B',
+  auth0ClientId: 'VSkXGqlTD7Rf5Q4n9a0h00rInEyL2ZQj',
 };
