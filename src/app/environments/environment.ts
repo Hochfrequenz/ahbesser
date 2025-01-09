@@ -1,3 +1,4 @@
+// this environment is used for local development and on the staging server
 import { EnvironmentInterface } from './environment.interface';
 
 export const environment: EnvironmentInterface = {
