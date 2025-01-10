@@ -1,0 +1,15 @@
+config:
+  ahb-tabellen:imageTag: v0.0.22
+  ahb-tabellen:ahbBlobContainerName: ahb-tables
+  ahb-tabellen:appPath: app
+  ahb-tabellen:containerPort: "80"
+  ahb-tabellen:cpu: "1"
+  ahb-tabellen:formatVersionContainerName: format-versions
+  ahb-tabellen:imageName: ghcr.io/hochfrequenz/ahbesser
+  ahb-tabellen:memory: "2"
+  ahb-tabellen:bedingungsbaumBaseUrl: https://bedingungsbaum.hochfrequenz.de
+  ahb-tabellen:location: germanywestcentral
+  ahb-tabellen:ghcr_token:
+    secure: AAABAKDpxgOPRYBk2KIdX7mlihB3y/nJDFZQsK2/2Mf88W8XnEeC4JbZSsDwPfvq0vZjnHa/x3iU6Kt2V1ww8jO3YiXKAswf
+  azure-native:location: germanywestcentral
+  pulumi:template: container-azure-python
