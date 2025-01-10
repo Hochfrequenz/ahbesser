@@ -15,3 +15,14 @@ node_modules
 .prettierrc
 README.md
 *.tsbuildinfo
+
+
+.DS_Store
+.env
+.example.env
+.github
+.gitmodules
+.idea
+.octopus
+azure-mock
+node_modules

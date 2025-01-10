@@ -29,6 +29,9 @@ assert container_port, "containerPort must be set"
 bedingungsbaum_base_url = config.get("bedingungsbaumBaseUrl")
 assert bedingungsbaum_base_url, "bedingungsbaumBaseUrl must be set"
 
+environment = config.get("environment")
+assert environment, "environment must be set"
+
 cpu = config.get_int("cpu", 1)
 memory = config.get_int("memory", 2)
 
@@ -112,6 +115,7 @@ web_app = azure_native.web.WebApp(
             azure_native.web.NameValuePairArgs(
                 name="BEDINGUNGSBAUM_BASE_URL", value=bedingungsbaum_base_url
             ),
+            azure_native.web.NameValuePairArgs(name="ENVIRONMENT", value=environment),
         ],
         linux_fx_version=f"DOCKER|{image_name_with_tag}",
     ),
