@@ -12,3 +12,4 @@ config:
   ahb-tabellen:memory: "2"
   azure-native:location: germanywestcentral
   pulumi:template: container-azure-python
+  ahb-tabellen:environment: stage
