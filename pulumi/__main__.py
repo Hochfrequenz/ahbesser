@@ -32,6 +32,9 @@ assert bedingungsbaum_base_url, "bedingungsbaumBaseUrl must be set"
 environment = config.get("environment")
 assert environment, "environment must be set"
 
+websites_container_start_time_limit = config.get("websitesContainerStartTimeLimit")
+assert websites_container_start_time_limit, "websitesContainerStartTimeLimit must be set"
+
 cpu = config.get_int("cpu", 1)
 memory = config.get_int("memory", 2)
 
@@ -116,6 +119,7 @@ web_app = azure_native.web.WebApp(
                 name="BEDINGUNGSBAUM_BASE_URL", value=bedingungsbaum_base_url
             ),
             azure_native.web.NameValuePairArgs(name="ENVIRONMENT", value=environment),
+            azure_native.web.NameValuePairArgs(name="WEBSITES_CONTAINER_START_TIME_LIMIT", value=websites_container_start_time_limit),
         ],
         linux_fx_version=f"DOCKER|{image_name_with_tag}",
     ),
