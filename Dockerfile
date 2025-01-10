@@ -20,11 +20,14 @@ RUN addgroup --system --gid 1001 nodejs && \
 # Copy all necessary files into the image
 COPY . .
 
+# Change ownership of the service folder and all copied files to the nodejs user
+RUN chown -R nodejs:nodejs /service
+
 # Install dependencies
 RUN npm ci --no-scripts
 
 # Switch to non-root user
-# USER nodejs
+USER nodejs
 
 # Expose port for the server
 EXPOSE 3000
