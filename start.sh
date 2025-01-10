@@ -3,15 +3,18 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-echo "Starting application setup..."
+echo "Starting application setup with environment: $ENVIRONMENT"
 
-# Build the Angular application
+# Build the Angular application using local Angular CLI
 echo "Building Angular application..."
-npm run ng:build --configuration=$ENVIRONMENT
+./node_modules/.bin/ng build --configuration=$ENVIRONMENT
 
 # Build the Express server
 echo "Building Express server..."
 npm run server:build
+
+# switch to non-root user nodejs
+su - nodejs
 
 # Start the server
 echo "Starting the Express server..."
