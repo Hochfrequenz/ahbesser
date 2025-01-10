@@ -1,6 +1,7 @@
 config:
   ahb-tabellen:ahbBlobContainerName: ahb-tables
   ahb-tabellen:appPath: app
+  ahb-tabellen:bedingungsbaumBaseUrl: https://bedingungsbaum.stage.hochfrequenz.de
   ahb-tabellen:containerPort: "80"
   ahb-tabellen:cpu: "1"
   ahb-tabellen:formatVersionContainerName: format-versions
@@ -9,6 +10,5 @@ config:
   ahb-tabellen:imageName: ghcr.io/hochfrequenz/ahbesser
   ahb-tabellen:imageTag: v0.0.22
   ahb-tabellen:memory: "2"
-  ahb-tabellen:bedingungsbaumBaseUrl: https://bedingungsbaum.stage.hochfrequenz.de
   azure-native:location: germanywestcentral
   pulumi:template: container-azure-python
