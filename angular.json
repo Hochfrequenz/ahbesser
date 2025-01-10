@@ -60,6 +60,9 @@
             "production": {
               "buildTarget": "ahbesser:build:production"
             },
+            "stage": {
+              "buildTarget": "ahbesser:build:stage"
+            },
             "development": {
               "buildTarget": "ahbesser:build:development"
             }
