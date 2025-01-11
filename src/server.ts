@@ -6,7 +6,6 @@ import { join } from 'path';
 import cors from 'cors';
 import router from './server/infrastructure/api.routes';
 import { httpErrorHandler } from './server/infrastructure/errors';
-import { env } from 'process';
 import { environment } from './app/environments/environment';
 
 const server = express();
