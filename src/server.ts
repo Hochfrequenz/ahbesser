@@ -20,6 +20,7 @@ server.get('/version', (_, res) =>
     buildDate: process.env['BUILD_DATE'] || 'unknown',
     commitId: process.env['COMMIT_ID'] || 'unknown',
     version: process.env['VERSION'] || 'unknown',
+    environment: process.env['ENVIRONMENT'] || 'unknown (local)',
     name: 'ahb-tabellen',
   }),
 );
