@@ -12,5 +12,6 @@ config:
   ahb-tabellen:imageTag: v0.0.22
   ahb-tabellen:location: germanywestcentral
   ahb-tabellen:memory: "2"
+  ahb-tabellen:websitesContainerStartTimeLimit: "300"
   azure-native:location: germanywestcentral
   pulumi:template: container-azure-python
