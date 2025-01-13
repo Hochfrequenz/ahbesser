@@ -1,5 +1,5 @@
 # Single-Stage Dockerfile
-FROM node:23.5-alpine
+FROM node:23.6-alpine
 
 # Set environment arguments and variables
 ARG BUILD_DATE
