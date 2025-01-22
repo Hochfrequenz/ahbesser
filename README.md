@@ -4,7 +4,7 @@
 
 ### Production
 
-The service is not production-ready yet. We will provide a production version soon and add the link here.
+You can access the **prod** version of the application on [ahb-tabellen.hochfrequenz.de](https://ahb-tabellen.hochfrequenz.de).
 
 ### Stage
 
