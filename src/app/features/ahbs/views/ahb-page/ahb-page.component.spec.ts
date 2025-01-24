@@ -14,7 +14,7 @@ describe('AhbPageComponent', () => {
       .mock(
         AhbService,
         MockService(AhbService, {
-          getAhb$Json: jest.fn((params) =>
+          getAhb$Json: jest.fn(params =>
             of({
               meta: {
                 pruefidentifikator: params.pruefi,
@@ -23,9 +23,9 @@ describe('AhbPageComponent', () => {
                 maus_version: '',
               },
               lines: [],
-            }),
+            })
           ),
-        } as Partial<AhbService>),
+        } as Partial<AhbService>)
       )
       .mock(ActivatedRoute, {
         queryParams: of({}),
@@ -84,10 +84,10 @@ describe('AhbPageComponent', () => {
     const result = component.getSenderEmpfaenger(testDirection);
 
     expect(result.sender).toBe(
-      'MSCONS-Nachrichten können von verschiedenen Marktrollen gesendet werden.',
+      'MSCONS-Nachrichten können von verschiedenen Marktrollen gesendet werden.'
     );
     expect(result.empfaenger).toBe(
-      'MSCONS-Nachrichten können von verschiedenen Marktrollen empfangen werden.',
+      'MSCONS-Nachrichten können von verschiedenen Marktrollen empfangen werden.'
     );
   });
 

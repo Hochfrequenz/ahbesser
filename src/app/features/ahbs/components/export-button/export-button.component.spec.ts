@@ -12,14 +12,12 @@ describe('ExportButtonComponent', () => {
           .fn()
           .mockReturnValue(of(new Blob())),
       },
-    }),
+    })
   );
 
   beforeAll(() => {
     // Mock window.URL.createObjectURL
-    window.URL.createObjectURL = jest.fn(
-      () => 'blob:http://localhost/export.xlsx',
-    );
+    window.URL.createObjectURL = jest.fn(() => 'blob:http://localhost/export.xlsx');
     window.URL.revokeObjectURL = jest.fn();
   });
 
@@ -45,7 +43,7 @@ describe('ExportButtonComponent', () => {
     await component.whenStable();
 
     expect(
-      ahbService.getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet,
+      ahbService.getAhb$VndOpenxmlformatsOfficedocumentSpreadsheetmlSheet
     ).toHaveBeenCalledWith({
       'format-version': 'testFormatVersion',
       pruefi: 'testPruefi',

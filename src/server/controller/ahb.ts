@@ -17,8 +17,7 @@ export default class AHBController {
     switch (format.toLowerCase()) {
       case 'xlsx':
         fileType = FileType.XLSX;
-        contentType =
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
         break;
       case 'csv':
         fileType = FileType.CSV;
@@ -36,7 +35,7 @@ export default class AHBController {
       .setHeader('Content-Type', contentType)
       .setHeader(
         'Content-Disposition',
-        `attachment; filename=AHB_${formatVersion}_${pruefi}.${format}`,
+        `attachment; filename=AHB_${formatVersion}_${pruefi}.${format}`
       );
 
     if (fileType === FileType.JSON) {

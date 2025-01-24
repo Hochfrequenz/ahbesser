@@ -1,15 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{html,ts}"],
+  content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
       colors: {
-        primary: "#EBBEC1",
-        secondary: "#CCA9AB",
-        tint: "#F6ECED",
+        primary: '#EBBEC1',
+        secondary: '#CCA9AB',
+        tint: '#F6ECED',
       },
       fontFamily: {
-        sans: ["Roboto", "Helvetica", "Arial", "sans-serif"],
+        sans: ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+      },
+      fontWeight: {
+        normal: 400,
+        medium: 500,
+        bold: 700,
       },
     },
   },

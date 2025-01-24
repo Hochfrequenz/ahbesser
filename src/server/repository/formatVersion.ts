@@ -24,8 +24,7 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
     if (!process.env['FORMAT_VERSION_CONTAINER_NAME']) {
       throw new Error('FORMAT_VERSION_CONTAINER_NAME is not set');
     }
-    this.formatVersionContainerName =
-      process.env['FORMAT_VERSION_CONTAINER_NAME'];
+    this.formatVersionContainerName = process.env['FORMAT_VERSION_CONTAINER_NAME'];
   }
 
   // Return a list of all unique format versions
@@ -47,9 +46,7 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
   // 3. Download the blob
   // 4. Convert the blob content to a string
   // 5. Parse the string to a list of pruefis
-  public async listPruefisByFormatVersion(
-    formatVersion: string,
-  ): Promise<string[]> {
+  public async listPruefisByFormatVersion(formatVersion: string): Promise<string[]> {
     const containerClient = await this.getFormatVersionsContainerClient();
     const blobClient = containerClient.getBlockBlobClient(formatVersion);
     if (!(await blobClient.exists())) {
@@ -57,16 +54,14 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
     }
     const downloadBlockBlobResponse = await blobClient.download(0);
     const downloadedContent = await this.streamToString(
-      downloadBlockBlobResponse.readableStreamBody as Readable,
+      downloadBlockBlobResponse.readableStreamBody as Readable
     );
     return JSON.parse(downloadedContent);
   }
 
   // Get the format versions container client. Create the container if it does not exist.
   private async getFormatVersionsContainerClient(): Promise<ContainerClient> {
-    const containerClient = this.client.getContainerClient(
-      this.formatVersionContainerName,
-    );
+    const containerClient = this.client.getContainerClient(this.formatVersionContainerName);
     if (!(await containerClient.exists())) {
       await this.createFormatVersionContainer();
     }
@@ -79,17 +74,14 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
   // 4. Upload the pruefis to the blob
   private async createFormatVersionContainer(): Promise<void> {
     console.log('Creating format version container');
-    const containerClient = this.client.getContainerClient(
-      this.formatVersionContainerName,
-    );
+    const containerClient = this.client.getContainerClient(this.formatVersionContainerName);
     await containerClient.createIfNotExists();
-    const formatVersionsWithPruefis =
-      await this.buildFormatVersionsWithPruefis();
+    const formatVersionsWithPruefis = await this.buildFormatVersionsWithPruefis();
     const promises = [];
     for (const formatVersion in formatVersionsWithPruefis) {
       const blobClient = containerClient.getBlockBlobClient(formatVersion);
       const data = Buffer.from(
-        JSON.stringify(Array.from(formatVersionsWithPruefis[formatVersion])),
+        JSON.stringify(Array.from(formatVersionsWithPruefis[formatVersion]))
       );
       promises.push(blobClient.uploadData(data));
     }
@@ -103,9 +95,7 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
   // 4. Store the pruefi in the formatVersionsWithPruefis object
   // 5. Return the object
   private async buildFormatVersionsWithPruefis(): Promise<FormatVersionsWithPruefis> {
-    const containerClient = this.client.getContainerClient(
-      this.ahbContainerName,
-    );
+    const containerClient = this.client.getContainerClient(this.ahbContainerName);
     const formatVersionBlobStorage: FormatVersionsWithPruefis = {};
     for await (const blob of containerClient.listBlobsFlat()) {
       const formatVersion = blob.name.split('/')[0];

@@ -66,7 +66,7 @@ export class AhbTableComponent {
       }
       // make selected element orange
       const markElements = this.markElements();
-      markElements.forEach((el) => el.classList.remove('bg-orange-500'));
+      markElements.forEach(el => el.classList.remove('bg-orange-500'));
       selectedMarkElement.classList.add('bg-orange-500');
       // notify outer scroll container
       this.scrollToHighlightedElement();
@@ -94,8 +94,7 @@ export class AhbTableComponent {
   previousResult() {
     const markElements = this.markElements();
     if (markElements.length > 0) {
-      const previousIndex =
-        (this.markIndex() - 1 + markElements.length) % markElements.length;
+      const previousIndex = (this.markIndex() - 1 + markElements.length) % markElements.length;
       this.markIndex.set(previousIndex);
       this.scrollToHighlightedElement();
     }
@@ -104,8 +103,7 @@ export class AhbTableComponent {
   scrollToHighlightedElement() {
     const selectedElement = this.selectedMarkElement();
     const header = this.header();
-    const headerHeight =
-      header?.nativeElement.getBoundingClientRect().height ?? 0;
+    const headerHeight = header?.nativeElement.getBoundingClientRect().height ?? 0;
     this.selectElement.emit({
       element: selectedElement || this.elementRef.nativeElement,
       offsetY: headerHeight,
@@ -134,8 +132,7 @@ export class AhbTableComponent {
     const currentLine = this.lines()[currentIndex];
     const previousLine = this.lines()[currentIndex - 1];
     return (
-      currentLine.data_element !== previousLine.data_element &&
-      currentLine.data_element !== ''
+      currentLine.data_element !== previousLine.data_element && currentLine.data_element !== ''
     );
   }
 
@@ -196,8 +193,8 @@ export class AhbTableComponent {
     if (!conditions) return [];
     return conditions
       .split(/(?=\[\d+\])/)
-      .map((s) => s.trim())
-      .filter((s) => s);
+      .map(s => s.trim())
+      .filter(s => s);
   }
 
   toggleExpand(index: number) {

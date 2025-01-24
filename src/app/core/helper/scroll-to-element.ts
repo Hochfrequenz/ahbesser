@@ -1,7 +1,7 @@
 export const scrollToElement = (
   element: HTMLElement,
   offsetY = 0,
-  container: HTMLElement | undefined,
+  container: HTMLElement | undefined
 ) => {
   if (!container) {
     const elementPosition = element.getBoundingClientRect().top;
@@ -11,7 +11,6 @@ export const scrollToElement = (
   }
   const containerRect = container.getBoundingClientRect();
   const elementRect = element.getBoundingClientRect();
-  const offsetPosition =
-    elementRect.top - containerRect.top + container.scrollTop - offsetY;
+  const offsetPosition = elementRect.top - containerRect.top + container.scrollTop - offsetY;
   container.scrollTo({ top: offsetPosition });
 };

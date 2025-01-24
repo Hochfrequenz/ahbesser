@@ -1,9 +1,4 @@
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { IconCopyUrlComponent } from './icon-copy-url.component';
 import { Renderer2 } from '@angular/core';
 

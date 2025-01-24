@@ -89,5 +89,5 @@ export const testData$: Observable<Ahb> = of(null).pipe(
         value_pool_entry: 'value_pool_entry',
       },
     ],
-  })),
+  }))
 );

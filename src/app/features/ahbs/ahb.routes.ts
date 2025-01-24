@@ -4,8 +4,7 @@ export const AHB_ROUTES: Routes = [
   {
     path: '',
     loadComponent: async () =>
-      (await import('./views/ahb-landing-page/ahb-landing-page.component'))
-        .AhbLandingPageComponent,
+      (await import('./views/ahb-landing-page/ahb-landing-page.component')).AhbLandingPageComponent,
   },
   {
     path: ':formatVersion/:pruefi',

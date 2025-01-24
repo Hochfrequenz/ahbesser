@@ -40,10 +40,6 @@ export class AhbLandingPageComponent {
       this.form.markAllAsTouched();
       return;
     }
-    this.router.navigate([
-      '/ahb',
-      this.form.value.formatVersion,
-      this.form.value.pruefi,
-    ]);
+    this.router.navigate(['/ahb', this.form.value.formatVersion, this.form.value.pruefi]);
   }
 }

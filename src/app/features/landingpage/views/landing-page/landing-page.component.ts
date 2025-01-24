@@ -15,7 +15,7 @@ import { environment } from '../../../../environments/environment';
 export class LandingPageComponent {
   constructor(
     private auth: AuthService,
-    private router: Router,
+    private router: Router
   ) {}
 
   onOpenClick() {
@@ -24,7 +24,7 @@ export class LandingPageComponent {
       return;
     }
 
-    this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+    this.auth.isAuthenticated$.subscribe(isAuthenticated => {
       if (isAuthenticated) {
         this.router.navigate(['/ahb']);
       } else {

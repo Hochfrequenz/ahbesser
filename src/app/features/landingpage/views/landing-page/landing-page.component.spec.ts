@@ -6,8 +6,6 @@ describe('LandingPageComponent', () => {
 
   it('should render', () => {
     const fixture = MockRender(LandingPageComponent);
-    expect(ngMocks.formatHtml(fixture)).toContain(
-      'Anwendungshandbücher für Menschen',
-    );
+    expect(ngMocks.formatHtml(fixture)).toContain('Anwendungshandbücher für Menschen');
   });
 });
