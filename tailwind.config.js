@@ -10,6 +10,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+        mono: ['Roboto Mono', 'monospace'],
       },
       fontWeight: {
         normal: 400,

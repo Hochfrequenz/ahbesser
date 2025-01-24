@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IconHeartComponent } from '../icon-heart/icon-heart.component';
+import { IconLogoComponent } from '../icon-logo/icon-logo.component';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, IconHeartComponent],
+  imports: [IconLogoComponent],
   templateUrl: './footer.component.html',
 })
 export class FooterComponent {
