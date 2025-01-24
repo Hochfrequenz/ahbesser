@@ -13,7 +13,7 @@ describe('HighlightPipe', () => {
         {
           provide: DomSanitizer,
           useValue: {
-            bypassSecurityTrustHtml: jest.fn((value) => value as SafeHtml),
+            bypassSecurityTrustHtml: jest.fn(value => value as SafeHtml),
           },
         },
       ],

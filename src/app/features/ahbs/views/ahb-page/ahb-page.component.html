@@ -4,8 +4,7 @@
       class="flex-1 hidden md:inline"
       [formatVersion]="formatVersion()"
       [pruefi]="pruefi()"
-      (formatVersionChange)="onFormatVersionChange($event)"
-    />
+      (formatVersionChange)="onFormatVersionChange($event)" />
     <app-input-search-enhanced
       class="inline-block w-full md:w-96"
       [searchQuery]="searchQuery()"
@@ -14,8 +13,7 @@
       (nextClick)="onNextClick()"
       (previousClick)="onPreviousClick()"
       [selectedPosition]="(table()?.markIndex() ?? 0) + 1"
-      [totalResults]="table()?.markElements()?.length"
-    />
+      [totalResults]="table()?.markElements()?.length" />
   </app-header>
 
   <div *ngIf="!errorOccurred">
@@ -45,10 +43,7 @@
             <section class="pt-10 mx-5 text-right flex-1">
               <div class="flex justify-end items-center space-x-3">
                 <app-icon-copy-url />
-                <app-export-button
-                  [formatVersion]="formatVersion()"
-                  [pruefi]="pruefi()"
-                />
+                <app-export-button [formatVersion]="formatVersion()" [pruefi]="pruefi()" />
               </div>
             </section>
           </div>
@@ -62,8 +57,7 @@
             [highlight]="searchQuery()"
             [formatVersion]="formatVersion()"
             [pruefi]="pruefi()"
-            (selectElement)="scrollToElement($event.element, $event.offsetY)"
-          />
+            (selectElement)="scrollToElement($event.element, $event.offsetY)" />
         } @else {
           <div class="flex-1 flex items-center justify-center">
             <p class="text-xl">loading ...</p>
@@ -77,8 +71,7 @@
     <app-fallback-page
       class="w-1/2"
       [pruefi]="pruefi()"
-      [formatVersion]="formatVersion()"
-    ></app-fallback-page>
+      [formatVersion]="formatVersion()"></app-fallback-page>
   </div>
 
   <app-footer class="flex-none" />

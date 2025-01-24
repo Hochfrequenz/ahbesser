@@ -1,7 +1,4 @@
-<button
-  class="rounded-full bg-primary py-3 px-5 text-white"
-  (click)="onClickCopyUrl()"
->
+<button class="rounded-full bg-primary py-3 px-5 text-white" (click)="onClickCopyUrl()">
   <div class="relative">
     <div class="flex items-center">
       <svg
@@ -10,13 +7,11 @@
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
-        class="size-6"
-      >
+        class="size-6">
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
-          d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
-        />
+          d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
       </svg>
       <ng-content></ng-content>
     </div>
@@ -25,20 +20,17 @@
       #popover
       id="popover-click"
       role="tooltip"
-      class="absolute -left-5 mt-6 z-10 invisible inline-block w-32 py-2 px-3 transition-opacity duration-300 bg-primary rounded-full shadow-sm opacity-0 before:content-[''] before:absolute before:top-0 before:left-6 before:-translate-y-full before:border-8 before:border-x-transparent before:border-t-transparent before:border-b-primary"
-    >
+      class="absolute -left-5 mt-6 z-10 invisible inline-block w-32 py-2 px-3 transition-opacity duration-300 bg-primary rounded-full shadow-sm opacity-0 before:content-[''] before:absolute before:top-0 before:left-6 before:-translate-y-full before:border-8 before:border-x-transparent before:border-t-transparent before:border-b-primary">
       <div class="flex items-center justify-center w-full space-x-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 16 16"
           fill="currentColor"
-          class="flex-shrink-0 w-3.5 h-3.5 text-white"
-        >
+          class="flex-shrink-0 w-3.5 h-3.5 text-white">
           <path
             fill-rule="evenodd"
             d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm3.844-8.791a.75.75 0 0 0-1.188-.918l-3.7 4.79-1.649-1.833a.75.75 0 1 0-1.114 1.004l2.25 2.5a.75.75 0 0 0 1.15-.043l4.25-5.5Z"
-            clip-rule="evenodd"
-          />
+            clip-rule="evenodd" />
         </svg>
         <span class="text-sm text-white">Link kopiert.</span>
       </div>

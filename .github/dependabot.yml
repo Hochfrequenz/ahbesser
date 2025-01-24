@@ -5,29 +5,29 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: 'npm' # See documentation for possible values
+    directory: '/' # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     reviewers:
-      - "TommyBom"
-      - "ohenning"
-      - "@Hochfrequenz/frontend-developers-review-team"
+      - 'TommyBom'
+      - 'ohenning'
+      - '@Hochfrequenz/frontend-developers-review-team'
     groups:
       angular:
         applies-to: version-updates
         patterns:
-          - "@angular*"
+          - '@angular*'
   # Maintain dependencies for GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     reviewers:
-      - "hf-krechan"
-  - package-ecosystem: "docker"
-    directory: "/"
+      - 'hf-krechan'
+  - package-ecosystem: 'docker'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     reviewers:
-      - "@Hochfrequenz/frontend-developers-review-team"
+      - '@Hochfrequenz/frontend-developers-review-team'

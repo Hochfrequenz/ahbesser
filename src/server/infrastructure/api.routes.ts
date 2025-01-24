@@ -15,14 +15,11 @@ router.get('/format-versions', async (req, res, next) => {
   await formatVersionController.list(req, res).catch((err: Error) => next(err));
 });
 
-router.get(
-  '/format-versions/:formatVersion/pruefis',
-  async (req, res, next) => {
-    await formatVersionController
-      .listPruefisByFormatVersion(req, res)
-      .catch((err: Error) => next(err));
-  },
-);
+router.get('/format-versions/:formatVersion/pruefis', async (req, res, next) => {
+  await formatVersionController
+    .listPruefisByFormatVersion(req, res)
+    .catch((err: Error) => next(err));
+});
 
 router.all('/**', (req, res) => {
   res.status(404);

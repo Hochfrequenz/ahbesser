@@ -1,12 +1,8 @@
 <form [formGroup]="headerSearchForm">
-  <app-format-version-select
-    class="inline-block me-3 h-16 w-64"
-    formControlName="formatVersion"
-  />
+  <app-format-version-select class="inline-block me-3 h-16 w-64" formControlName="formatVersion" />
   <app-pruefi-input
     class="inline-block h-16 w-64"
     formControlName="pruefi"
     [formatVersion]="headerSearchForm.controls.formatVersion.value"
-    (ngModelChange)="onPruefiSelect()"
-  />
+    (ngModelChange)="onPruefiSelect()" />
 </form>

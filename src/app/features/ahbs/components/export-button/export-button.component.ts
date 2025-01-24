@@ -19,7 +19,7 @@ export class ExportButtonComponent {
         'format-version': this.formatVersion,
         pruefi: this.pruefi,
         format: 'xlsx',
-      }),
+      })
     );
 
     const url = window.URL.createObjectURL(blob);

@@ -24,7 +24,7 @@ server.get('/version', (_, res) =>
     environment: process.env['ENVIRONMENT'] || 'unknown (local)',
     name: 'ahb-tabellen',
     auth0ClientId: environment.auth0ClientId,
-  }),
+  })
 );
 server.get('/health', (_, res) => res.send());
 server.get('/readiness', (_, res) => res.send());

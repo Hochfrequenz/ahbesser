@@ -1,4 +1,4 @@
-name: "Pull Request"
+name: 'Pull Request'
 on:
   push:
     branches:
@@ -18,8 +18,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20.13"
-          cache: "npm"
+          node-version: '20.13'
+          cache: 'npm'
 
       - name: Install modules
         run: npm ci

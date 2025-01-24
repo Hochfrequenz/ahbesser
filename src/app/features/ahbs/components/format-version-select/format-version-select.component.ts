@@ -23,9 +23,7 @@ import { CommonModule } from '@angular/common';
     },
   ],
 })
-export class FormatVersionSelectComponent
-  implements ControlValueAccessor, OnInit
-{
+export class FormatVersionSelectComponent implements ControlValueAccessor, OnInit {
   control = new FormControl<string>('');
 
   formatVersions$!: Observable<{ value: string; label: string }[]>;
@@ -37,13 +35,13 @@ export class FormatVersionSelectComponent
   ngOnInit(): void {
     this.control.disable();
     this.formatVersions$ = this.ahbService.getFormatVersions().pipe(
-      map((versions) =>
-        versions.map((v) => ({
+      map(versions =>
+        versions.map(v => ({
           value: v,
           label: this.getFormatVersionDate(v),
-        })),
+        }))
       ),
-      tap(() => this.control.enable()),
+      tap(() => this.control.enable())
     );
   }
 

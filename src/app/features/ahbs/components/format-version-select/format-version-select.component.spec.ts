@@ -9,8 +9,8 @@ describe('FormatVersionSelectComponent', () => {
       AhbService,
       MockService(AhbService, {
         getFormatVersions: () => of([]),
-      }),
-    ),
+      })
+    )
   );
 
   it('should render', () => {
