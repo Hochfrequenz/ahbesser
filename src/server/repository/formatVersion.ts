@@ -1,6 +1,5 @@
 import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
 import BlobStorageContainerBacked from './abstract/blobStorageBacked';
-import { Readable } from 'stream';
 import { NotFoundError } from '../infrastructure/errors';
 
 interface FormatVersionsWithPruefis {

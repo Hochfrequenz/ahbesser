@@ -5,7 +5,7 @@ import { IconHeartComponent } from '../icon-heart/icon-heart.component';
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [IconLogoComponent, IconHeartComponent],
+  imports: [IconHeartComponent],
   templateUrl: './footer.component.html',
 })
 export class FooterComponent {

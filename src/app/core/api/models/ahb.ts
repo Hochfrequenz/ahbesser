@@ -1,5 +1,5 @@
 /* tslint:disable */
-/* eslint-disable */
+ 
 export interface Ahb {
   lines: Array<{
 'ahb_expression': string;
