@@ -90,7 +90,7 @@ const shouldUploadFile = async (
     const localHash = calculateFileHash(filePath);
     const cloudHash = properties.metadata?.['fileHash'];
     return !cloudHash || cloudHash !== localHash;
-  } catch (_error) {
+  } catch {
     // If blob doesn't exist or other error, we should upload
     return true;
   }
