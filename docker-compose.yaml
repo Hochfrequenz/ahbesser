@@ -9,7 +9,7 @@ services:
   upload-documents:
     build:
       context: .
-      dockerfile: ./azure-mock/Dockerfile
+      dockerfile: azure-mock/Dockerfile
     environment:
       - AZURE_STORAGE_HOST=http://azurite
     depends_on:
