@@ -27,36 +27,45 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
     this.formatVersionContainerName = process.env['FORMAT_VERSION_CONTAINER_NAME'];
   }
 
-  // Return a list of all unique format versions
-  // 1. Get the container client which stores the format versions
-  // 2. Iterate over all blobs in the container
-  // 3. Return the list of format versions
+  // Return a list of all unique format versions by looking at the top-level directories
+  // in the uploaded-files container that start with 'FV'
   public async list(): Promise<string[]> {
-    const containerClient = await this.getFormatVersionsContainerClient();
-    const formatVersions: string[] = [];
+    const containerClient = this.client.getContainerClient(this.ahbContainerName);
+    const formatVersions = new Set<string>();
+
     for await (const blob of containerClient.listBlobsFlat()) {
-      formatVersions.push(blob.name);
+      const parts = blob.name.split('/');
+      if (parts.length > 0 && parts[0].startsWith('FV')) {
+        formatVersions.add(parts[0]);
+      }
     }
-    return formatVersions;
+
+    return Array.from(formatVersions).sort();
   }
 
-  // Return a list of all pruefis for a specific format version
-  // 1. Get the container client which stores the format versions
-  // 2. Get the blob client for the specified format version
-  // 3. Download the blob
-  // 4. Convert the blob content to a string
-  // 5. Parse the string to a list of pruefis
+  // Return a list of all pruefis for a specific format version by looking at the json files
+  // in the flatahb directory of the format version
   public async listPruefisByFormatVersion(formatVersion: string): Promise<string[]> {
-    const containerClient = await this.getFormatVersionsContainerClient();
-    const blobClient = containerClient.getBlockBlobClient(formatVersion);
-    if (!(await blobClient.exists())) {
+    const containerClient = this.client.getContainerClient(this.ahbContainerName);
+    const pruefis = new Set<string>();
+
+    // List all blobs in the container with the prefix of the format version
+    for await (const blob of containerClient.listBlobsFlat({ prefix: `${formatVersion}/` })) {
+      // Check if the blob is in the flatahb directory and is a json file
+      if (blob.name.includes('/flatahb/') && blob.name.endsWith('.json')) {
+        // Extract the pruefi from the filename (remove .json extension)
+        const pruefi = blob.name.split('/').pop()?.replace('.json', '');
+        if (pruefi) {
+          pruefis.add(pruefi);
+        }
+      }
+    }
+
+    if (pruefis.size === 0) {
       throw new NotFoundError(`Format version ${formatVersion} does not exist`);
     }
-    const downloadBlockBlobResponse = await blobClient.download(0);
-    const downloadedContent = await this.streamToString(
-      downloadBlockBlobResponse.readableStreamBody as Readable
-    );
-    return JSON.parse(downloadedContent);
+
+    return Array.from(pruefis).sort();
   }
 
   // Get the format versions container client. Create the container if it does not exist.
