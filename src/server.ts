@@ -9,9 +9,18 @@ import { httpErrorHandler } from './server/infrastructure/errors';
 import { environment } from './app/environments/environment';
 
 const server = express();
-if (process.env['ENABLE_CORS'] === 'true') {
-  server.use(cors());
-}
+server.use(
+  cors({
+    origin: [
+      'http://localhost:4200',
+      'http://localhost:4000',
+      'https://ahb-tabellen.stage.hochfrequenz.de',
+      'https://ahb-tabellen.hochfrequenz.de',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
 const distFolder = join(process.cwd(), 'dist/ahbesser/browser');
 const indexHtml = 'index.html';
