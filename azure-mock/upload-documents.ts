@@ -1,8 +1,4 @@
-import {
-  BlobServiceClient,
-  StorageSharedKeyCredential,
-  newPipeline,
-} from '@azure/storage-blob';
+import { BlobServiceClient, StorageSharedKeyCredential, newPipeline } from '@azure/storage-blob';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -12,10 +8,7 @@ const createBlobServiceClient = () => {
   const accountName = 'devstoreaccount1';
   const accountKey =
     'Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==';
-  const sharedKeyCredential = new StorageSharedKeyCredential(
-    accountName,
-    accountKey,
-  );
+  const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
   const pipeline = newPipeline(sharedKeyCredential, {
     retryOptions: { maxTries: 4 }, // Retry options
     userAgentOptions: { userAgentPrefix: 'Sample V1.0.0' }, // User agent options
@@ -45,10 +38,7 @@ const edifactFormats = [
 const fileFormats = ['csv', 'flatahb', 'xlsx'];
 
 // Recursive function to upload files
-const uploadFiles = async (
-  folderPath: string,
-  containerClient: ContainerClient,
-) => {
+const uploadFiles = async (folderPath: string, containerClient: ContainerClient) => {
   const files = fs.readdirSync(folderPath);
 
   for (const file of files) {
@@ -62,16 +52,12 @@ const uploadFiles = async (
 
     const isValidDirectoryWithRequiredFiles =
       stat.isDirectory() &&
-      (file.startsWith('FV') ||
-        edifactFormats.includes(file) ||
-        fileFormats.includes(file));
+      (file.startsWith('FV') || edifactFormats.includes(file) || fileFormats.includes(file));
 
     if (isValidDirectoryWithRequiredFiles) {
       await uploadFiles(filePath, containerClient);
     } else {
-      const blobName = path
-        .relative(process.argv[2], filePath)
-        .replace(/\\/g, '/');
+      const blobName = path.relative(process.argv[2], filePath).replace(/\\/g, '/');
       const blockBlobClient = containerClient.getBlockBlobClient(blobName);
       console.log(`Uploading ${filePath} as ${blobName}`);
       await blockBlobClient.uploadFile(filePath);
@@ -93,9 +79,7 @@ const main = async () => {
 
   try {
     await containerClient.createIfNotExists();
-    console.log(
-      `Starting upload of files from ${folderPath} to container '${containerName}'`,
-    );
+    console.log(`Starting upload of files from ${folderPath} to container '${containerName}'`);
     await uploadFiles(folderPath, containerClient);
     console.log('All files uploaded successfully.');
   } catch (error) {
