@@ -11,7 +11,7 @@ services:
       context: .
       dockerfile: ./azure-mock/Dockerfile
     environment:
-      - AZURE_STORAGE_HOST=http://host.docker.internal
+      - AZURE_STORAGE_HOST=http://azurite
     depends_on:
       - azurite
 
