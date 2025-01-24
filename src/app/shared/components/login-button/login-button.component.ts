@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService, User } from '@auth0/auth0-angular';
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
 import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -13,7 +12,7 @@ type ExtendedAuthService = AuthService & {
 @Component({
   selector: 'app-login-button',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule],
   templateUrl: './login-button.component.html',
 })
 export class LoginButtonComponent implements OnInit {
