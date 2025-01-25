@@ -1,4 +1,42 @@
 @import '@mdi/font/css/materialdesignicons.css';
+:root {
+  /* copied from /assets/companystylesheet/css/hochfrequenz.css, because I didn't manage to import/include it properly */
+  /* X [ERROR] Could not resolve "/assets/companystylesheet/css/hochfrequenz.css" */
+  /* Greens, lind-grün, oben rechts */
+  --pastell-gruen: #d5f4b9;
+  --grell-gruen: #8de040;
+
+  /* Blues, unten, zweites von rechts */
+  --pastell-blau: #c2cee9;
+  --grell-blau: #8ba2d7;
+
+  /* Reds, unten rechts */
+  --pastell-rot: #f4e0e1;
+  --grell-rot: #ff569c;
+
+  /* Yellows, unten, zweites von links */
+  --pastell-gelb: #f4e2b9;
+  --grell-gelb: #e5bd5c;
+
+  /* Pinks oben, zweites von links */
+  --pastell-rose: #f4e0e1;
+  --grell-rose: #ebbec1;
+
+  /* Turquoise oben links */
+  --pastell-tuerkis: #d4ede8;
+  --grell-tuerkis: #abdcd3;
+
+  /* Grün2 aka "mint", unten links */
+  --pastell-mint: #c6e7d2;
+  --grell-mint: #85cb9c;
+
+  /* Neutral Colors */
+  --neutral-grau: #e7e6e5;
+  --off-white: #e7e6e5;
+  --neutral-grau-2: #eaece9;
+  --grell-grau: #c4cac1;
+  --weiches-schwarz: #25141d;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,4 +48,29 @@
 }
 body {
   font-family: 'Roboto', sans-serif;
+}
+#solutions a {
+  color: white;
+  text-decoration: none;
+  margin: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  /* each button has their own background-color */
+  transition: background-color 0.3s;
+}
+
+#solutions a.ahbesser {
+  background-color: var(--grell-rot);
+}
+
+#solutions a.fristenkalender {
+  background-color: var(--grell-tuerkis);
+}
+
+#solutions a.ahahnb {
+  background-color: var(--grell-gelb);
+}
+
+#solutions a.entscheidungsbaum {
+  background-color: var(--grell-blau);
 }
