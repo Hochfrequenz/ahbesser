@@ -121,6 +121,9 @@ web_app = azure_native.web.WebApp(
             azure_native.web.NameValuePairArgs(
                 name="BEDINGUNGSBAUM_BASE_URL", value=bedingungsbaum_base_url
             ),
+            azure_native.web.NameValuePairArgs(
+                name="EBD_BASE_URL", value=ebd_base_url
+            ),
             azure_native.web.NameValuePairArgs(name="ENVIRONMENT", value=environment),
             azure_native.web.NameValuePairArgs(name="WEBSITES_CONTAINER_START_TIME_LIMIT", value=websites_container_start_time_limit),
         ],
