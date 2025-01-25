@@ -7,6 +7,7 @@ module.exports = {
         primary: '#EBBEC1',
         secondary: '#CCA9AB',
         tint: '#F6ECED',
+        offwhite: '#E7E6E5',
       },
       fontFamily: {
         sans: ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
