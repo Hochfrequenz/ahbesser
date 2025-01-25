@@ -29,6 +29,9 @@ assert container_port, "containerPort must be set"
 bedingungsbaum_base_url = config.get("bedingungsbaumBaseUrl")
 assert bedingungsbaum_base_url, "bedingungsbaumBaseUrl must be set"
 
+ebd_base_url = config.get("ebdBaseUrl")
+assert ebd_base_url, "ebdBaseUrl must be set"
+
 environment = config.get("environment")
 assert environment, "environment must be set"
 

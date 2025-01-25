@@ -2,6 +2,7 @@ config:
   ahb-tabellen:ahbBlobContainerName: ahb-tables
   ahb-tabellen:appPath: app
   ahb-tabellen:bedingungsbaumBaseUrl: https://bedingungsbaum.hochfrequenz.de
+  ahb-tabellen:ebdBaseUrl: https://ebd.hochfrequenz.de
   ahb-tabellen:containerPort: "80"
   ahb-tabellen:cpu: "1"
   ahb-tabellen:environment: production
