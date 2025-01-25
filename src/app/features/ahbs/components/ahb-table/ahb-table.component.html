@@ -40,6 +40,14 @@
             class="hover:underline">
             {{ line.ahb_expression }}
           </a>
+          @if(generateEbdDeepLink(line.ahb_expression)){
+            <a
+              [href]="generateEbdDeepLink(line.ahb_expression)"
+              target="_blank"
+              class="hover:underline">
+              (EBD)
+            </a>
+          }
         </td>
         <td class="px-6 py-4 conditions-column">
           @if (line.conditions) {
