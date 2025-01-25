@@ -29,6 +29,9 @@ assert container_port, "containerPort must be set"
 bedingungsbaum_base_url = config.get("bedingungsbaumBaseUrl")
 assert bedingungsbaum_base_url, "bedingungsbaumBaseUrl must be set"
 
+ebd_base_url = config.get("ebdBaseUrl")
+assert ebd_base_url, "ebdBaseUrl must be set"
+
 environment = config.get("environment")
 assert environment, "environment must be set"
 
@@ -117,6 +120,9 @@ web_app = azure_native.web.WebApp(
             ),
             azure_native.web.NameValuePairArgs(
                 name="BEDINGUNGSBAUM_BASE_URL", value=bedingungsbaum_base_url
+            ),
+            azure_native.web.NameValuePairArgs(
+                name="EBD_BASE_URL", value=ebd_base_url
             ),
             azure_native.web.NameValuePairArgs(name="ENVIRONMENT", value=environment),
             azure_native.web.NameValuePairArgs(name="WEBSITES_CONTAINER_START_TIME_LIMIT", value=websites_container_start_time_limit),
