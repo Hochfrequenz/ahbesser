@@ -11,6 +11,7 @@ import {
 import { Ahb } from '../../../../core/api';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { environment } from '../../../../environments/environment';
+import { IconLinkComponent } from '../../../../shared/components/icon-link/icon-link.component';
 
 interface ExpandedState {
   [key: number]: boolean;
@@ -19,7 +20,7 @@ interface ExpandedState {
 @Component({
   selector: 'app-ahb-table',
   standalone: true,
-  imports: [HighlightPipe],
+  imports: [HighlightPipe, IconLinkComponent],
   templateUrl: './ahb-table.component.html',
   styleUrl: './ahb-table.component.scss',
 })

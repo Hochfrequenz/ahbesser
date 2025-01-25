@@ -36,8 +36,8 @@
             <a
               [href]="generateEbdDeepLink(line.value_pool_entry)"
               target="_blank"
-              class="hover:underline">
-              {{ line.value_pool_entry }} (EBD🌳)
+              class="hover:underline font-bold text-ebd_primary flex flex-row gap-1 items-center">
+              {{ line.value_pool_entry }} <app-icon-link />
             </a>
           } @else {
             {{ line.value_pool_entry }}
