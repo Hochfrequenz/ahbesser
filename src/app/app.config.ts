@@ -18,7 +18,7 @@ export const appConfig: ApplicationConfig = {
       HttpClientModule,
       ApiModule.forRoot({
         rootUrl: environment.apiUrl,
-      }),
+      })
     ),
     provideAuth0({
       domain: environment.auth0Domain,

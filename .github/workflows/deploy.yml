@@ -5,12 +5,12 @@ env:
   IMAGE_NAME: ${{ github.repository }}
   PROJECT_NAME: ahb-tabellen
   OCTOPUS_SPACE: Default
-  BUILD_DATE: "set by build_release_info step"
-  COMMIT_ID: "set by build_release_info step"
-  VERSION_TAG: "set by build_release_info step"
-  DOCKER_METADATA_OUTPUT_TAGS: "set by metadata action"
-  DOCKER_METADATA_OUTPUT_LABELS: "set by metadata action"
-  DIGEST: "set by output of push step"
+  BUILD_DATE: 'set by build_release_info step'
+  COMMIT_ID: 'set by build_release_info step'
+  VERSION_TAG: 'set by build_release_info step'
+  DOCKER_METADATA_OUTPUT_TAGS: 'set by metadata action'
+  DOCKER_METADATA_OUTPUT_LABELS: 'set by metadata action'
+  DIGEST: 'set by output of push step'
 
 on:
   release:
@@ -53,7 +53,7 @@ jobs:
 
       - name: Build and push Docker image
         id: push
-        uses: docker/build-push-action@v6.12.0
+        uses: docker/build-push-action@v6.13.0
         with:
           context: .
           push: true
@@ -92,7 +92,7 @@ jobs:
           release_number: ${{ env.VERSION_TAG }}
           git_ref: ${{ github.ref }}
           git_commit: ${{ github.sha }}
-          release_notes: "Release created from GitHub Actions. Version: ${{ env.VERSION_TAG }}"
+          release_notes: 'Release created from GitHub Actions. Version: ${{ env.VERSION_TAG }}'
 
       - name: Deploy a release in Octopus Deploy 🐙
         uses: OctopusDeploy/deploy-release-action@v3

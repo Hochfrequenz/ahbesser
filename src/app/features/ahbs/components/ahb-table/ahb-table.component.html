@@ -1,24 +1,12 @@
 <table class="table-auto w-full text-sm text-gray-500">
   <thead class="text-xs text-gray-700 uppercase bg-gray-50" #header>
     <tr>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
-        Segmentgruppe
-      </th>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
-        Segmentname
-      </th>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
-        Segment
-      </th>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
-        Datenelement
-      </th>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
-        Qualifier
-      </th>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
-        Name
-      </th>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">Segmentgruppe</th>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">Segmentname</th>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">Segment</th>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">Datenelement</th>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">Qualifier</th>
+      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">Name</th>
       <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
         Pflichtfeld-Kennzeichen
       </th>
@@ -33,45 +21,30 @@
         <td
           class="px-6 py-4"
           [class.font-bold]="isNewSegment(i)"
-          [innerHTML]="line.segment_group_key | highlight: highlight()"
-        ></td>
+          [innerHTML]="line.segment_group_key | highlight: highlight()"></td>
         <td
           class="px-6 py-4"
           [class.font-bold]="isNewSegment(i)"
-          [innerHTML]="line.section_name | highlight: highlight()"
-        ></td>
+          [innerHTML]="line.section_name | highlight: highlight()"></td>
         <td
           class="px-6 py-4"
           [class.font-bold]="isNewSegment(i)"
-          [innerHTML]="line.segment_code | highlight: highlight()"
-        ></td>
-        <td
-          class="px-6 py-4"
-          [innerHTML]="line.data_element | highlight: highlight()"
-        ></td>
-        <td
-          class="px-6 py-4"
-          [innerHTML]="line.value_pool_entry | highlight: highlight()"
-        ></td>
-        <td
-          class="px-6 py-4"
-          [innerHTML]="line.name | highlight: highlight()"
-        ></td>
+          [innerHTML]="line.segment_code | highlight: highlight()"></td>
+        <td class="px-6 py-4" [innerHTML]="line.data_element | highlight: highlight()"></td>
+        <td class="px-6 py-4" [innerHTML]="line.value_pool_entry | highlight: highlight()"></td>
+        <td class="px-6 py-4" [innerHTML]="line.name | highlight: highlight()"></td>
         <td class="px-6 py-4">
           <a
             [href]="generateBedingungsbaumDeepLink(line.ahb_expression)"
             target="_blank"
-            class="hover:underline"
-          >
+            class="hover:underline">
             {{ line.ahb_expression }}
           </a>
         </td>
         <td class="px-6 py-4 conditions-column">
           @if (line.conditions) {
             @for (
-              condition of addConditionLineBreaks(
-                getDisplayText(line.conditions, i)
-              );
+              condition of addConditionLineBreaks(getDisplayText(line.conditions, i));
               track $index
             ) {
               <div [innerHTML]="condition | highlight: highlight()"></div>
@@ -79,9 +52,8 @@
             @if (shouldShowToggle(line.conditions)) {
               <button
                 (click)="toggleExpand(i)"
-                class="text-secondary hover:text-primary text-sm mt-1"
-              >
-                {{ isExpanded(i) ? "weniger anzeigen" : "mehr anzeigen" }}
+                class="text-secondary hover:text-primary text-sm mt-1">
+                {{ isExpanded(i) ? 'weniger anzeigen' : 'mehr anzeigen' }}
               </button>
             }
           }

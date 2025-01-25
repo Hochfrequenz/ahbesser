@@ -13,12 +13,7 @@ import { FormatVersionSelectComponent } from '../format-version-select/format-ve
 @Component({
   selector: 'app-ahb-search-form-header',
   standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    FormatVersionSelectComponent,
-    PruefiInputComponent,
-  ],
+  imports: [FormsModule, ReactiveFormsModule, FormatVersionSelectComponent, PruefiInputComponent],
   templateUrl: './ahb-search-form-header.component.html',
 })
 export class AhbSearchFormHeaderComponent {
@@ -40,13 +35,11 @@ export class AhbSearchFormHeaderComponent {
       });
     });
 
-    this.headerSearchForm
-      .get('formatVersion')
-      ?.valueChanges.subscribe((value) => {
-        if (value) {
-          this.formatVersionChange.emit(value);
-        }
-      });
+    this.headerSearchForm.get('formatVersion')?.valueChanges.subscribe(value => {
+      if (value) {
+        this.formatVersionChange.emit(value);
+      }
+    });
   }
 
   onPruefiSelect() {

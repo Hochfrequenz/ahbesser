@@ -27,20 +27,14 @@ export default class AHBRepository extends BlobStorageBacked {
   // 4. Download the blob
   // 5. Convert the blob content to a string
   // 6. Parse the string to an Ahb object
-  public async get(
-    pruefi: string,
-    formatVersion: string,
-    type: FileType,
-  ): Promise<Ahb | Buffer> {
-    const containerClient = this.client.getContainerClient(
-      this.ahbContainerName,
-    );
+  public async get(pruefi: string, formatVersion: string, type: FileType): Promise<Ahb | Buffer> {
+    const containerClient = this.client.getContainerClient(this.ahbContainerName);
     const blobName = await this.getBlobName(pruefi, formatVersion, type);
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const downloadBlockBlobResponse = await blockBlobClient.download(0);
 
     const content = await this.streamToBuffer(
-      downloadBlockBlobResponse.readableStreamBody as Readable,
+      downloadBlockBlobResponse.readableStreamBody as Readable
     );
 
     if (type === FileType.JSON) {
@@ -70,7 +64,7 @@ export default class AHBRepository extends BlobStorageBacked {
   private async getBlobName(
     pruefi: string,
     formatVersion: string,
-    type: FileType,
+    type: FileType
   ): Promise<string> {
     const format = await this.getFormatName(pruefi);
     const fileFormatDirectoryName = this.getFileTypeDirectoryName(type);

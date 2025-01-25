@@ -29,10 +29,10 @@ export class InputSearchEnhancedComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
+    private router: Router
   ) {
     // Read query parameters on initialization
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.subscribe(params => {
       const query = params['query'];
       if (query) {
         this.searchQuery.set(query);

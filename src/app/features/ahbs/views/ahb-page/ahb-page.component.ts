@@ -63,7 +63,7 @@ export class AhbPageComponent implements OnInit {
   constructor(
     private readonly ahbService: AhbService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router,
+    private readonly router: Router
   ) {
     effect(() => {
       this.loadAhbData();
@@ -71,7 +71,7 @@ export class AhbPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.subscribe(params => {
       const query = params['query'];
       if (query) {
         this.initialSearchQuery = query;
@@ -95,16 +95,16 @@ export class AhbPageComponent implements OnInit {
           }
         }),
         shareReplay(1),
-        catchError((error) => {
+        catchError(error => {
           if (error.status === 404) {
             this.errorOccurred = true;
           }
           // Return an empty object of type Ahb if there's an error
           return of({} as Ahb); // Returning a fallback object of type Ahb
-        }),
+        })
       );
 
-    this.lines$ = this.ahb$.pipe(map((ahb) => ahb.lines));
+    this.lines$ = this.ahb$.pipe(map(ahb => ahb.lines));
   }
 
   onFormatVersionChange(newFormatVersion: string) {
@@ -131,10 +131,7 @@ export class AhbPageComponent implements OnInit {
     const containerRect = scrollContainer.nativeElement.getBoundingClientRect();
     const elementRect = element.getBoundingClientRect();
     const scrollTop =
-      elementRect.top -
-      containerRect.top +
-      scrollContainer.nativeElement.scrollTop -
-      offsetY;
+      elementRect.top - containerRect.top + scrollContainer.nativeElement.scrollTop - offsetY;
     scrollContainer.nativeElement.scrollTo({
       top: scrollTop,
       behavior: 'smooth',
@@ -196,16 +193,12 @@ export class AhbPageComponent implements OnInit {
   } {
     if (!direction) {
       return {
-        sender:
-          'MSCONS-Nachrichten können von verschiedenen Marktrollen gesendet werden.',
-        empfaenger:
-          'MSCONS-Nachrichten können von verschiedenen Marktrollen empfangen werden.',
+        sender: 'MSCONS-Nachrichten können von verschiedenen Marktrollen gesendet werden.',
+        empfaenger: 'MSCONS-Nachrichten können von verschiedenen Marktrollen empfangen werden.',
       };
     }
 
-    const [sender, empfaenger] = direction
-      .split(' an ')
-      .map((part) => part.trim());
+    const [sender, empfaenger] = direction.split(' an ').map(part => part.trim());
     return { sender, empfaenger: empfaenger || '' };
   }
 }

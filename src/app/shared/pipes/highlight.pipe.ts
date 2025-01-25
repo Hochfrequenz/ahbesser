@@ -8,10 +8,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class HighlightPipe implements PipeTransform {
   constructor(private readonly domSanitizer: DomSanitizer) {}
 
-  transform(
-    value: string | undefined,
-    highlightText: string | undefined,
-  ): SafeHtml {
+  transform(value: string | undefined, highlightText: string | undefined): SafeHtml {
     if (!value) {
       return this.domSanitizer.bypassSecurityTrustHtml('');
     }
@@ -19,7 +16,7 @@ export class HighlightPipe implements PipeTransform {
       return this.domSanitizer.bypassSecurityTrustHtml(value);
     }
     const regex = new RegExp(highlightText, 'gi');
-    const html = value.replace(regex, (match) => `<mark>${match}</mark>`);
+    const html = value.replace(regex, match => `<mark>${match}</mark>`);
     return this.domSanitizer.bypassSecurityTrustHtml(html);
   }
 }

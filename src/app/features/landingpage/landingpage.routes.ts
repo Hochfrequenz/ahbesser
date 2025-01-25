@@ -4,7 +4,6 @@ export const LANDINGPAGE_ROUTES: Routes = [
   {
     path: '',
     loadComponent: async () =>
-      (await import('./views/landing-page/landing-page.component'))
-        .LandingPageComponent,
+      (await import('./views/landing-page/landing-page.component')).LandingPageComponent,
   },
 ];

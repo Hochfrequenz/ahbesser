@@ -7,4 +7,6 @@ import { IconLogoComponent } from '../icon-logo/icon-logo.component';
   imports: [IconLogoComponent],
   templateUrl: './footer.component.html',
 })
-export class FooterComponent {}
+export class FooterComponent {
+  currentYear = new Date().getFullYear();
+}

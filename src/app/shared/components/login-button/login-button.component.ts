@@ -19,8 +19,7 @@ export class LoginButtonComponent implements OnInit {
   authState$!: Observable<{ isAuthenticated: boolean; isLoading: boolean }>;
   buttonText$ = new BehaviorSubject<string>('Einloggen');
 
-  private isDevelopment =
-    !environment.isProduction || window.location.hostname === 'localhost';
+  private isDevelopment = !environment.isProduction || window.location.hostname === 'localhost';
 
   constructor(public auth: AuthService) {}
 
@@ -43,12 +42,12 @@ export class LoginButtonComponent implements OnInit {
             sub: 'local-development',
           } as User);
         }
-      }),
+      })
     );
   }
 
   loginOrLogout() {
-    this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+    this.auth.isAuthenticated$.subscribe(isAuthenticated => {
       if (isAuthenticated) {
         this.logout();
       } else {
