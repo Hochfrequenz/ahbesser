@@ -1,8 +1,10 @@
 import { AhbPageComponent } from './ahb-page.component';
-import { MockBuilder, MockRender, MockService, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { AhbService } from '../../../../core/api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
+import { AhbTableComponent } from '../../components/ahb-table/ahb-table.component';
+import { signal, computed } from '@angular/core';
 
 describe('AhbPageComponent', () => {
   let mockRouter: { navigate: jest.Mock };
@@ -11,26 +13,34 @@ describe('AhbPageComponent', () => {
     mockRouter = { navigate: jest.fn() };
 
     return MockBuilder(AhbPageComponent)
-      .mock(
-        AhbService,
-        MockService(AhbService, {
-          getAhb$Json: jest.fn(params =>
-            of({
-              meta: {
-                pruefidentifikator: params.pruefi,
-                description: '',
-                direction: '',
-                maus_version: '',
-              },
-              lines: [],
-            })
-          ),
-        } as Partial<AhbService>)
-      )
+      .keep(AhbTableComponent)
+      .provide({
+        provide: AhbTableComponent,
+        useValue: {
+          markIndex: signal(0),
+          markElements: computed(() => [] as HTMLElement[]),
+          nextResult: () => {},
+          previousResult: () => {},
+          resetMarkIndex: () => {},
+        },
+      })
+      .mock(AhbService, {
+        getAhb$Json: jest.fn(params =>
+          of({
+            meta: {
+              pruefidentifikator: params.pruefi,
+              description: '',
+              direction: '',
+              maus_version: '',
+            },
+            lines: [],
+          })
+        ),
+      })
       .mock(ActivatedRoute, {
         queryParams: of({}),
-      } as Partial<ActivatedRoute>)
-      .mock(Router, mockRouter as Partial<Router>);
+      })
+      .mock(Router, mockRouter);
   });
 
   it('should render', () => {
@@ -40,7 +50,7 @@ describe('AhbPageComponent', () => {
     });
     const html = ngMocks.formatHtml(fixture);
     expect(html).toContain('<app-header');
-    expect(html).toContain('loading ...');
+    expect(html).toContain('Anwendungshandbuch 123');
   });
 
   it('should split sender and empfaenger without "an" keyword', () => {
