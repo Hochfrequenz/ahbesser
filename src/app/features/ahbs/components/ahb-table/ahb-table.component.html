@@ -31,7 +31,18 @@
           [class.font-bold]="isNewSegment(i)"
           [innerHTML]="line.segment_code | highlight: highlight()"></td>
         <td class="px-6 py-4" [innerHTML]="line.data_element | highlight: highlight()"></td>
-        <td class="px-6 py-4" [innerHTML]="line.value_pool_entry | highlight: highlight()"></td>
+        <td class="px-6 py-4">
+          @if (generateEbdDeepLink(line.value_pool_entry) !== null) {
+            <a
+              [href]="generateEbdDeepLink(line.value_pool_entry)"
+              target="_blank"
+              class="hover:underline">
+              {{ line.value_pool_entry }} (EBD🌳)
+            </a>
+          } @else {
+            {{ line.value_pool_entry }}
+          }
+        </td>
         <td class="px-6 py-4" [innerHTML]="line.name | highlight: highlight()"></td>
         <td class="px-6 py-4">
           <a
@@ -40,14 +51,6 @@
             class="hover:underline">
             {{ line.ahb_expression }}
           </a>
-          @if(generateEbdDeepLink(line.ahb_expression)){
-            <a
-              [href]="generateEbdDeepLink(line.ahb_expression)"
-              target="_blank"
-              class="hover:underline">
-              (EBD)
-            </a>
-          }
         </td>
         <td class="px-6 py-4 conditions-column">
           @if (line.conditions) {

@@ -159,19 +159,19 @@ export class AhbTableComponent {
     const encodedExpression = encodeURIComponent(expression);
     return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.formatVersion()}&format_version=${this.getFormatVersion(this.pruefi())}&expression=${encodedExpression}`;
   }
-  generateEbdDeepLink(bedingungs_spalte: string|null): string|null {
-    if(!bedingungs_spalte) {
+  generateEbdDeepLink(bedingungs_spalte: string | null): string | null {
+    if (!bedingungs_spalte) {
       return null;
     }
-    if(bedingungs_spalte.trim().length === 0) {
+    if (bedingungs_spalte.trim().length === 0) {
       return null;
     }
     const regex = /^.*\b(?<ebd_key>E_\d+)\b.*$/;
     const match = bedingungs_spalte.match(regex);
-    if(!match?.groups) {
+    if (!match?.groups) {
       return null;
     }
-    const ebdKey = match.groups["ebd_key"]!;
+    const ebdKey = match.groups['ebd_key']!;
     // e.g. https://ebd.stage.hochfrequenz.de/ebd/?formatversion=FV2504&ebd=E_0004
     return `${environment.ebdBaseUrl}/ebd/?format_version=${this.getFormatVersion(this.pruefi())}&ebd=${ebdKey}`;
   }
