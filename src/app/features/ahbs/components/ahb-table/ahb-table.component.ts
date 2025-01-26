@@ -160,15 +160,15 @@ export class AhbTableComponent {
     const encodedExpression = encodeURIComponent(expression);
     return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.formatVersion()}&format_version=${this.getFormat(this.pruefi())}&expression=${encodedExpression}`;
   }
-  generateEbdDeepLink(bedingungs_spalte: string | null): string | null {
-    if (!bedingungs_spalte) {
+  generateEbdDeepLink(value_pool_entry: string | null): string | null {
+    if (!value_pool_entry) {
       return null;
     }
-    if (bedingungs_spalte.trim().length === 0) {
+    if (value_pool_entry.trim().length === 0) {
       return null;
     }
     const regex = /^.*\b(?<ebd_key>E_\d+)\b.*$/;
-    const match = bedingungs_spalte.match(regex);
+    const match = value_pool_entry.match(regex);
     if (!match?.groups) {
       return null;
     }
