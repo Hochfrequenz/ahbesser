@@ -18,11 +18,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, map, shareReplay, tap, catchError, of } from 'rxjs';
 import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-header/ahb-search-form-header.component';
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
-import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { ExportButtonComponent } from '../../components/export-button/export-button.component';
 import { IconCopyUrlComponent } from '../../../../shared/components/icon-copy-url/icon-copy-url.component';
 import { FallbackPageComponent } from '../../../../shared/components/fallback-page/fallback-page.component';
-import { LoginButtonComponent } from '../../../../shared/components/login-button/login-button.component';
 
 @Component({
   selector: 'app-ahb-page',
@@ -36,11 +34,9 @@ import { LoginButtonComponent } from '../../../../shared/components/login-button
     CommonModule,
     AhbSearchFormHeaderComponent,
     InputSearchEnhancedComponent,
-    HighlightPipe,
     ExportButtonComponent,
     IconCopyUrlComponent,
     FallbackPageComponent,
-    LoginButtonComponent,
   ],
   templateUrl: './ahb-page.component.html',
 })
