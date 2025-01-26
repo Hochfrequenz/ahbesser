@@ -158,7 +158,7 @@ export class AhbTableComponent {
 
   generateBedingungsbaumDeepLink(expression: string): string {
     const encodedExpression = encodeURIComponent(expression);
-    return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.formatVersion()}&format_version=${this.getFormatVersion(this.pruefi())}&expression=${encodedExpression}`;
+    return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.formatVersion()}&format_version=${this.getFormat(this.pruefi())}&expression=${encodedExpression}`;
   }
   generateEbdDeepLink(bedingungs_spalte: string | null): string | null {
     if (!bedingungs_spalte) {
@@ -177,7 +177,7 @@ export class AhbTableComponent {
     return `${environment.ebdBaseUrl}/ebd/?format_version=${this.getFormatVersion(this.pruefi())}&ebd=${ebdKey}`;
   }
 
-  private getFormatVersion(pruefi: string): string {
+  private getFormat(pruefi: string): string {
     const mapping: { [key: string]: string } = {
       '99': 'APERAK',
       '29': 'COMDIS',
