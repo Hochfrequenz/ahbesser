@@ -157,10 +157,10 @@ export class AhbTableComponent {
 
   generateBedingungsbaumDeepLink(expression: string): string {
     const encodedExpression = encodeURIComponent(expression);
-    return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.formatVersion()}&format_version=${this.getFormatVersion(this.pruefi())}&expression=${encodedExpression}`;
+    return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.getFormat(this.pruefi())}&format_version=${this.formatVersion()}&expression=${encodedExpression}`;
   }
 
-  private getFormatVersion(pruefi: string): string {
+  private getFormat(pruefi: string): string {
     const mapping: { [key: string]: string } = {
       '99': 'APERAK',
       '29': 'COMDIS',
