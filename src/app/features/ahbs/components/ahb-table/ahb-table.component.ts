@@ -174,7 +174,7 @@ export class AhbTableComponent {
     }
     const ebdKey = match.groups['ebd_key']!;
     // e.g. https://ebd.stage.hochfrequenz.de/ebd/?formatversion=FV2504&ebd=E_0004
-    return `${environment.ebdBaseUrl}/ebd/?format_version=${this.getFormatVersion(this.pruefi())}&ebd=${ebdKey}`;
+    return `${environment.ebdBaseUrl}/ebd/?format_version=${this.formatVersion()}&ebd=${ebdKey}`;
   }
 
   private getFormat(pruefi: string): string {
