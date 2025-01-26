@@ -160,7 +160,7 @@ export class AhbTableComponent {
     const encodedExpression = encodeURIComponent(expression);
     return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.getFormat(this.pruefi())}&format_version=${this.formatVersion()}&expression=${encodedExpression}`;
   }
-  
+
   generateEbdDeepLink(value_pool_entry: string | null): string | null {
     if (!value_pool_entry || value_pool_entry.trim().length === 0) {
       return null;
