@@ -157,7 +157,7 @@ export class AhbTableComponent {
 
   generateBedingungsbaumDeepLink(expression: string): string {
     const encodedExpression = encodeURIComponent(expression);
-    return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.formatVersion()}&format_version=${this.getFormat(this.pruefi())}&expression=${encodedExpression}`;
+    return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.getFormat(this.pruefi())}&format_version=${this.formatVersion()}&expression=${encodedExpression}`;
   }
 
   private getFormat(pruefi: string): string {
