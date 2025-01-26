@@ -11,6 +11,7 @@ import {
 import { Ahb } from '../../../../core/api';
 import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import { environment } from '../../../../environments/environment';
+import { IconLinkComponent } from '../../../../shared/components/icon-link/icon-link.component';
 
 interface ExpandedState {
   [key: number]: boolean;
@@ -19,7 +20,7 @@ interface ExpandedState {
 @Component({
   selector: 'app-ahb-table',
   standalone: true,
-  imports: [HighlightPipe],
+  imports: [HighlightPipe, IconLinkComponent],
   templateUrl: './ahb-table.component.html',
   styleUrl: './ahb-table.component.scss',
 })
@@ -157,10 +158,24 @@ export class AhbTableComponent {
 
   generateBedingungsbaumDeepLink(expression: string): string {
     const encodedExpression = encodeURIComponent(expression);
-    return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.formatVersion()}&format_version=${this.getFormatVersion(this.pruefi())}&expression=${encodedExpression}`;
+    return `${environment.bedingungsbaumBaseUrl}/tree/?format=${this.getFormat(this.pruefi())}&format_version=${this.formatVersion()}&expression=${encodedExpression}`;
   }
 
-  private getFormatVersion(pruefi: string): string {
+  generateEbdDeepLink(value_pool_entry: string | null): string | null {
+    if (!value_pool_entry || value_pool_entry.trim().length === 0) {
+      return null;
+    }
+    const regex = /^.*\b(?<ebd_key>E_\d+)\b.*$/;
+    const match = value_pool_entry.match(regex);
+    if (!match?.groups) {
+      return null;
+    }
+    const ebdKey = match.groups['ebd_key']!;
+    // e.g. https://ebd.stage.hochfrequenz.de/ebd/?formatversion=FV2504&ebd=E_0004
+    return `${environment.ebdBaseUrl}/ebd/?format_version=${this.formatVersion()}&ebd=${ebdKey}`;
+  }
+
+  private getFormat(pruefi: string): string {
     const mapping: { [key: string]: string } = {
       '99': 'APERAK',
       '29': 'COMDIS',

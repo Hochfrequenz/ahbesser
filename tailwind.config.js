@@ -8,6 +8,7 @@ module.exports = {
         secondary: '#CCA9AB',
         tint: '#F6ECED',
         offwhite: '#E7E6E5',
+        ebd_primary: '#8ba2d7',
       },
       fontFamily: {
         sans: ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
