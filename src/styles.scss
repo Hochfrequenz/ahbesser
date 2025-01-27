@@ -53,7 +53,7 @@
 
 @font-face {
   font-family: 'Roboto';
-  font-weight: 500;
+  font-weight: 700; /* because font-weight for tailwind font-bold is 700*/ 
   font-style: normal;
   font-display: swap;
   font-stretch: normal;
