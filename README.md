@@ -119,6 +119,10 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
+### OpenAPI Specification Generation
+
+Run `npm run ng-openapi-gen` to generate the OpenAPI specification and related TypeScript interfaces. This command will update the API client code based on the OpenAPI specification.
+
 ## 🔗 Links
 
 - Generate machine-readable files from AHB documents with [KohlrAHBi](https://github.com/Hochfrequenz/kohlrahbi) 🥬.
