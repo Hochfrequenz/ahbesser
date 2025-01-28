@@ -8,7 +8,12 @@ import {
 } from '@angular/forms';
 import { AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
-import { of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map, of, tap } from 'rxjs';
+
+interface PruefiOption {
+  pruefidentifikator: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-pruefi-input',
@@ -27,8 +32,21 @@ export class PruefiInputComponent implements ControlValueAccessor {
   formatVersion = input.required<string | null>();
 
   control = new FormControl<string>('');
+  private searchTerm$ = new BehaviorSubject<string>('');
+  private allPruefis$ = new BehaviorSubject<PruefiOption[]>([]);
 
-  pruefis$!: ReturnType<AhbService['getPruefis']>;
+  pruefis$: Observable<string[]> = combineLatest([this.searchTerm$, this.allPruefis$]).pipe(
+    map(([searchTerm, pruefis]) => {
+      if (!searchTerm) return pruefis.map(p => p.pruefidentifikator);
+      const term = searchTerm.toLowerCase();
+      return pruefis
+        .filter(
+          p =>
+            p.pruefidentifikator.toLowerCase().includes(term) || p.name.toLowerCase().includes(term)
+        )
+        .map(p => `${p.pruefidentifikator} - ${p.name}`);
+    })
+  );
 
   public onChange?: (pruefi: string | null) => void;
 
@@ -36,15 +54,23 @@ export class PruefiInputComponent implements ControlValueAccessor {
     effect(() => {
       const formatVersion = this.formatVersion();
       if (!formatVersion) {
-        this.pruefis$ = of([]);
+        this.allPruefis$.next([]);
         return;
       }
       this.control.disable();
-      this.pruefis$ = this.ahbService
+      this.ahbService
         .getPruefis({
           'format-version': formatVersion,
         })
-        .pipe(tap(() => this.control.enable()));
+        .pipe(tap(() => this.control.enable()))
+        .subscribe(pruefis => {
+          this.allPruefis$.next(
+            pruefis.map(p => ({
+              pruefidentifikator: p.pruefidentifikator || '',
+              name: p.name || '',
+            }))
+          );
+        });
     });
   }
 
@@ -70,9 +96,17 @@ export class PruefiInputComponent implements ControlValueAccessor {
 
   onInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, '');
-    value = value.slice(0, 5);
+    let value = input.value;
+
+    // If the value contains a hyphen, it's from the suggestion list
+    if (value.includes(' - ')) {
+      value = value.split(' - ')[0];
+    }
+
+    // Filter only numbers and limit to 5 digits
+    value = value.replace(/\D/g, '').slice(0, 5);
     this.control.setValue(value);
+    this.searchTerm$.next(input.value);
 
     // incomplete pruefids should not trigger the ahb-page to search for AHBs
     if (value.length === 5 && this.onChange) {
