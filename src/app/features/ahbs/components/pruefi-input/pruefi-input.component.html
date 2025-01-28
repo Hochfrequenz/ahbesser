@@ -1,21 +1,20 @@
 <div class="flex flex-col items-start mt-2 w-full">
-  <input
-    class="rounded border-2 border-white bg-tint py-2.5 px-2 focus:outline-0 w-full"
-    type="number"
-    list="pruefi-list"
-    [formControl]="control"
-    (input)="onInputChange($event)"
-    placeholder="Bitte auswählen"
-    maxlength="5" />
-  <label
-    for="format-version-select"
-    class="ml-3 -mt-14 text-xs inline-block text-slate-500 text-[12px] bg-white px-1">
-    Prüfidentifikator
-  </label>
+  <mat-form-field class="w-full" appearance="outline">
+    <mat-label>Prüfidentifikator</mat-label>
+    <input
+      type="text"
+      matInput
+      [formControl]="control"
+      [matAutocomplete]="auto"
+      placeholder="Prüfidentifikator oder Beschreibung eingeben" />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="onOptionSelected($event.option.value)">
+      @for (option of filteredOptions$ | async; track option.pruefidentifikator) {
+        <mat-option [value]="option">
+          <strong>{{ option.pruefidentifikator }}</strong> - {{ option.name }}
+        </mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
 </div>
-
-<datalist id="pruefi-list">
-  @for (pruefi of pruefis$ | async; track pruefi) {
-    <option [value]="pruefi">{{ pruefi }}</option>
-  }
-</datalist>

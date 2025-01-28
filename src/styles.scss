@@ -1,4 +1,7 @@
+@use '@angular/material' as mat;
+@use '@angular/material/prebuilt-themes/indigo-pink.css';
 @import '@mdi/font/css/materialdesignicons.css';
+
 :root {
   /* copied from /assets/companystylesheet/css/hochfrequenz.css, because I didn't manage to import/include it properly */
   /* X [ERROR] Could not resolve "/assets/companystylesheet/css/hochfrequenz.css" */
@@ -79,6 +82,7 @@
 body {
   font-family: 'Roboto', sans-serif;
 }
+
 #solutions a {
   color: white;
   text-decoration: none;

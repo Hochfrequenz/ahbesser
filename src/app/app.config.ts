@@ -1,5 +1,6 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { routes } from './app.routes';
 import { ApiModule } from './core/api';
@@ -14,6 +15,7 @@ function isDevelopmentEnvironment(): boolean {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withComponentInputBinding()),
+    provideAnimations(),
     importProvidersFrom(
       HttpClientModule,
       ApiModule.forRoot({
