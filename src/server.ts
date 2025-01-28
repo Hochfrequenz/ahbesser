@@ -7,6 +7,8 @@ import cors from 'cors';
 import router from './server/infrastructure/api.routes';
 import { httpErrorHandler } from './server/infrastructure/errors';
 import { environment } from './app/environments/environment';
+import { AppDataSource } from './server/infrastructure/database';
+import 'reflect-metadata';
 
 const server = express();
 server.use(
@@ -24,6 +26,15 @@ server.use(
 
 const distFolder = join(process.cwd(), 'dist/ahbesser/browser');
 const indexHtml = 'index.html';
+
+// Initialize database connection
+AppDataSource.initialize()
+  .then(() => {
+    console.log('Database connection initialized');
+  })
+  .catch(error => {
+    console.error('Error initializing database connection:', error);
+  });
 
 server.get('/version', (_, res) =>
   res.send({
