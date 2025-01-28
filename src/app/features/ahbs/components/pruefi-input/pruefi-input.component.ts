@@ -96,23 +96,31 @@ export class PruefiInputComponent implements ControlValueAccessor {
 
   onInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-    let value = input.value;
+    const inputValue = input.value;
+
+    // Update the search term for filtering suggestions
+    this.searchTerm$.next(inputValue);
+
+    let pruefidentifikator: string | null = null;
 
     // If the value contains a hyphen, it's from the suggestion list
-    if (value.includes(' - ')) {
-      value = value.split(' - ')[0];
+    if (inputValue.includes(' - ')) {
+      pruefidentifikator = inputValue.split(' - ')[0].trim();
+    } else if (/^\d+$/.test(inputValue)) {
+      // If the input is only digits, treat it as a pruefidentifikator
+      pruefidentifikator = inputValue.slice(0, 5);
     }
 
-    // Filter only numbers and limit to 5 digits
-    value = value.replace(/\D/g, '').slice(0, 5);
-    this.control.setValue(value);
-    this.searchTerm$.next(input.value);
+    // Update the form control with the full input value to allow searching
+    this.control.setValue(inputValue);
 
-    // incomplete pruefids should not trigger the ahb-page to search for AHBs
-    if (value.length === 5 && this.onChange) {
-      this.onChange(value);
-    } else if (this.onChange) {
-      this.onChange(null);
+    // Only emit changes when we have a valid 5-digit pruefidentifikator
+    if (this.onChange) {
+      if (pruefidentifikator?.length === 5) {
+        this.onChange(pruefidentifikator);
+      } else {
+        this.onChange(null);
+      }
     }
   }
 }
