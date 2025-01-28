@@ -123,6 +123,36 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 Run `npm run ng-openapi-gen` to generate the OpenAPI specification and related TypeScript interfaces. This command will update the API client code based on the OpenAPI specification.
 
+## 🚀 Deployment
+
+The application can be deployed to two environments: Stage and Production.
+The deployment process is automated using a combination of GitHub Actions, Pulumi, and Octopus Deploy.
+
+### Deployment Process Overview
+
+1. **Build**: GitHub Actions builds a Docker image and pushes it to the GitHub Container Registry
+2. **Infrastructure**: Pulumi manages the Azure resources
+3. **Deployment**: Octopus Deploy handles the container deployment to Azure by using Pulumi.
+
+### Stage Deployment
+
+To deploy to the stage environment:
+
+1. Create a new release in GitHub
+2. Set the release as "Pre-release"
+3. This will automatically trigger the deployment pipeline
+4. The application will be deployed to [ahb-tabellen.stage.hochfrequenz.de](https://ahb-tabellen.stage.hochfrequenz.de)
+
+### Production Deployment
+
+To deploy to the production environment:
+
+1. Create a new release in GitHub
+2. Publish it as a full release (not pre-release)
+3. This will trigger the production deployment pipeline
+4. A manual approval step in Octopus Deploy will be required
+5. After approval, the application will be deployed to [ahb-tabellen.hochfrequenz.de](https://ahb-tabellen.hochfrequenz.de)
+
 ## 🔗 Links
 
 - Generate machine-readable files from AHB documents with [KohlrAHBi](https://github.com/Hochfrequenz/kohlrahbi) 🥬.
