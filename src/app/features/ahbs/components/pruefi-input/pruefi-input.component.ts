@@ -37,12 +37,13 @@ export class PruefiInputComponent implements ControlValueAccessor {
 
   pruefis$: Observable<string[]> = combineLatest([this.searchTerm$, this.allPruefis$]).pipe(
     map(([searchTerm, pruefis]) => {
-      if (!searchTerm) return pruefis.map(p => p.pruefidentifikator);
       const term = searchTerm.toLowerCase();
       return pruefis
         .filter(
           p =>
-            p.pruefidentifikator.toLowerCase().includes(term) || p.name.toLowerCase().includes(term)
+            !term || // show all when no search term
+            p.pruefidentifikator.toLowerCase().includes(term) ||
+            p.name.toLowerCase().includes(term)
         )
         .map(p => `${p.pruefidentifikator} - ${p.name}`);
     })
