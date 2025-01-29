@@ -1,3 +1,5 @@
+import { BlobServiceClient } from '@azure/storage-blob';
+import { Readable } from 'stream';
 import { Ahb } from '../../app/core/api/models';
 import { NotFoundError } from '../infrastructure/errors';
 import { AppDataSource } from '../infrastructure/database';
@@ -11,8 +13,26 @@ export enum FileType {
 }
 
 export default class AHBRepository {
-  // Retrieve a single AHB from the database
+  private blobClient?: BlobServiceClient;
+  private ahbContainerName?: string;
+
+  constructor(client?: BlobServiceClient) {
+    if (client) {
+      this.blobClient = client;
+      this.ahbContainerName = process.env['AHB_CONTAINER_NAME'];
+    }
+  }
+
+  // Retrieve a single AHB from either database (JSON) or blob storage (XLSX/CSV)
   public async get(pruefi: string, formatVersion: string, type: FileType): Promise<Ahb | Buffer> {
+    if (type === FileType.JSON) {
+      return this.getFromDatabase(pruefi, formatVersion);
+    } else {
+      return this.getFromBlobStorage(pruefi, formatVersion, type);
+    }
+  }
+
+  private async getFromDatabase(pruefi: string, formatVersion: string): Promise<Ahb> {
     // Initialize the database connection if not already initialized
     if (!AppDataSource.isInitialized) {
       await AppDataSource.initialize();
@@ -38,7 +58,7 @@ export default class AHBRepository {
       .getMany();
 
     // Transform the data to match the API schema
-    const ahb: Ahb = {
+    return {
       meta: {
         description: metaInfo.description || '',
         direction: metaInfo.direction || '',
@@ -58,12 +78,102 @@ export default class AHBRepository {
         value_pool_entry: line.value_pool_entry || '',
       })),
     };
+  }
 
-    // For now, we only support JSON output
-    if (type !== FileType.JSON) {
-      throw new NotFoundError(`File type ${type} is not supported yet`);
+  private async getFromBlobStorage(
+    pruefi: string,
+    formatVersion: string,
+    type: FileType
+  ): Promise<Buffer> {
+    if (!this.blobClient || !this.ahbContainerName) {
+      // Initialize blob client if not already done
+      if (!process.env['AZURE_BLOB_STORAGE_CONNECTION_STRING']) {
+        throw new NotFoundError(
+          'Azure Blob Storage connection string is not configured (AZURE_BLOB_STORAGE_CONNECTION_STRING)'
+        );
+      }
+      if (!process.env['AHB_CONTAINER_NAME']) {
+        throw new NotFoundError('AHB container name is not configured (AHB_CONTAINER_NAME)');
+      }
+      this.blobClient = BlobServiceClient.fromConnectionString(
+        process.env['AZURE_BLOB_STORAGE_CONNECTION_STRING']
+      );
+      this.ahbContainerName = process.env['AHB_CONTAINER_NAME'];
     }
 
-    return ahb;
+    const containerClient = this.blobClient.getContainerClient(this.ahbContainerName);
+    const blobName = await this.getBlobName(pruefi, formatVersion, type);
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+    try {
+      const downloadBlockBlobResponse = await blockBlobClient.download(0);
+      return await this.streamToBuffer(downloadBlockBlobResponse.readableStreamBody as Readable);
+    } catch (error) {
+      throw new NotFoundError(
+        `File not found for pruefi ${pruefi} and format version ${formatVersion}`
+      );
+    }
+  }
+
+  private async streamToBuffer(readableStream: Readable): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      const chunks: Buffer[] = [];
+      readableStream.on('data', (data: Buffer | string) => {
+        chunks.push(Buffer.isBuffer(data) ? data : Buffer.from(data));
+      });
+      readableStream.on('end', () => {
+        resolve(Buffer.concat(chunks));
+      });
+      readableStream.on('error', reject);
+    });
+  }
+
+  private async getBlobName(
+    pruefi: string,
+    formatVersion: string,
+    type: FileType
+  ): Promise<string> {
+    const format = await this.getFormatName(pruefi);
+    const fileFormatDirectoryName = this.getFileTypeDirectoryName(type);
+    return `${formatVersion}/${format}/${fileFormatDirectoryName}/${pruefi}.${type.toString()}`;
+  }
+
+  private getFileTypeDirectoryName(fileType: FileType): string {
+    switch (fileType) {
+      case FileType.CSV:
+        return 'csv';
+      case FileType.JSON:
+        return 'flatahb';
+      case FileType.XLSX:
+        return 'xlsx';
+      default:
+        throw new NotFoundError(`Unknown file type ${fileType}`);
+    }
+  }
+
+  private getFormatName(pruefi: string): string {
+    const mapping: { [key: string]: string } = {
+      '99': 'APERAK',
+      '29': 'COMDIS',
+      '21': 'IFTSTA',
+      '23': 'INSRPT',
+      '31': 'INVOIC',
+      '13': 'MSCONS',
+      '39': 'ORDCHG',
+      '17': 'ORDERS',
+      '19': 'ORDRSP',
+      '27': 'PRICAT',
+      '15': 'QUOTES',
+      '33': 'REMADV',
+      '35': 'REQOTE',
+      '37': 'PARTIN',
+      '11': 'UTILMD',
+      '25': 'UTILTS',
+      '91': 'CONTRL',
+      '92': 'APERAK',
+      '44': 'UTILMD', // UTILMD for GAS since FV2310
+      '55': 'UTILMD', // UTILMD for STROM since FV2310
+    };
+    return mapping[pruefi.slice(0, 2)];
   }
 }
