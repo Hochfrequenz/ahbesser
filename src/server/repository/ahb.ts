@@ -62,7 +62,6 @@ export default class AHBRepository {
       meta: {
         description: metaInfo.description || '',
         direction: metaInfo.direction || '',
-        maus_version: '0.3.1', // TODO: Add this to the database schema
         pruefidentifikator: metaInfo.pruefidentifikator,
       },
       lines: lines.map(line => ({
