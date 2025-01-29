@@ -187,17 +187,12 @@ components:
             direction:
               type: string
               example: 'inbound'
-            maus_version:
-              type: string
-              pattern: '^\\d+\\.\\d+\\.\\d+$'
-              example: '0.3.1'
             pruefidentifikator:
               type: string
               example: '25007'
           required:
             - description
             - direction
-            - maus_version
             - pruefidentifikator
       required:
         - lines
