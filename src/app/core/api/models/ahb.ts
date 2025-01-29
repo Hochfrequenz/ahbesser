@@ -18,7 +18,6 @@ export interface Ahb {
   meta: {
 'description': string;
 'direction': string;
-'maus_version': string;
 'pruefidentifikator': string;
 };
 }

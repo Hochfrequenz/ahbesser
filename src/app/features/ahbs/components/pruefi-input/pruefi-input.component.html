@@ -1,12 +1,12 @@
 <div class="flex flex-col items-start mt-2 w-full">
   <input
     class="rounded border-2 border-white bg-tint py-2.5 px-2 focus:outline-0 w-full"
-    type="number"
+    type="text"
     list="pruefi-list"
     [formControl]="control"
     (input)="onInputChange($event)"
-    placeholder="Bitte auswählen"
-    maxlength="5" />
+    placeholder="Bitte auswählen oder suchen"
+    maxlength="50" />
   <label
     for="format-version-select"
     class="ml-3 -mt-14 text-xs inline-block text-slate-500 text-[12px] bg-white px-1">
@@ -15,7 +15,7 @@
 </div>
 
 <datalist id="pruefi-list">
-  @for (pruefi of pruefis$ | async; track pruefi) {
-    <option [value]="pruefi">{{ pruefi }}</option>
+  @for (suggestion of pruefis$ | async; track suggestion) {
+    <option [value]="suggestion">{{ suggestion }}</option>
   }
 </datalist>

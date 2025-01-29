@@ -33,20 +33,20 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
     this.formatVersionContainerName = process.env['FORMAT_VERSION_CONTAINER_NAME'];
   }
 
-  // Return a list of all unique format versions by looking at the top-level directories
-  // in the uploaded-files container that start with 'FV'
+  // Return a list of all unique format versions from the database
   public async list(): Promise<string[]> {
-    const containerClient = this.client.getContainerClient(this.ahbContainerName);
-    const formatVersions = new Set<string>();
-
-    for await (const blob of containerClient.listBlobsFlat()) {
-      const parts = blob.name.split('/');
-      if (parts.length > 0 && parts[0].startsWith('FV')) {
-        formatVersions.add(parts[0]);
-      }
+    // Initialize the database connection if not already initialized
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
     }
 
-    return Array.from(formatVersions).sort();
+    const formatVersions = await AppDataSource.getRepository(AhbMetaInformation)
+      .createQueryBuilder('ahb')
+      .select('DISTINCT ahb.edifact_format_version', 'formatVersion')
+      .orderBy('ahb.edifact_format_version')
+      .getRawMany();
+
+    return formatVersions.map(result => result.formatVersion);
   }
 
   // Return a list of all pruefis for a specific format version by looking at the json files
