@@ -43,9 +43,10 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
     const formatVersions = await AppDataSource.getRepository(AhbMetaInformation)
       .createQueryBuilder('ahb')
       .select('DISTINCT ahb.edifact_format_version', 'formatVersion')
+      .orderBy('ahb.edifact_format_version')
       .getRawMany();
 
-    return formatVersions.map(result => result.formatVersion).sort();
+    return formatVersions.map(result => result.formatVersion);
   }
 
   // Return a list of all pruefis for a specific format version by looking at the json files
