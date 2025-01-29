@@ -1,9 +1,16 @@
 import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
 import BlobStorageContainerBacked from './abstract/blobStorageBacked';
 import { NotFoundError } from '../infrastructure/errors';
+import { AppDataSource } from '../infrastructure/database';
+import { AhbMetaInformation } from '../entities/ahb-meta-information.entity';
 
 interface FormatVersionsWithPruefis {
   [formatVersion: string]: Set<string>;
+}
+
+interface PruefiWithName {
+  pruefidentifikator: string;
+  name: string;
 }
 
 // The FormatVersionRepository class is responsible for retrieving the format versions and their related pruefis.
@@ -26,45 +33,45 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
     this.formatVersionContainerName = process.env['FORMAT_VERSION_CONTAINER_NAME'];
   }
 
-  // Return a list of all unique format versions by looking at the top-level directories
-  // in the uploaded-files container that start with 'FV'
+  // Return a list of all unique format versions from the database
   public async list(): Promise<string[]> {
-    const containerClient = this.client.getContainerClient(this.ahbContainerName);
-    const formatVersions = new Set<string>();
-
-    for await (const blob of containerClient.listBlobsFlat()) {
-      const parts = blob.name.split('/');
-      if (parts.length > 0 && parts[0].startsWith('FV')) {
-        formatVersions.add(parts[0]);
-      }
+    // Initialize the database connection if not already initialized
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
     }
 
-    return Array.from(formatVersions).sort();
+    const formatVersions = await AppDataSource.getRepository(AhbMetaInformation)
+      .createQueryBuilder('ahb')
+      .select('DISTINCT ahb.edifact_format_version', 'formatVersion')
+      .orderBy('ahb.edifact_format_version')
+      .getRawMany();
+
+    return formatVersions.map(result => result.formatVersion);
   }
 
   // Return a list of all pruefis for a specific format version by looking at the json files
   // in the flatahb directory of the format version
-  public async listPruefisByFormatVersion(formatVersion: string): Promise<string[]> {
-    const containerClient = this.client.getContainerClient(this.ahbContainerName);
-    const pruefis = new Set<string>();
-
-    // List all blobs in the container with the prefix of the format version
-    for await (const blob of containerClient.listBlobsFlat({ prefix: `${formatVersion}/` })) {
-      // Check if the blob is in the flatahb directory and is a json file
-      if (blob.name.includes('/flatahb/') && blob.name.endsWith('.json')) {
-        // Extract the pruefi from the filename (remove .json extension)
-        const pruefi = blob.name.split('/').pop()?.replace('.json', '');
-        if (pruefi) {
-          pruefis.add(pruefi);
-        }
-      }
+  public async listPruefisByFormatVersion(formatVersion: string): Promise<PruefiWithName[]> {
+    // Initialize the database connection if not already initialized
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
     }
 
-    if (pruefis.size === 0) {
+    const pruefis = await AppDataSource.getRepository(AhbMetaInformation)
+      .createQueryBuilder('ahb')
+      .select(['ahb.pruefidentifikator', 'ahb.description'])
+      .where('ahb.edifact_format_version = :formatVersion', { formatVersion })
+      .orderBy('ahb.pruefidentifikator')
+      .getMany();
+
+    if (pruefis.length === 0) {
       throw new NotFoundError(`Format version ${formatVersion} does not exist`);
     }
 
-    return Array.from(pruefis).sort();
+    return pruefis.map(pruefi => ({
+      pruefidentifikator: pruefi.pruefidentifikator,
+      name: pruefi.description || '',
+    }));
   }
 
   // Get the format versions container client. Create the container if it does not exist.

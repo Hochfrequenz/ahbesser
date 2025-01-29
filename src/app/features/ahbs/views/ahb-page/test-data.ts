@@ -7,7 +7,6 @@ export const testData$: Observable<Ahb> = of(null).pipe(
     meta: {
       description: 'asd',
       direction: 'LTS to abc',
-      maus_version: 'asdasd',
       pruefidentifikator: '123',
     },
     lines: [
