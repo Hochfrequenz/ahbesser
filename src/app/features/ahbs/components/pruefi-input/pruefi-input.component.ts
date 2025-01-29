@@ -104,24 +104,40 @@ export class PruefiInputComponent implements ControlValueAccessor {
 
     let pruefidentifikator: string | null = null;
 
-    // If the value contains a hyphen, it's from the suggestion list
-    if (inputValue.includes(' - ')) {
-      pruefidentifikator = inputValue.split(' - ')[0].trim();
-    } else if (/^\d+$/.test(inputValue)) {
-      // If the input is only digits, treat it as a pruefidentifikator
-      pruefidentifikator = inputValue.slice(0, 5);
+    // Handle empty or whitespace-only input
+    if (!inputValue || !inputValue.trim()) {
+      if (this.onChange) {
+        this.onChange(null);
+      }
+      return;
     }
+
+    const regexPattern = /^(?<pruefi>\d{5})\b\s*-\s*(?<name>.+)\s*$/;
+    const digitOnlyPattern = /^\d+$/;
+
+    if (regexPattern.test(inputValue)) {
+      // Full format with name (e.g., "12345 - Some Name")
+      const match = inputValue.match(regexPattern);
+      pruefidentifikator = match?.groups?.['pruefi'] ?? null;
+    } else if (digitOnlyPattern.test(inputValue)) {
+      // Handle numeric input
+      if (inputValue.length === 5) {
+        // Exactly 5 digits
+        pruefidentifikator = inputValue;
+      } else if (inputValue.length > 5) {
+        // More than 5 digits - take first 5
+        pruefidentifikator = inputValue.slice(0, 5);
+      }
+      // Less than 5 digits - treat as invalid (pruefidentifikator remains null)
+    }
+    // Any other format is considered invalid (pruefidentifikator remains null)
 
     // Update the form control with the full input value to allow searching
     this.control.setValue(inputValue);
 
-    // Only emit changes when we have a valid 5-digit pruefidentifikator
+    // Emit changes
     if (this.onChange) {
-      if (pruefidentifikator?.length === 5) {
-        this.onChange(pruefidentifikator);
-      } else {
-        this.onChange(null);
-      }
+      this.onChange(pruefidentifikator);
     }
   }
 }
