@@ -1,3 +1,7 @@
+// The here defined columns come from the ahbline table in the database.
+// The table is created by the ahbline.sql file in the database/sql folder.
+// Which you can find here: https://github.com/Hochfrequenz/ahb-mig-backend/releases/tag/v0.0.1
+
 import { Entity, Column, PrimaryColumn, Index } from 'typeorm';
 
 @Entity({ name: 'ahbline', synchronize: false })
