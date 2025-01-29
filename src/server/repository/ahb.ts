@@ -107,7 +107,7 @@ export default class AHBRepository {
     try {
       const downloadBlockBlobResponse = await blockBlobClient.download(0);
       return await this.streamToBuffer(downloadBlockBlobResponse.readableStreamBody as Readable);
-    } catch (error) {
+    } catch {
       throw new NotFoundError(
         `File not found for pruefi ${pruefi} and format version ${formatVersion}`
       );

@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
-import { BehaviorSubject, Observable, combineLatest, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map, tap } from 'rxjs';
 
 interface PruefiOption {
   pruefidentifikator: string;
