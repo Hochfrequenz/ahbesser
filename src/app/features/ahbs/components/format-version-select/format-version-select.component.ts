@@ -41,10 +41,24 @@ export class FormatVersionSelectComponent implements ControlValueAccessor, OnIni
           label: this.getFormatVersionDate(v),
         }))
       ),
-      tap(() => this.control.enable())
+      tap(() => {
+        const defaultVersion = this.getDefaultFormatVersion();
+        this.control.setValue(defaultVersion);
+        if (this.onChange) {
+          this.onChange(defaultVersion);
+        }
+        this.control.enable();
+      })
     );
   }
 
+  /**
+   * Returns the default format version based on a hardcoded date check.
+   */
+  private getDefaultFormatVersion(): string {
+    const keyDate24hLFW = new Date('2025-06-06');
+    return new Date() < keyDate24hLFW ? 'FV2410' : 'FV2504';
+  }
   writeValue(formatVersion: string): void {
     this.control.setValue(formatVersion);
   }
@@ -75,7 +89,7 @@ export class FormatVersionSelectComponent implements ControlValueAccessor, OnIni
       FV2310: 'Oktober 2023 (FV2310)',
       FV2404: 'April 2024 (FV2404)',
       FV2410: 'Oktober 2024 (FV2410)',
-      FV2504: 'April 2025 (FV2504)',
+      FV2504: 'Juni 2025 (FV2504)',
       FV2510: 'Oktober 2025 (FV2510)',
     };
     return mapping[formatVersion] || formatVersion;
