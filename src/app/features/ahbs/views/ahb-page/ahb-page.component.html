@@ -16,7 +16,7 @@
       [totalResults]="table()?.markElements()?.length" />
   </app-header>
 
-  <div *ngIf="!errorOccurred">
+  <div class="flex-1" *ngIf="!errorOccurred">
     <div class="flex-1 flex flex-col overflow-auto" #scroll>
       <div>
         @if (ahb$ | async; as ahb) {
