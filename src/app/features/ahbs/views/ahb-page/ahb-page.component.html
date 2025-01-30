@@ -17,7 +17,7 @@
   </app-header>
 
   <div class="flex-1" *ngIf="!errorOccurred">
-    <div class="flex-1 flex flex-col overflow-auto" #scroll>
+    <div class="flex-1 flex flex-col overflow-auto h-full" #scroll>
       <div>
         @if (ahb$ | async; as ahb) {
           <div class="flex-none flex flex-col md:flex-row mb-10">
@@ -50,7 +50,7 @@
         }
       </div>
 
-      <div>
+      <div class="h-full">
         @if (lines$ | async; as lines) {
           <app-ahb-table
             [lines]="lines"
@@ -59,7 +59,7 @@
             [pruefi]="pruefi()"
             (selectElement)="scrollToElement($event.element, $event.offsetY)" />
         } @else {
-          <div class="flex-1 flex items-center justify-center">
+          <div class="h-full flex items-center justify-center">
             <p class="text-xl">loading ...</p>
           </div>
         }
