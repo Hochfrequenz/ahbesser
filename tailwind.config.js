@@ -9,7 +9,7 @@ module.exports = {
         tint: '#F6ECED',
         offwhite: '#E7E6E5',
         ebd_primary: '#8ba2d7',
-        dark: '#cf939a'
+        dark: '#cf939a',
         white: '#ffffff',
       },
       fontFamily: {
