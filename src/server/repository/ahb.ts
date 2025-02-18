@@ -47,7 +47,7 @@ export default class AHBRepository {
 
     if (!metaInfo) {
       throw new NotFoundError(
-        `AHB not found for pruefi ${pruefi} and format version ${formatVersion}`
+        `AHB document not found. Prüfidentifikator: ${pruefi}, Format Version: ${formatVersion}`
       );
     }
 
