@@ -62,7 +62,7 @@ export class FormatVersionSelectComponent implements ControlValueAccessor, OnIni
   }
 
   /**
-   * Returns the default format version based on a series of predefined datetime thresholds.
+   * Returns the default format version based on a series of predefined datetime upper thresholds.
    * Each threshold corresponds to a specific version of the Edifact format.
    * The thresholds are defined in UTC and are based on the official BDEW schedule.
    */
