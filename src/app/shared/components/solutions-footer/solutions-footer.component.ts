@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-solutions-footer',
   imports: [],
   templateUrl: './solutions-footer.component.html',
-  styleUrl: './solutions-footer.component.scss'
+  styleUrl: './solutions-footer.component.scss',
 })
-export class SolutionsFooterComponent {
-
-}
+export class SolutionsFooterComponent {}
