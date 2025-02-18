@@ -51,14 +51,14 @@ server.get('/readiness', (_, res) => res.send());
 
 server.use('/api', router);
 
+// Apply error handler middleware
+server.use(httpErrorHandler);
+
 // Serve static files from /browser
 server.get('*.*', express.static(distFolder, { maxAge: '1y' }));
 
 // All regular routes serve angular
 server.get('*', async (_, res) => res.sendFile(join(distFolder, indexHtml)));
-
-// Apply error handler middleware
-server.use(httpErrorHandler);
 
 const port = process.env['PORT'] || 3000;
 server.listen(port, () => {
