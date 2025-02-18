@@ -1,75 +1,105 @@
-<table class="table-auto w-full text-sm text-gray-500">
-  <thead class="text-xs text-gray-700 uppercase bg-gray-50" #header>
-    <tr>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">Segmentgruppe</th>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">Segmentname</th>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">Segment</th>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">Datenelement</th>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">Qualifier</th>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">Name</th>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
-        Pflichtfeld-Kennzeichen
-      </th>
-      <th scope="col" class="sticky top-0 bg-gray-50 px-6 py-3 text-left">
-        Bedingung / Hinweis / Format
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (line of lines(); track line.index; let i = $index) {
-      <tr [class]="getRowClass(i)">
-        <td
-          class="px-6 py-4"
-          [class.font-bold]="isNewSegment(i)"
-          [innerHTML]="line.segment_group_key | highlight: highlight()"></td>
-        <td
-          class="px-6 py-4"
-          [class.font-bold]="isNewSegment(i)"
-          [innerHTML]="line.section_name | highlight: highlight()"></td>
-        <td
-          class="px-6 py-4"
-          [class.font-bold]="isNewSegment(i)"
-          [innerHTML]="line.segment_code | highlight: highlight()"></td>
-        <td class="px-6 py-4" [innerHTML]="line.data_element | highlight: highlight()"></td>
-        <td class="px-6 py-4">
-          @if (generateEbdDeepLink(line.value_pool_entry) !== null) {
-            <a
-              [href]="generateEbdDeepLink(line.value_pool_entry)"
-              target="_blank"
-              class="hover:underline font-bold text-ebd_primary flex flex-row gap-1 items-center">
-              {{ line.value_pool_entry }} <app-icon-link />
-            </a>
-          } @else {
-            {{ line.value_pool_entry }}
-          }
-        </td>
-        <td class="px-6 py-4" [innerHTML]="line.name | highlight: highlight()"></td>
-        <td class="px-6 py-4">
-          <a
-            [href]="generateBedingungsbaumDeepLink(line.ahb_expression)"
-            target="_blank"
-            class="hover:underline">
-            {{ line.ahb_expression }}
-          </a>
-        </td>
-        <td class="px-6 py-4 conditions-column">
-          @if (line.conditions) {
-            @for (
-              condition of addConditionLineBreaks(getDisplayText(line.conditions, i));
-              track $index
-            ) {
-              <div [innerHTML]="condition | highlight: highlight()"></div>
-            }
-            @if (shouldShowToggle(line.conditions)) {
-              <button
-                (click)="toggleExpand(i)"
-                class="text-secondary hover:text-primary text-sm mt-1">
-                {{ isExpanded(i) ? 'weniger anzeigen' : 'mehr anzeigen' }}
-              </button>
-            }
-          }
-        </td>
+<div class="relative bg-hf-pastell-rot">
+  <table class="table-auto w-full text-sm text-gray-500">
+    <thead>
+      <tr>
+        <th
+          scope="col"
+          class="sticky top-0 bg-white px-6 py-3 text-left text-xs text-gray-700 uppercase">
+          Segmentgruppe
+        </th>
+        <th
+          scope="col"
+          class="sticky top-0 bg-white px-6 py-3 text-left text-xs text-gray-700 uppercase">
+          Segmentname
+        </th>
+        <th
+          scope="col"
+          class="sticky top-0 bg-white px-6 py-3 text-left text-xs text-gray-700 uppercase">
+          Segment
+        </th>
+        <th
+          scope="col"
+          class="sticky top-0 bg-white px-6 py-3 text-left text-xs text-gray-700 uppercase">
+          Datenelement
+        </th>
+        <th
+          scope="col"
+          class="sticky top-0 bg-white px-6 py-3 text-left text-xs text-gray-700 uppercase">
+          Qualifier
+        </th>
+        <th
+          scope="col"
+          class="sticky top-0 bg-white px-6 py-3 text-left text-xs text-gray-700 uppercase">
+          Name
+        </th>
+        <th
+          scope="col"
+          class="sticky top-0 bg-white px-6 py-3 text-left text-xs text-gray-700 uppercase">
+          Pflichtfeld-Kennzeichen
+        </th>
+        <th
+          scope="col"
+          class="sticky top-0 bg-white px-6 py-3 text-left text-xs text-gray-700 uppercase">
+          Bedingung / Hinweis / Format
+        </th>
       </tr>
-    }
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      @for (line of lines(); track line.index; let i = $index) {
+        <tr [class]="getRowClass(i)">
+          <td
+            class="px-6 py-4"
+            [class.font-bold]="isNewSegment(i)"
+            [innerHTML]="line.segment_group_key | highlight: highlight()"></td>
+          <td
+            class="px-6 py-4"
+            [class.font-bold]="isNewSegment(i)"
+            [innerHTML]="line.section_name | highlight: highlight()"></td>
+          <td
+            class="px-6 py-4"
+            [class.font-bold]="isNewSegment(i)"
+            [innerHTML]="line.segment_code | highlight: highlight()"></td>
+          <td class="px-6 py-4" [innerHTML]="line.data_element | highlight: highlight()"></td>
+          <td class="px-6 py-4">
+            @if (generateEbdDeepLink(line.value_pool_entry) !== null) {
+              <a
+                [href]="generateEbdDeepLink(line.value_pool_entry)"
+                target="_blank"
+                class="hover:underline font-bold text-ebd_primary flex flex-row gap-1 items-center">
+                {{ line.value_pool_entry }} <app-icon-link />
+              </a>
+            } @else {
+              {{ line.value_pool_entry }}
+            }
+          </td>
+          <td class="px-6 py-4" [innerHTML]="line.name | highlight: highlight()"></td>
+          <td class="px-6 py-4">
+            <a
+              [href]="generateBedingungsbaumDeepLink(line.ahb_expression)"
+              target="_blank"
+              class="hover:underline">
+              {{ line.ahb_expression }}
+            </a>
+          </td>
+          <td class="px-6 py-4 conditions-column">
+            @if (line.conditions) {
+              @for (
+                condition of addConditionLineBreaks(getDisplayText(line.conditions, i));
+                track $index
+              ) {
+                <div [innerHTML]="condition | highlight: highlight()"></div>
+              }
+              @if (shouldShowToggle(line.conditions)) {
+                <button
+                  (click)="toggleExpand(i)"
+                  class="text-secondary hover:text-primary text-sm mt-1">
+                  {{ isExpanded(i) ? 'weniger anzeigen' : 'mehr anzeigen' }}
+                </button>
+              }
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
