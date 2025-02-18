@@ -72,7 +72,8 @@ describe('FormatVersionSelectComponent', () => {
     // Simulate user selecting a different format version
     component.control.setValue('FV2504');
 
-    // Advance timers to process any async operations
+    // We need to run detectChanges to trigger Angular's change detection
+    fixture.detectChanges();
     jest.runAllTimers();
     await fixture.whenStable();
 

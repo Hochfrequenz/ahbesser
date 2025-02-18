@@ -52,6 +52,13 @@ export class FormatVersionSelectComponent implements ControlValueAccessor, OnIni
         this.control.enable();
       })
     );
+
+    // Subscribe to value changes
+    this.control.valueChanges.subscribe(value => {
+      if (this.onChange) {
+        this.onChange(value);
+      }
+    });
   }
 
   /**
