@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { FooterComponent } from '../../../../shared/components/footer/footer.component';
+import { SolutionsFooterComponent } from '../../../../shared/components/solutions-footer/solutions-footer.component';
 import {
   FormControl,
   FormGroup,
@@ -22,6 +23,7 @@ import { InputSearchEnhancedComponent } from '../../../../shared/components/inpu
     ReactiveFormsModule,
     AhbSearchFormHeaderComponent,
     InputSearchEnhancedComponent,
+    SolutionsFooterComponent,
   ],
   templateUrl: './ahb-landing-page.component.html',
 })
