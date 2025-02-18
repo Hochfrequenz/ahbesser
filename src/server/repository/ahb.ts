@@ -38,18 +38,6 @@ export default class AHBRepository {
       await AppDataSource.initialize();
     }
 
-    // Validate prüfidentifikator format (5 digits)
-    if (!/^\d{5}$/.test(pruefi)) {
-      throw new NotFoundError(`Invalid Prüfidentifikator format: ${pruefi}. Expected 5 digits.`);
-    }
-
-    // Validate format version pattern (e.g. FV2310)
-    if (!/^FV\d{4}$/.test(formatVersion)) {
-      throw new NotFoundError(
-        `Invalid format version: ${formatVersion}. Expected pattern: FV followed by 4 digits.`
-      );
-    }
-
     // Get the meta information and lines from the database
     const metaInfo = await AppDataSource.getRepository(AhbMetaInformation)
       .createQueryBuilder('ami')
