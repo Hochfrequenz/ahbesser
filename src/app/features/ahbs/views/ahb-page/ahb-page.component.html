@@ -1,5 +1,6 @@
-<div class="h-screen flex flex-col">
-  <app-header class="flex-none">
+<div class="min-h-screen flex flex-col bg-hf-pastell-rot">
+  <!-- Fixed Header -->
+  <app-header class="sticky top-0 z-50">
     <app-ahb-search-form-header
       class="flex-1 hidden md:inline"
       [formatVersion]="formatVersion()"
@@ -16,8 +17,9 @@
       [totalResults]="table()?.markElements()?.length" />
   </app-header>
 
-  <div class="flex-1" *ngIf="!errorOccurred">
-    <div class="flex-1 flex flex-col overflow-auto h-full" #scroll>
+  <!-- Scrollable Content -->
+  <div class="flex-1 overflow-auto mb-[120px]" *ngIf="!errorOccurred">
+    <div class="flex-1 flex flex-col h-full" #scroll>
       <div>
         @if (ahb$ | async; as ahb) {
           <div class="flex-none flex flex-col md:flex-row mb-10">
@@ -67,12 +69,13 @@
     </div>
   </div>
 
-  <div *ngIf="errorOccurred" class="flex-1 flex items-center justify-center">
+  <div *ngIf="errorOccurred" class="flex-1 flex items-center justify-center mb-[120px]">
     <app-fallback-page
       class="w-1/2"
       [pruefi]="pruefi()"
       [formatVersion]="formatVersion()"></app-fallback-page>
   </div>
 
-  <app-footer class="flex-none" />
+  <!-- Fixed Footer -->
+  <app-footer class="fixed bottom-0 left-0 right-0 z-50" />
 </div>
