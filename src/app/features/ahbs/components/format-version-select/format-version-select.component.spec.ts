@@ -1,7 +1,7 @@
 import { of } from 'rxjs';
 import { AhbService } from '../../../../core/api';
 import { FormatVersionSelectComponent } from './format-version-select.component';
-import { MockBuilder, MockRender, MockService, ngMocks } from 'ng-mocks';
+import { MockBuilder, MockRender, MockService } from 'ng-mocks';
 
 describe('FormatVersionSelectComponent', () => {
   const mockFormatVersions = ['FV2410', 'FV2504'];
