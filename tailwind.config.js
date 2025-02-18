@@ -11,6 +11,8 @@ module.exports = {
         ebd_primary: '#8ba2d7',
         dark: '#cf939a',
         white: '#ffffff',
+        // the hf colors are defined in hochfrequenz.css
+        // see: https://github.com/Hochfrequenz/companystylesheet/blob/933394932c5c97328a891c2bd3e72dbb6cecd357/css/hochfrequenz.css
         hf: {
           // Greens
           'pastell-gruen': '#d5f4b9',
