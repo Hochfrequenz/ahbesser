@@ -9,8 +9,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FormatVersionSelectComponent } from '../../components/format-version-select/format-version-select.component';
-import { PruefiInputComponent } from '../../components/pruefi-input/pruefi-input.component';
 import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-header/ahb-search-form-header.component';
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
 
@@ -22,8 +20,6 @@ import { InputSearchEnhancedComponent } from '../../../../shared/components/inpu
     FooterComponent,
     FormsModule,
     ReactiveFormsModule,
-    FormatVersionSelectComponent,
-    PruefiInputComponent,
     AhbSearchFormHeaderComponent,
     InputSearchEnhancedComponent,
   ],
