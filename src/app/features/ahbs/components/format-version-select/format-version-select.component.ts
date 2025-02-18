@@ -55,11 +55,25 @@ export class FormatVersionSelectComponent implements ControlValueAccessor, OnIni
   }
 
   /**
-   * Returns the default format version based on a hardcoded date check.
+   * Returns the default format version based on a series of predefined datetime thresholds.
+   * Each threshold corresponds to a specific version of the Edifact format.
+   * The thresholds are defined in UTC and are based on the official BDEW schedule.
    */
   private getDefaultFormatVersion(): string {
-    const keyDate24hLFW = new Date('2025-06-06');
-    return new Date() < keyDate24hLFW ? 'FV2410' : 'FV2504';
+    const now = new Date();
+    const formatVersionThresholds: [Date, string][] = [
+      [new Date('2024-09-30T22:00:00Z'), 'FV2404'],
+      [new Date('2025-06-05T22:00:00Z'), 'FV2410'],
+      [new Date('2025-09-30T22:00:00Z'), 'FV2504'],
+    ];
+
+    for (const [thresholdDate, version] of formatVersionThresholds) {
+      if (now < thresholdDate) {
+        return version;
+      }
+    }
+
+    return 'FV2510';
   }
   writeValue(formatVersion: string): void {
     this.control.setValue(formatVersion);
