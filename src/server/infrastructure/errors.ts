@@ -42,22 +42,26 @@ export class ExternalServiceError extends AppError {
 }
 
 export const httpErrorHandler: ErrorRequestHandler = (err, _, res, next) => {
-  console.error('Error:', {
-    name: err.name,
-    message: err.message,
-    stack: err.stack,
-  });
-
-  if (err instanceof AppError) {
-    return res.status(err.statusCode).json({
-      error: err.errorCode,
+  try {
+    console.error('Error:', {
+      name: err.name,
       message: err.message,
+      stack: err.stack,
     });
-  }
 
-  // Handle unexpected errors
-  res.status(500).json({
-    error: 'INTERNAL_SERVER_ERROR',
-    message: 'An unexpected error occurred',
-  });
+    if (err instanceof AppError) {
+      return res.status(err.statusCode).json({
+        error: err.errorCode,
+        message: err.message,
+      });
+    }
+
+    // Handle unexpected errors
+    res.status(500).json({
+      error: 'INTERNAL_SERVER_ERROR',
+      message: 'An unexpected error occurred',
+    });
+  } catch (error) {
+    next(error); // Pass any errors that occur during error handling to the next error handler
+  }
 };
