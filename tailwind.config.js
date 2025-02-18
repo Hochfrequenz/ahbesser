@@ -42,6 +42,7 @@ module.exports = {
           'dunkel-mint': '#549976',
           // Neutral
           'neutral-grau': '#e7e6e5',
+          'off-white': '#e7e6e5',
           'neutral-grau-2': '#eaece9',
           'grell-grau': '#c4cac1',
           'weiches-schwarz': '#25141d',
