@@ -30,10 +30,15 @@
         <!-- Info box -->
         <div class="bg-hf-pastell-rot rounded-lg p-4 mb-6 shadow-sm">
           <div class="flex items-start space-x-3">
-            <img
-              src="assets/companystylesheet/icons/info.svg"
-              alt="Login Icon"
-              class="w-6 h-6 text-hf-dunkel-rot flex-shrink-0 mt-0.5" />
+            <div
+              class="w-6 h-6 text-hf-dunkel-rot flex-shrink-0 mt-0.5"
+              style="
+                mask-image: url('/assets/companystylesheet/icons/info.svg');
+                mask-size: cover;
+                -webkit-mask-image: url('/assets/companystylesheet/icons/info.svg');
+                -webkit-mask-size: cover;
+                background-color: currentColor;
+              "></div>
             <div>
               <p class="text-sm text-hf-weiches-schwarz font-medium">Prüfidentifikator angeben</p>
               <p class="text-sm text-hf-weiches-schwarz mt-1 opacity-75">
