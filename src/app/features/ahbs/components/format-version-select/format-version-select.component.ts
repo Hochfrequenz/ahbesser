@@ -42,10 +42,12 @@ export class FormatVersionSelectComponent implements ControlValueAccessor, OnIni
         }))
       ),
       tap(() => {
-        const defaultVersion = this.getDefaultFormatVersion();
-        this.control.setValue(defaultVersion);
-        if (this.onChange) {
-          this.onChange(defaultVersion);
+        if (!this.control.value) {
+          const defaultVersion = this.getDefaultFormatVersion();
+          this.control.setValue(defaultVersion);
+          if (this.onChange) {
+            this.onChange(defaultVersion);
+          }
         }
         this.control.enable();
       })
