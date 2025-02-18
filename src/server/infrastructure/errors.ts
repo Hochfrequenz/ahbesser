@@ -51,11 +51,12 @@ export const httpErrorHandler: ErrorRequestHandler = (err, _, res, next) => {
     }
 
     // Handle unexpected errors
-    res.status(500).json({
+    return res.status(500).json({
       error: 'INTERNAL_SERVER_ERROR',
       message: 'An unexpected error occurred',
     });
   } catch (error) {
     next(error); // Pass any errors that occur during error handling to the next error handler
+    return;
   }
 };
