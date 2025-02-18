@@ -7,8 +7,8 @@ const router: IRouter = Router();
 const ahbController = new AHBController();
 const formatVersionController = new FormatVersionController();
 
-router.get('/ahb/:formatVersion/:pruefi', async (req, res, next) => {
-  await ahbController.get(req, res).catch((err: Error) => next(err));
+router.get('/ahb/:formatVersion/:pruefi', (req, res, next) => {
+  ahbController.get(req, res, next);
 });
 
 router.get('/format-versions', async (req, res, next) => {
