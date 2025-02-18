@@ -43,12 +43,6 @@ export class ExternalServiceError extends AppError {
 
 export const httpErrorHandler: ErrorRequestHandler = (err, _, res, next) => {
   try {
-    console.error('Error:', {
-      name: err.name,
-      message: err.message,
-      stack: err.stack,
-    });
-
     if (err instanceof AppError) {
       return res.status(err.statusCode).json({
         error: err.errorCode,
