@@ -3,8 +3,6 @@ import { AhbService } from '../../../../core/api';
 import { FormatVersionSelectComponent } from './format-version-select.component';
 import { MockBuilder, MockRender, MockService, ngMocks } from 'ng-mocks';
 
-jest.setTimeout(10000); // Increase global timeout
-
 describe('FormatVersionSelectComponent', () => {
   const mockFormatVersions = ['FV2410', 'FV2504'];
 
