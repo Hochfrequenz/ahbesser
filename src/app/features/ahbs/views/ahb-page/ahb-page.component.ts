@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { FooterComponent } from '../../../../shared/components/footer/footer.component';
+import { SolutionsFooterComponent } from '../../../../shared/components/solutions-footer/solutions-footer.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AhbTableComponent } from '../../components/ahb-table/ahb-table.component';
 import { Ahb, AhbService } from '../../../../core/api';
@@ -30,6 +31,7 @@ import { FallbackPageComponent } from '../../../../shared/components/fallback-pa
     ReactiveFormsModule,
     HeaderComponent,
     FooterComponent,
+    SolutionsFooterComponent,
     AhbTableComponent,
     CommonModule,
     AhbSearchFormHeaderComponent,
