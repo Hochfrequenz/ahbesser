@@ -11,6 +11,8 @@ import {
 import { Router } from '@angular/router';
 import { FormatVersionSelectComponent } from '../../components/format-version-select/format-version-select.component';
 import { PruefiInputComponent } from '../../components/pruefi-input/pruefi-input.component';
+import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-header/ahb-search-form-header.component';
+import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
 
 @Component({
   selector: 'app-ahb-landing-page',
@@ -22,13 +24,18 @@ import { PruefiInputComponent } from '../../components/pruefi-input/pruefi-input
     ReactiveFormsModule,
     FormatVersionSelectComponent,
     PruefiInputComponent,
+    AhbSearchFormHeaderComponent,
+    InputSearchEnhancedComponent,
   ],
   templateUrl: './ahb-landing-page.component.html',
 })
 export class AhbLandingPageComponent {
   form = new FormGroup({
-    formatVersion: new FormControl('', Validators.required),
-    pruefi: new FormControl('', Validators.required),
+    formatVersion: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    pruefi: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
   });
 
   constructor(private readonly router: Router) {}
