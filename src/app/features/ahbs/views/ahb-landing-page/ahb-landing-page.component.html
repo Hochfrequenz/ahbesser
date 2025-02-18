@@ -1,0 +1,62 @@
+<div class="h-screen flex flex-col">
+  <!-- Fixed Main Header -->
+  <app-header class="flex-none">
+    <app-ahb-search-form-header
+      class="flex-1 hidden md:inline"
+      [formatVersion]="form.controls.formatVersion.value"
+      [pruefi]="form.controls.pruefi.value"
+      (formatVersionChange)="form.controls.formatVersion.setValue($event); onClickSubmit()" />
+    <app-input-search-enhanced
+      class="inline-block w-full md:w-96 pointer-events-none opacity-50"
+      [searchQuery]="''"
+      [selectedPosition]="0"
+      [totalResults]="0" />
+  </app-header>
+  <div class="container h-full px-6 py-24">
+    <div class="flex h-full flex-wrap items-start justify-center lg:justify-between mt-12">
+      <div class="relative">
+        <!-- Arrow pointing up -->
+        <div class="absolute -top-12 left-1/2 transform -translate-x-1/2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-8 h-8 text-hf-dunkel-rot animate-bounce">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+          </svg>
+        </div>
+        <!-- Info box -->
+        <div class="bg-hf-pastell-rot rounded-lg p-4 mb-6 shadow-sm">
+          <div class="flex items-start space-x-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-hf-dunkel-rot flex-shrink-0 mt-0.5">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg>
+            <div>
+              <p class="text-sm text-hf-weiches-schwarz font-medium">
+                Willkommen! 👋 Bitte geben Sie einen Prüfidentifikator ein
+              </p>
+              <p class="text-sm text-hf-weiches-schwarz mt-1 opacity-75">
+                Mit dem Prüfidentifikator können wir Ihnen das passende Anwendungshandbuch zeigen.
+                Es ist ganz einfach! 😊
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer>
+    <span class="block p-3">&nbsp;</span>
+  </app-footer>
+</div>
