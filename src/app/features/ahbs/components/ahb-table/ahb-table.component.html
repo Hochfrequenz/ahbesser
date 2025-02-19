@@ -90,9 +90,7 @@
                 <div [innerHTML]="condition | highlight: highlight()"></div>
               }
               @if (shouldShowToggle(line.conditions)) {
-                <button
-                  (click)="toggleExpand(i)"
-                  class="text-secondary hover:text-primary text-sm mt-1">
+                <button (click)="toggleExpand(i)" class="text-hf-grell-rot text-sm mt-1">
                   {{ isExpanded(i) ? 'weniger anzeigen' : 'mehr anzeigen' }}
                 </button>
               }
