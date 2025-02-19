@@ -5,7 +5,11 @@ meta {
 }
 
 get {
-  url: 
+  url: http://localhost:3000/api/health
   body: none
   auth: none
+}
+
+headers {
+  oh-dear-health-check-secret: my-secret-oh-dear-health-check-secret
 }
