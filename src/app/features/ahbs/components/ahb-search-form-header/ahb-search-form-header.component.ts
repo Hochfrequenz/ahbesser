@@ -1,4 +1,4 @@
-import { Component, effect, input, output } from '@angular/core';
+import { Component, input, output, effect } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -21,6 +21,7 @@ export class AhbSearchFormHeaderComponent {
   pruefi = input.required<string>();
 
   formatVersionChange = output<string>();
+  pruefiChange = output<string>();
 
   headerSearchForm = new FormGroup({
     formatVersion: new FormControl('', Validators.required),
@@ -28,29 +29,43 @@ export class AhbSearchFormHeaderComponent {
   });
 
   constructor(private readonly router: Router) {
+    // Update form when inputs change
     effect(() => {
-      this.headerSearchForm.setValue({
-        formatVersion: this.formatVersion(),
-        pruefi: this.pruefi(),
-      });
+      const newFormatVersion = this.formatVersion();
+      if (newFormatVersion !== this.headerSearchForm.get('formatVersion')?.value) {
+        this.headerSearchForm.patchValue({ formatVersion: newFormatVersion }, { emitEvent: false });
+      }
     });
 
+    effect(() => {
+      const newPruefi = this.pruefi();
+      if (newPruefi !== this.headerSearchForm.get('pruefi')?.value) {
+        this.headerSearchForm.patchValue({ pruefi: newPruefi }, { emitEvent: false });
+      }
+    });
+
+    // Handle form control changes
     this.headerSearchForm.get('formatVersion')?.valueChanges.subscribe(value => {
       if (value) {
         this.formatVersionChange.emit(value);
       }
     });
+
+    this.headerSearchForm.get('pruefi')?.valueChanges.subscribe(value => {
+      if (value) {
+        this.pruefiChange.emit(value);
+        this.navigateToAhb();
+      }
+    });
   }
 
-  onPruefiSelect() {
-    if (!this.headerSearchForm.valid) {
-      this.headerSearchForm.markAllAsTouched();
-      return;
+  private navigateToAhb() {
+    if (this.headerSearchForm.valid) {
+      this.router.navigate([
+        '/ahb',
+        this.headerSearchForm.value.formatVersion,
+        this.headerSearchForm.value.pruefi,
+      ]);
     }
-    this.router.navigate([
-      '/ahb',
-      this.headerSearchForm.value.formatVersion,
-      this.headerSearchForm.value.pruefi,
-    ]);
   }
 }
