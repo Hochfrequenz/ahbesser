@@ -28,7 +28,7 @@ export default class HealthController {
     }
 
     if (providedSecret !== expectedSecret) {
-      res.status(403).json({ error: 'Invalid health check secret' });
+      res.status(401).json({ error: 'Invalid health check secret' });
       return;
     }
 
