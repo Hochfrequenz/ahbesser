@@ -1,4 +1,4 @@
-<div class="relative bg-hf-pastell-rot">
+<div class="relative bg-hf-pastell-rose">
   <table class="table-auto w-full text-sm text-gray-500">
     <thead>
       <tr>
@@ -90,7 +90,7 @@
                 <div [innerHTML]="condition | highlight: highlight()"></div>
               }
               @if (shouldShowToggle(line.conditions)) {
-                <button (click)="toggleExpand(i)" class="text-hf-grell-rot text-sm mt-1">
+                <button (click)="toggleExpand(i)" class="text-hf-grell-rose text-sm mt-1">
                   {{ isExpanded(i) ? 'weniger anzeigen' : 'mehr anzeigen' }}
                 </button>
               }
