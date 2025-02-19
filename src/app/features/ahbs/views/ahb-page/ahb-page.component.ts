@@ -16,7 +16,7 @@ import { Ahb, AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subject, of } from 'rxjs';
-import { map, shareReplay, tap, catchError, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { map, shareReplay, catchError, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-header/ahb-search-form-header.component';
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
 import { ExportButtonComponent } from '../../components/export-button/export-button.component';
