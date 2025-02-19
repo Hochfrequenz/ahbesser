@@ -38,7 +38,7 @@ assert environment, "environment must be set"
 websites_container_start_time_limit = config.get("websitesContainerStartTimeLimit")
 assert websites_container_start_time_limit, "websitesContainerStartTimeLimit must be set"
 
-oh_dear_health_check_secret = config.get("ohDearHealthCheckSecret")
+oh_dear_health_check_secret = config.require_secret("ohDearHealthCheckSecret")
 assert oh_dear_health_check_secret, "ohDearHealthCheckSecret must be set"
 
 cpu = config.get_int("cpu", 1)
