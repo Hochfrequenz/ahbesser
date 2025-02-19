@@ -1,11 +1,17 @@
 import { Router, IRouter } from 'express';
 import AHBController from '../controller/ahb';
 import FormatVersionController from '../controller/formatVersion';
+import HealthController from '../controller/health';
 
 const router: IRouter = Router();
 
 const ahbController = new AHBController();
 const formatVersionController = new FormatVersionController();
+const healthController = new HealthController();
+
+router.get('/health', async (req, res, next) => {
+  await healthController.check(req, res).catch((err: Error) => next(err));
+});
 
 router.get('/ahb/:formatVersion/:pruefi', (req, res, next) => {
   ahbController.get(req, res, next);
