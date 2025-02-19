@@ -1,0 +1,15 @@
+meta {
+  name: health
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{host}}/api/health
+  body: none
+  auth: none
+}
+
+headers {
+  oh-dear-health-check-secret: my-secret-oh-dear-health-check-secret
+}

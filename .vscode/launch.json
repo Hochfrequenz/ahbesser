@@ -3,6 +3,23 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Debug Express Server",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "/Users/kevin/.nvm/versions/node/v20.13.1/bin/node",
+      "program": "${workspaceFolder}/node_modules/.bin/tsx",
+      "args": ["${workspaceFolder}/src/server.ts"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "restart": true,
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**"]
+    },
+    {
       "name": "ng serve",
       "type": "chrome",
       "request": "launch",
