@@ -31,6 +31,7 @@ module.exports = {
           'grell-gelb': '#e5bd5c',
           'dunkel-gelb': '#ae8a1d',
           // Roses
+          'weiss-rose': '#fbf2f1',
           'pastell-rose': '#f4e0e1',
           'grell-rose': '#ebbec1',
           'dunkel-rose': '#cf939a',
