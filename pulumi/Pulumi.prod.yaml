@@ -16,3 +16,5 @@ config:
   ahb-tabellen:websitesContainerStartTimeLimit: "300"
   azure-native:location: germanywestcentral
   pulumi:template: container-azure-python
+  ahb-tabellen:ohDearHealthCheckSecret:
+    secure: AAABAHVhi8bu62ZujXIZQcHtU5USavOgn5rciI24E5ahGg3CPqt3mnRktu1uovTS
