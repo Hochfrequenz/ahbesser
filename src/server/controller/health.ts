@@ -3,17 +3,25 @@ import { AppDataSource } from '../infrastructure/database';
 import { createNewBlobStorageClient } from '../infrastructure/azure-blob-storage-client';
 import { ExternalServiceError } from '../infrastructure/errors';
 
+enum HealthCheckStatus {
+  OK = 'ok',
+  WARNING = 'warning',
+  FAILED = 'failed',
+  CRASHED = 'crashed',
+  SKIPPED = 'skipped',
+}
+
 interface HealthCheckResult {
   name: string;
   label: string;
   notificationMessage: string | null;
   shortSummary: string;
-  status: 'ok' | 'warning' | 'failed' | 'crashed';
+  status: HealthCheckStatus;
   meta?: Record<string, unknown>;
 }
 
 interface HealthCheckResponse {
-  finishedAt: string;
+  finishedAt: number;
   checkResults: HealthCheckResult[];
 }
 
@@ -50,9 +58,9 @@ export default class HealthController {
       checkResults.push({
         name: 'SQLiteConnection',
         label: 'SQLite Database Connection',
-        notificationMessage: null,
+        notificationMessage: 'SQLite Database connection successful',
         shortSummary: `Connected - Tables verified`,
-        status: 'ok',
+        status: HealthCheckStatus.OK,
         meta: {
           ahbMetaCount: ahbMetaCount.count,
           ahbLineCount: ahbLineCount.count,
@@ -62,9 +70,9 @@ export default class HealthController {
       checkResults.push({
         name: 'SQLiteConnection',
         label: 'SQLite Database Connection',
-        notificationMessage: `Database connection failed: ${(error as Error).message}`,
+        notificationMessage: `Error: Database connection failed: ${(error as Error).message}`,
         shortSummary: 'Failed',
-        status: 'failed',
+        status: HealthCheckStatus.FAILED,
         meta: { error: (error as Error).message },
       });
     }
@@ -84,9 +92,9 @@ export default class HealthController {
       checkResults.push({
         name: 'AzureBlobStorage',
         label: 'Azure Blob Storage Connection',
-        notificationMessage: null,
+        notificationMessage: 'Azure Blob Storage connection successful',
         shortSummary: 'Connected',
-        status: 'ok',
+        status: HealthCheckStatus.OK,
       });
     } catch (error) {
       checkResults.push({
@@ -94,19 +102,20 @@ export default class HealthController {
         label: 'Azure Blob Storage Connection',
         notificationMessage: `Blob storage connection failed: ${(error as Error).message}`,
         shortSummary: 'Failed',
-        status: 'failed',
+        status: HealthCheckStatus.FAILED,
         meta: { error: (error as Error).message },
       });
     }
 
     const response: HealthCheckResponse = {
-      finishedAt: new Date().toISOString(),
+      finishedAt: Math.floor(Date.now() / 1000),
       checkResults,
     };
 
     // If any check failed, return 500 status
     const hasFailedChecks = checkResults.some(
-      check => check.status === 'failed' || check.status === 'crashed'
+      check =>
+        check.status === HealthCheckStatus.FAILED || check.status === HealthCheckStatus.CRASHED
     );
 
     res.status(hasFailedChecks ? 500 : 200).json(response);
