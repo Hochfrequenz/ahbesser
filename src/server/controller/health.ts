@@ -50,7 +50,7 @@ export default class HealthController {
       checkResults.push({
         name: 'SQLiteConnection',
         label: 'SQLite Database Connection',
-        notificationMessage: null,
+        notificationMessage: 'SQLite Database connection successful',
         shortSummary: `Connected - Tables verified`,
         status: 'ok',
         meta: {
@@ -84,7 +84,7 @@ export default class HealthController {
       checkResults.push({
         name: 'AzureBlobStorage',
         label: 'Azure Blob Storage Connection',
-        notificationMessage: null,
+        notificationMessage: 'Azure Blob Storage connection successful',
         shortSummary: 'Connected',
         status: 'ok',
       });
