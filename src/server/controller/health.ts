@@ -21,7 +21,7 @@ interface HealthCheckResult {
 }
 
 interface HealthCheckResponse {
-  finishedAt: string;
+  finishedAt: number;
   checkResults: HealthCheckResult[];
 }
 
@@ -108,7 +108,7 @@ export default class HealthController {
     }
 
     const response: HealthCheckResponse = {
-      finishedAt: new Date().toISOString(),
+      finishedAt: Math.floor(Date.now() / 1000),
       checkResults,
     };
 
