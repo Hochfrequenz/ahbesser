@@ -1,6 +1,6 @@
 <ng-container *ngIf="authState$ | async as authState">
   <button
-    class="rounded-full bg-hf-pastell-rot text-hf-weiches-schwarz text-[16px] py-3 px-5 flex items-center gap-2"
+    class="rounded-full bg-hf-pastell-rose text-hf-weiches-schwarz text-[16px] py-3 px-5 flex items-center gap-2"
     (click)="loginOrLogout()"
     [disabled]="authState.isLoading">
     <span>{{ buttonText$ | async }}</span>

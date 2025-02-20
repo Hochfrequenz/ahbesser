@@ -142,14 +142,14 @@ export class AhbTableComponent {
     if (index === 0) return '';
 
     if (this.hasSectionNameChanged(index)) {
-      return 'border-t-2 border-gray-300'; // bold line between different segment_names
+      return 'border-t-4 border-hf-grell-rose'; // bold line between different segment_names
     }
 
     if (this.hasDataElementChanged(index) || this.hasSegmentChanged(index)) {
-      return 'border-t border-gray-300'; // thin solid line between different data_elements
+      return 'border-t-2 border-hf-grell-rose'; // thin solid line between different data_elements
     }
 
-    return 'border-t border-gray-250 border-dashed'; //  by default: dashed line between all rows (if not overwritten by the bold/thin solid lines)
+    return 'border-t-2 border-hf-grell-rose border-dashed'; //  by default: dashed line between all rows (if not overwritten by the bold/thin solid lines)
   }
 
   isNewSegment(index: number): boolean {
