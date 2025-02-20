@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { AppDataSource } from '../infrastructure/database';
 import { createNewBlobStorageClient } from '../infrastructure/azure-blob-storage-client';
 import HealthController from './health';
-import { ExternalServiceError, AppError } from '../infrastructure/errors';
+import { AppError } from '../infrastructure/errors';
 
 // Mock Azure Storage Blob
 jest.mock('@azure/storage-blob', () => ({
