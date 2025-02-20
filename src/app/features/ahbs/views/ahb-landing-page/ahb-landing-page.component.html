@@ -5,7 +5,8 @@
       class="flex-1 hidden md:inline"
       [formatVersion]="form.controls.formatVersion.value"
       [pruefi]="form.controls.pruefi.value"
-      (formatVersionChange)="form.controls.formatVersion.setValue($event); onClickSubmit()" />
+      (formatVersionChange)="form.controls.formatVersion.setValue($event)"
+      (pruefiChange)="form.controls.pruefi.setValue($event); onClickSubmit()" />
     <app-input-search-enhanced
       class="inline-block w-full md:w-96 pointer-events-none opacity-50"
       [searchQuery]="''"

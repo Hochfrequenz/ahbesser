@@ -36,7 +36,15 @@ export class AhbLandingPageComponent {
     pruefi: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
   });
 
-  constructor(private readonly router: Router) {}
+  constructor(private readonly router: Router) {
+    // Subscribe to pruefi value changes
+    this.form.controls.pruefi.valueChanges.subscribe(value => {
+      // If we have a 5-digit number and a format version, navigate immediately
+      if (value?.match(/^\d{5}$/) && this.form.controls.formatVersion.value) {
+        this.onClickSubmit();
+      }
+    });
+  }
 
   onClickSubmit() {
     if (!this.form.valid) {

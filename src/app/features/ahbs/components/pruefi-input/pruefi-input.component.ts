@@ -122,25 +122,39 @@ export class PruefiInputComponent implements ControlValueAccessor {
       // Update the form control with just the pruefidentifikator
       if (pruefidentifikator) {
         this.control.setValue(pruefidentifikator, { emitEvent: false });
+        // Emit changes immediately for dropdown selection
+        if (this.onChange) {
+          this.onChange(pruefidentifikator);
+        }
       }
     } else if (digitOnlyPattern.test(inputValue)) {
       // Handle numeric input
       if (inputValue.length === 5) {
-        // Exactly 5 digits
+        // Exactly 5 digits - trigger immediate load
         pruefidentifikator = inputValue;
+        // Update the form control with the 5 digits
+        this.control.setValue(pruefidentifikator, { emitEvent: false });
+        // Emit changes immediately for 5-digit input
+        if (this.onChange) {
+          this.onChange(pruefidentifikator);
+        }
       } else if (inputValue.length > 5) {
         // More than 5 digits - take first 5
         pruefidentifikator = inputValue.slice(0, 5);
         // Update the form control with just the first 5 digits
         this.control.setValue(pruefidentifikator, { emitEvent: false });
+        // Emit changes immediately
+        if (this.onChange) {
+          this.onChange(pruefidentifikator);
+        }
       }
       // Less than 5 digits - treat as invalid (pruefidentifikator remains null)
     }
     // Any other format is considered invalid (pruefidentifikator remains null)
 
-    // Emit changes
-    if (this.onChange) {
-      this.onChange(pruefidentifikator);
+    // Emit null for invalid input
+    if (!pruefidentifikator && this.onChange) {
+      this.onChange(null);
     }
   }
 }
