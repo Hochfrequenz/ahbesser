@@ -112,13 +112,17 @@ export class PruefiInputComponent implements ControlValueAccessor {
       return;
     }
 
-    const regexPattern = /^(?<pruefi>\d{5})\b\s*-\s*(?<name>.+)\s*$/;
+    const regexPattern = /^(?<pruefi>\d{5})\b(?:\s*-\s*(?<n>.+)\s*)?$/;
     const digitOnlyPattern = /^\d+$/;
 
     if (regexPattern.test(inputValue)) {
-      // Full format with name (e.g., "12345 - Some Name")
+      // Full format with optional name (e.g., "12345 - Some Name" or just "12345")
       const match = inputValue.match(regexPattern);
       pruefidentifikator = match?.groups?.['pruefi'] ?? null;
+      // Update the form control with just the pruefidentifikator
+      if (pruefidentifikator) {
+        this.control.setValue(pruefidentifikator, { emitEvent: false });
+      }
     } else if (digitOnlyPattern.test(inputValue)) {
       // Handle numeric input
       if (inputValue.length === 5) {
@@ -127,13 +131,12 @@ export class PruefiInputComponent implements ControlValueAccessor {
       } else if (inputValue.length > 5) {
         // More than 5 digits - take first 5
         pruefidentifikator = inputValue.slice(0, 5);
+        // Update the form control with just the first 5 digits
+        this.control.setValue(pruefidentifikator, { emitEvent: false });
       }
       // Less than 5 digits - treat as invalid (pruefidentifikator remains null)
     }
     // Any other format is considered invalid (pruefidentifikator remains null)
-
-    // Update the form control with the full input value to allow searching
-    this.control.setValue(inputValue);
 
     // Emit changes
     if (this.onChange) {

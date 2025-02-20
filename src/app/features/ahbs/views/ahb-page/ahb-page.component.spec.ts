@@ -8,9 +8,23 @@ import { signal, computed } from '@angular/core';
 
 describe('AhbPageComponent', () => {
   let mockRouter: { navigate: jest.Mock };
+  let mockAhbService: { getAhb$Json: jest.Mock };
 
   beforeEach(() => {
     mockRouter = { navigate: jest.fn() };
+    mockAhbService = {
+      getAhb$Json: jest.fn(params =>
+        of({
+          meta: {
+            pruefidentifikator: params.pruefi,
+            description: '',
+            direction: '',
+            maus_version: '',
+          },
+          lines: [],
+        })
+      ),
+    };
 
     return MockBuilder(AhbPageComponent)
       .keep(AhbTableComponent)
@@ -24,23 +38,21 @@ describe('AhbPageComponent', () => {
           resetMarkIndex: () => {},
         },
       })
-      .mock(AhbService, {
-        getAhb$Json: jest.fn(params =>
-          of({
-            meta: {
-              pruefidentifikator: params.pruefi,
-              description: '',
-              direction: '',
-              maus_version: '',
-            },
-            lines: [],
-          })
-        ),
+      .provide({
+        provide: AhbService,
+        useValue: mockAhbService,
       })
-      .mock(ActivatedRoute, {
-        queryParams: of({}),
+      .provide({
+        provide: ActivatedRoute,
+        useValue: {
+          queryParams: of({}),
+          params: of({ formatVersion: 'FV123', pruefi: '123' }),
+        },
       })
-      .mock(Router, mockRouter);
+      .provide({
+        provide: Router,
+        useValue: mockRouter,
+      });
   });
 
   it('should render', () => {
@@ -103,18 +115,16 @@ describe('AhbPageComponent', () => {
 
   it('should refresh table and redirect URL upon formatversion change', () => {
     const fixture = MockRender(AhbPageComponent, {
-      formatVersion: 'FV123',
-      pruefi: '456',
+      formatVersion: 'FV2304',
+      pruefi: '123',
     });
     const component = fixture.point.componentInstance;
     const router = ngMocks.findInstance(Router);
 
     const navigateSpy = jest.spyOn(router, 'navigate');
 
-    component.onFormatVersionChange('FV456');
+    component.onFormatVersionChange('FV2410');
 
-    expect(navigateSpy).toHaveBeenCalledWith(['/ahb', 'FV456', '456']);
+    expect(navigateSpy).toHaveBeenCalledWith(['/ahb', 'FV2410', '123']);
   });
-
-  // Add more tests here
 });

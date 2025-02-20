@@ -1,12 +1,11 @@
 import {
   Component,
-  computed,
   ElementRef,
-  effect,
-  input,
-  signal,
   viewChild,
   OnInit,
+  OnDestroy,
+  signal,
+  computed,
 } from '@angular/core';
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { FooterComponent } from '../../../../shared/components/footer/footer.component';
@@ -16,7 +15,8 @@ import { AhbTableComponent } from '../../components/ahb-table/ahb-table.componen
 import { Ahb, AhbService } from '../../../../core/api';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Observable, map, shareReplay, tap, catchError, of } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
+import { map, shareReplay, catchError, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { AhbSearchFormHeaderComponent } from '../../components/ahb-search-form-header/ahb-search-form-header.component';
 import { InputSearchEnhancedComponent } from '../../../../shared/components/input-search-enhanced/input-search-enhanced.component';
 import { ExportButtonComponent } from '../../components/export-button/export-button.component';
@@ -42,63 +42,75 @@ import { FallbackPageComponent } from '../../../../shared/components/fallback-pa
   ],
   templateUrl: './ahb-page.component.html',
 })
-export class AhbPageComponent implements OnInit {
-  formatVersion = input.required<string>();
-  pruefi = input.required<string>();
-
-  table = viewChild(AhbTableComponent);
-  scroll = viewChild<ElementRef>('scroll');
-
+export class AhbPageComponent implements OnInit, OnDestroy {
+  // State management
+  formatVersion = signal<string>('');
+  pruefi = signal<string>('');
   searchQuery = signal<string | undefined>('');
   edifactFormat = computed(() => this.getEdifactFormat(this.pruefi()));
 
+  // View references
+  table = viewChild(AhbTableComponent);
+  scroll = viewChild<ElementRef>('scroll');
+
+  // Data streams
   ahb$?: Observable<Ahb>;
   lines$?: Observable<Ahb['lines']>;
   errorOccurred = false;
 
-  private initialSearchQuery: string | null = null;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private readonly ahbService: AhbService,
     private readonly route: ActivatedRoute,
     private readonly router: Router
-  ) {
-    effect(() => {
-      this.loadAhbData();
-    });
-  }
+  ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      const query = params['query'];
-      if (query) {
-        this.initialSearchQuery = query;
-        this.searchQuery.set(query);
+    // Handle route parameters
+    this.route.params.pipe(takeUntil(this.destroy$), distinctUntilChanged()).subscribe(params => {
+      const formatVersion = params['formatVersion'];
+      const pruefi = params['pruefi'];
+
+      if (formatVersion && pruefi) {
+        this.formatVersion.set(formatVersion);
+        this.pruefi.set(pruefi);
+        this.loadAhbData(formatVersion, pruefi);
       }
     });
+
+    // Handle search query params
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$), distinctUntilChanged())
+      .subscribe(params => {
+        const query = params['query'];
+        if (query) {
+          this.searchQuery.set(query);
+          this.triggerSearch(query);
+        }
+      });
   }
 
-  private loadAhbData() {
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private loadAhbData(formatVersion: string, pruefi: string) {
     this.errorOccurred = false;
 
     this.ahb$ = this.ahbService
       .getAhb$Json({
-        'format-version': this.formatVersion(),
-        pruefi: this.pruefi(),
+        'format-version': formatVersion,
+        pruefi: pruefi,
       })
       .pipe(
-        tap(() => {
-          if (this.initialSearchQuery) {
-            setTimeout(() => this.triggerSearch(this.initialSearchQuery!), 0);
-          }
-        }),
         shareReplay(1),
         catchError(error => {
           if (error.status === 404) {
             this.errorOccurred = true;
           }
-          // Return an empty object of type Ahb if there's an error
-          return of({} as Ahb); // Returning a fallback object of type Ahb
+          return of({} as Ahb);
         })
       );
 
@@ -107,6 +119,10 @@ export class AhbPageComponent implements OnInit {
 
   onFormatVersionChange(newFormatVersion: string) {
     this.router.navigate(['/ahb', newFormatVersion, this.pruefi()]);
+  }
+
+  onPruefiChange(newPruefi: string) {
+    this.router.navigate(['/ahb', this.formatVersion(), newPruefi]);
   }
 
   triggerSearch(query: string | undefined) {
@@ -118,7 +134,6 @@ export class AhbPageComponent implements OnInit {
         tableComponent.resetMarkIndex();
       }, 0);
     }
-    this.initialSearchQuery = null; // Reset after first use
   }
 
   scrollToElement(element: HTMLElement, offsetY: number): void {
@@ -155,7 +170,6 @@ export class AhbPageComponent implements OnInit {
     }
   }
 
-  // mapping provided by mig_ahb_utility_stack
   private getEdifactFormat(pruefi: string): string {
     const mapping: { [key: string]: string } = {
       '99': 'APERAK',
