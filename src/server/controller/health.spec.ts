@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
-import { AppDataSource } from '../../infrastructure/database';
-import { createNewBlobStorageClient } from '../../infrastructure/azure-blob-storage-client';
-import HealthController from '../health';
-import { ExternalServiceError, AppError } from '../../infrastructure/errors';
+import { AppDataSource } from '../infrastructure/database';
+import { createNewBlobStorageClient } from '../infrastructure/azure-blob-storage-client';
+import HealthController from './health';
+import { ExternalServiceError, AppError } from '../infrastructure/errors';
 
 // Mock Azure Storage Blob
 jest.mock('@azure/storage-blob', () => ({
   BlobServiceClient: jest.fn(),
 }));
-jest.mock('../../infrastructure/database');
-jest.mock('../../infrastructure/azure-blob-storage-client');
+jest.mock('../infrastructure/database');
+jest.mock('../infrastructure/azure-blob-storage-client');
 
 describe('HealthController', () => {
   let healthController: HealthController;
