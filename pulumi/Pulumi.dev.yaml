@@ -10,7 +10,7 @@ config:
   ahb-tabellen:ghcr_token:
     secure: AAABAEg7fEk2P91sxA8mlsQ5AueGPcKpU5H8jCLGvH82HsWD1NkdQLT69wDwMfdI7Nc+jSdwJC4Wx/ym4m3HUMGxgeK9RJt0
   ahb-tabellen:imageName: ghcr.io/hochfrequenz/ahbesser
-  ahb-tabellen:imageTag: v0.0.22
+  ahb-tabellen:imageTag: v0.6.2
   ahb-tabellen:memory: "2"
   ahb-tabellen:websitesContainerStartTimeLimit: "300"
   azure-native:location: germanywestcentral
