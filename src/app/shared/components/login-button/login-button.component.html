@@ -4,6 +4,10 @@
     (click)="loginOrLogout()"
     [disabled]="authState.isLoading">
     <span>{{ buttonText$ | async }}</span>
-    <i *ngIf="authState.isAuthenticated" class="mdi mdi-logout text-lg"></i>
+    <img
+      *ngIf="authState.isAuthenticated"
+      src="assets/companystylesheet/icons/logout.svg"
+      class="w-5 h-5"
+      alt="logout" />
   </button>
 </ng-container>
