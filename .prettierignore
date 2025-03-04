@@ -1,3 +1,4 @@
 src/app/core/api
 azure-mock/data
 pulumi
+src/assets/companystylesheets
