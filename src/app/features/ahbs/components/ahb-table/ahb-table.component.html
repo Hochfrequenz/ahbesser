@@ -65,7 +65,7 @@
               <a
                 [href]="generateEbdDeepLink(line.value_pool_entry)"
                 target="_blank"
-                class="hover:underline font-bold text-ebd_primary flex flex-row gap-1 items-center">
+                class="hover:underline font-bold text-hf-dunkel-blau flex flex-row gap-1 items-center">
                 {{ line.value_pool_entry }} <app-icon-link />
               </a>
             } @else {
@@ -74,12 +74,16 @@
           </td>
           <td class="px-6 py-4" [innerHTML]="line.name | highlight: highlight()"></td>
           <td class="px-6 py-4">
-            <a
-              [href]="generateBedingungsbaumDeepLink(line.ahb_expression)"
-              target="_blank"
-              class="hover:underline">
+            @if (line.ahb_expression.includes('[')) {
+              <a
+                [href]="generateBedingungsbaumDeepLink(line.ahb_expression)"
+                target="_blank"
+                class="hover:underline font-bold text-hf-dunkel-gelb flex flex-row gap-1 items-center">
+                {{ line.ahb_expression }} <app-icon-link />
+              </a>
+            } @else {
               {{ line.ahb_expression }}
-            </a>
+            }
           </td>
           <td class="px-6 py-4 conditions-column">
             @if (line.conditions) {
