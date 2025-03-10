@@ -46,7 +46,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "prettier": "^3.5.1",
+    "prettier": "^3.5.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.2",
     "sqlite3": "^5.1.7",
