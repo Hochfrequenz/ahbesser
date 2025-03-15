@@ -6,7 +6,6 @@ import { join } from 'path';
 import cors from 'cors';
 import router from './server/infrastructure/api.routes';
 import { httpErrorHandler } from './server/infrastructure/errors';
-import { environment } from './app/environments/environment';
 import { AppDataSource } from './server/infrastructure/database';
 import 'reflect-metadata';
 
@@ -43,7 +42,6 @@ server.get('/version', (_, res) =>
     version: process.env['VERSION'] || 'unknown',
     environment: process.env['ENVIRONMENT'] || 'unknown (local)',
     name: 'ahb-tabellen',
-    auth0ClientId: environment.auth0ClientId,
   })
 );
 server.get('/health', (_, res) => res.send());
