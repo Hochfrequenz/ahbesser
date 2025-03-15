@@ -66,7 +66,7 @@
                 [href]="generateEbdDeepLink(line.value_pool_entry)"
                 target="_blank"
                 class="hover:underline font-bold text-hf-dunkel-blau flex flex-row gap-1 items-center">
-                {{ line.value_pool_entry }} <app-icon-link />
+                {{ line.value_pool_entry }} <span class="hf-icon-open-new"></span>
               </a>
             } @else {
               {{ line.value_pool_entry }}
@@ -79,7 +79,7 @@
                 [href]="generateBedingungsbaumDeepLink(line.ahb_expression)"
                 target="_blank"
                 class="hover:underline font-bold text-hf-dunkel-gelb flex flex-row gap-1 items-center">
-                {{ line.ahb_expression }} <app-icon-link />
+                {{ line.ahb_expression }} <span class="hf-icon-open-new"></span>
               </a>
             } @else {
               {{ line.ahb_expression }}
