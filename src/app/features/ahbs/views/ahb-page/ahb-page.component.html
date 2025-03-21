@@ -19,7 +19,7 @@
   </app-header>
 
   <!-- Scrollable Content -->
-  <div class="flex-1 overflow-auto relative bg-hf-pastell-rot" *ngIf="!errorOccurred">
+  <div #scroll class="flex-1 overflow-auto relative bg-hf-pastell-rot" *ngIf="!errorOccurred">
     <!-- Metadata Section -->
     @if (ahb$ | async; as ahb) {
       <div class="flex flex-col md:flex-row mb-10">
@@ -58,7 +58,7 @@
         [highlight]="searchQuery()"
         [formatVersion]="formatVersion()"
         [pruefi]="pruefi()"
-        (selectElement)="scrollToElement($event.element, $event.offsetY)" />
+        (scrollToElement)="scrollToElement($event)" />
     } @else {
       <div class="h-full flex items-center justify-center">
         <p class="text-xl">AHB-Tabelle wird geladen ...</p>
