@@ -9,7 +9,7 @@
     type="text"
     [(ngModel)]="searchQuery"
     placeholder="Suchbegriff eingeben ..."
-    (keyup.enter)="onEnterKey()" />
+    (keydown)="onKeyDown($event)" />
   @if (totalResults()) {
     <div class="align-middle pe-5 text-gray-500">{{ selectedPosition() }}/{{ totalResults() }}</div>
   }
