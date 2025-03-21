@@ -4,10 +4,6 @@
     (click)="loginOrLogout()"
     [disabled]="authState.isLoading">
     <span>{{ buttonText$ | async }}</span>
-    <img
-      *ngIf="authState.isAuthenticated"
-      src="assets/companystylesheet/icons/logout.svg"
-      class="w-5 h-5"
-      alt="logout" />
+    <span *ngIf="authState.isAuthenticated" class="hf-icon-logout hf-icon-sm"></span>
   </button>
 </ng-container>
