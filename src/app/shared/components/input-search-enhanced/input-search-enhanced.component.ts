@@ -46,6 +46,22 @@ export class InputSearchEnhancedComponent {
       this.updateURL(currentQuery);
     });
   }
+
+  // Handle Enter and Shift+Enter key press to navigate
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      if (event.shiftKey) {
+        // Shift+Enter goes to previous result
+        event.preventDefault();
+        this.previousClick.emit();
+      } else {
+        // Enter goes to next result
+        event.preventDefault();
+        this.nextClick.emit();
+      }
+    }
+  }
+
   updateURL(query: string | undefined): void {
     this.router.navigate([], {
       relativeTo: this.route,

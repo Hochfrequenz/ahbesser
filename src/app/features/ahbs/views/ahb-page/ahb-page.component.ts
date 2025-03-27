@@ -127,25 +127,22 @@ export class AhbPageComponent implements OnInit, OnDestroy {
 
   triggerSearch(query: string | undefined) {
     if (!query) return;
-
-    const tableComponent = this.table();
-    if (tableComponent) {
-      setTimeout(() => {
-        tableComponent.resetMarkIndex();
-      }, 0);
-    }
   }
 
-  scrollToElement(element: HTMLElement, offsetY: number): void {
+  scrollToElement(element: HTMLElement): void {
     const scrollContainer = this.scroll();
-    if (!scrollContainer?.nativeElement) {
-      return;
-    }
-    const containerRect = scrollContainer.nativeElement.getBoundingClientRect();
+    if (!scrollContainer?.nativeElement) return;
+
+    // Get the scroll container
+    const container = scrollContainer.nativeElement;
+
+    // Calculate position accounting for header offset
     const elementRect = element.getBoundingClientRect();
-    const scrollTop =
-      elementRect.top - containerRect.top + scrollContainer.nativeElement.scrollTop - offsetY;
-    scrollContainer.nativeElement.scrollTo({
+    const containerRect = container.getBoundingClientRect();
+    const scrollTop = elementRect.top - containerRect.top + container.scrollTop - 120; // 120px for header
+
+    // Scroll smoothly to the element
+    container.scrollTo({
       top: scrollTop,
       behavior: 'smooth',
     });
@@ -153,7 +150,6 @@ export class AhbPageComponent implements OnInit, OnDestroy {
 
   onSearchQueryChange(query: string | undefined) {
     this.searchQuery.set(query);
-    this.triggerSearch(query);
   }
 
   onNextClick() {

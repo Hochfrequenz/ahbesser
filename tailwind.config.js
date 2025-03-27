@@ -1,6 +1,34 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{html,ts}'],
+  safelist: [
+    'hf-icon',
+    'hf-icon-xs',
+    'hf-icon-sm',
+    'hf-icon-md',
+    'hf-icon-lg',
+    'hf-icon-xl',
+    'hf-icon-login',
+    'hf-icon-logout',
+    'hf-icon-open-new',
+    'hf-icon-up',
+    'hf-icon-down',
+    'hf-icon-up-down',
+    'hf-icon-glossar-left',
+    'hf-icon-glossar-right',
+    'hf-icon-check-1',
+    'hf-icon-check-2',
+    'hf-icon-check-3',
+    'hf-icon-heart',
+    'hf-icon-info',
+    'hf-icon-left',
+    'hf-icon-download',
+    'hf-icon-filter',
+    'hf-icon-question',
+    'hf-icon-growing-plant',
+    'hf-icon-spin',
+    'hf-icon-pulse',
+  ],
   theme: {
     extend: {
       colors: {
