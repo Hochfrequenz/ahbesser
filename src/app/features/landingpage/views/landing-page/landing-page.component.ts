@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { FooterComponent } from '../../../../shared/components/footer/footer.component';
 import { environment } from '../../../../environments/environment';
+import { IconLoginComponent } from '@hochfrequenz/companystylesheet/angular/components';
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [FooterComponent],
+  imports: [FooterComponent, IconLoginComponent],
   templateUrl: './landing-page.component.html',
 })
 export class LandingPageComponent {

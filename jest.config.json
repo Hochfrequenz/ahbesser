@@ -2,16 +2,17 @@
   "preset": "jest-preset-angular",
   "setupFilesAfterEnv": ["<rootDir>/src/setup-jest.ts"],
   "transform": {
-    "^.+\\.(ts|html)$": [
+    "^.+\\.(ts|html|svg)$": [
       "jest-preset-angular",
       {
         "tsconfig": "<rootDir>/tsconfig.spec.json",
-        "stringifyContentPathRegex": "\\.html$"
+        "stringifyContentPathRegex": "\\.(html|svg)$"
       }
     ]
   },
   "moduleNameMapper": {
-    "^lodash-es$": "lodash"
+    "^lodash-es$": "lodash",
+    "\\.svg$": "<rootDir>/src/__mocks__/svg-mock.js"
   },
   "coverageReporters": ["json", "html"],
   "coverageDirectory": "coverage/ahb-tabellen",
