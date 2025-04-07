@@ -41,7 +41,7 @@
     "@angular/platform-browser-dynamic": "^19.2.2",
     "@angular/router": "^19.2.2",
     "@auth0/auth0-angular": "^2.2.3",
-    "@azure/storage-blob": "^12.26.0",
+    "@azure/storage-blob": "^12.27.0",
     "@mdi/font": "^7.4.47",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
