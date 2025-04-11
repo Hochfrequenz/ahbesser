@@ -32,7 +32,7 @@ export class AhbTableComponent {
   formatVersion = input.required<string>();
   pruefi = input.required<string>();
 
-  selectElement = output<{ element: HTMLElement; offsetY: number }>();
+  scrollToElement = output<{ element: HTMLElement; offsetY: number }>();
 
   private highlightSignal = computed(() => this.highlight());
   markIndex = signal(0);
@@ -50,33 +50,20 @@ export class AhbTableComponent {
     return Array.from(nativeElement.querySelectorAll('mark'));
   });
 
-  selectedMarkElement = computed(() => {
-    const markIndex = this.markIndex();
-    const markElements = this.markElements();
-    if (markElements.length === 0 || markElements.length < markIndex + 1) {
-      return null;
-    }
-    return markElements[this.markIndex()];
-  });
-
   constructor(private readonly elementRef: ElementRef) {
+    // Watch for highlight changes to reset the index
     effect(() => {
-      const selectedMarkElement = this.selectedMarkElement();
-      if (selectedMarkElement === null) {
-        return;
+      const highlight = this.highlight();
+      if (highlight) {
+        this.markIndex.set(0);
+        setTimeout(() => this.applyCurrentMark());
       }
-      // make selected element orange
-      const markElements = this.markElements();
-      markElements.forEach(el => el.classList.remove('bg-orange-500'));
-      selectedMarkElement.classList.add('bg-orange-500');
-      // notify outer scroll container
-      this.scrollToHighlightedElement();
     });
   }
 
   resetMarkIndex() {
     this.markIndex.set(0);
-    this.scrollToHighlightedElement();
+    this.applyCurrentMark();
   }
 
   getHighlight(): string | undefined {
@@ -85,30 +72,43 @@ export class AhbTableComponent {
 
   nextResult() {
     const markElements = this.markElements();
-    if (markElements.length > 0) {
-      const nextIndex = (this.markIndex() + 1) % markElements.length;
-      this.markIndex.set(nextIndex);
-      this.scrollToHighlightedElement();
-    }
+    if (markElements.length === 0) return;
+
+    const nextIndex = (this.markIndex() + 1) % markElements.length;
+    this.markIndex.set(nextIndex);
+    this.applyCurrentMark();
   }
 
   previousResult() {
     const markElements = this.markElements();
-    if (markElements.length > 0) {
-      const previousIndex = (this.markIndex() - 1 + markElements.length) % markElements.length;
-      this.markIndex.set(previousIndex);
-      this.scrollToHighlightedElement();
-    }
+    if (markElements.length === 0) return;
+
+    const previousIndex = (this.markIndex() - 1 + markElements.length) % markElements.length;
+    this.markIndex.set(previousIndex);
+    this.applyCurrentMark();
   }
 
-  scrollToHighlightedElement() {
-    const selectedElement = this.selectedMarkElement();
-    const header = this.header();
-    const headerHeight = header?.nativeElement.getBoundingClientRect().height ?? 0;
-    this.selectElement.emit({
-      element: selectedElement || this.elementRef.nativeElement,
-      offsetY: headerHeight,
-    });
+  private applyCurrentMark() {
+    const markElements = this.markElements();
+    const currentIndex = this.markIndex();
+
+    if (markElements.length === 0 || currentIndex >= markElements.length) {
+      return;
+    }
+
+    // Update highlighting
+    markElements.forEach(el => el.classList.remove('bg-orange-500'));
+    const currentElement = markElements[currentIndex];
+    currentElement.classList.add('bg-orange-500');
+
+    // Notify parent component to scroll to this element
+    if (currentElement) {
+      const headerHeight = this.header()?.nativeElement.getBoundingClientRect().height ?? 0;
+      this.scrollToElement.emit({
+        element: currentElement,
+        offsetY: headerHeight + 20,
+      });
+    }
   }
 
   // determines each time the section_name changes to add a bold rule in ahb-table.component.html
