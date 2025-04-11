@@ -106,9 +106,10 @@ export class AhbTableComponent {
 
     // Notify parent component to scroll to this element
     if (currentElement) {
+      const headerHeight = this.header()?.nativeElement.getBoundingClientRect().height ?? 0;
       this.scrollToElement.emit({
         element: currentElement,
-        offsetY: this.header()?.nativeElement.getBoundingClientRect().height ?? 0,
+        offsetY: headerHeight + 20,
       });
     }
   }
