@@ -56,10 +56,7 @@ export class AhbTableComponent {
       const highlight = this.highlight();
       if (highlight) {
         this.markIndex.set(0);
-        // Give time for DOM to update with the new highlights before scrolling
-        setTimeout(() => {
-          this.applyCurrentMark();
-        }, 100);
+        setTimeout(() => this.applyCurrentMark());
       }
     });
   }
