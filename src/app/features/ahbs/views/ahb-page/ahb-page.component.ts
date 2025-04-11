@@ -129,7 +129,7 @@ export class AhbPageComponent implements OnInit, OnDestroy {
     if (!query) return;
   }
 
-  scrollToElement(element: HTMLElement): void {
+  scrollToElement(element: HTMLElement, offsetY: number): void {
     const scrollContainer = this.scroll();
     if (!scrollContainer?.nativeElement) return;
 
@@ -139,7 +139,7 @@ export class AhbPageComponent implements OnInit, OnDestroy {
     // Calculate position accounting for header offset
     const elementRect = element.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
-    const scrollTop = elementRect.top - containerRect.top + container.scrollTop - 120; // 120px for header
+    const scrollTop = elementRect.top - containerRect.top + container.scrollTop - offsetY;
 
     // Scroll smoothly to the element
     container.scrollTo({

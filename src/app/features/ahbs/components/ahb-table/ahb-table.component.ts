@@ -32,7 +32,7 @@ export class AhbTableComponent {
   formatVersion = input.required<string>();
   pruefi = input.required<string>();
 
-  scrollToElement = output<HTMLElement>();
+  scrollToElement = output<{ element: HTMLElement; offsetY: number }>();
 
   private highlightSignal = computed(() => this.highlight());
   markIndex = signal(0);
@@ -106,7 +106,10 @@ export class AhbTableComponent {
 
     // Notify parent component to scroll to this element
     if (currentElement) {
-      this.scrollToElement.emit(currentElement);
+      this.scrollToElement.emit({
+        element: currentElement,
+        offsetY: this.header()?.nativeElement.getBoundingClientRect().height ?? 0,
+      });
     }
   }
 
