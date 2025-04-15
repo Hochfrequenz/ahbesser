@@ -64,7 +64,7 @@ export default class AHBRepository {
       },
       lines: lines.map(line => ({
         ahb_expression: line.line_ahb_status || '',
-        conditions: '', // This will be handled separately as mentioned in the view definition
+        conditions: line.bedingung || '',
         data_element: line.data_element?.startsWith('D_')
           ? line.data_element.substring(2)
           : line.data_element || '',
