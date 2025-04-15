@@ -58,12 +58,12 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
       await AppDataSource.initialize();
     }
 
-    const pruefis = await AppDataSource.getRepository(AhbMetaInformation)
+    const pruefis = await AppDataSource.getRepository(AhbLine)
       .createQueryBuilder('ahb')
-      .select(['ahb.pruefidentifikator', 'ahb.description'])
-      .where('ahb.edifact_format_version = :formatVersion', { formatVersion })
+      .select(['DISTINCT ahb.pruefidentifikator', 'ahb.description'])
+      .where('ahb.format_version = :formatVersion', { formatVersion })
       .orderBy('ahb.pruefidentifikator')
-      .getMany();
+      .getRawMany();
 
     if (pruefis.length === 0) {
       throw new NotFoundError(`Format version ${formatVersion} does not exist`);
