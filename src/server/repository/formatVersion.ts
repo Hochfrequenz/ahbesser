@@ -60,7 +60,7 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
 
     const pruefis = await AppDataSource.getRepository(AhbLine)
       .createQueryBuilder('ahb')
-      .select(['DISTINCT ahb.pruefidentifikator', 'ahb.description'])
+      .select('DISTINCT ahb.pruefidentifikator, ahb.description')
       .where('ahb.format_version = :formatVersion', { formatVersion })
       .orderBy('ahb.pruefidentifikator')
       .getRawMany();
