@@ -38,43 +38,41 @@ export default class AHBRepository {
       await AppDataSource.initialize();
     }
 
-    // Get the meta information and lines from the database
-    const metaInfo = await AppDataSource.getRepository(AhbMetaInformation)
-      .createQueryBuilder('ami')
-      .where('ami.edifact_format_version = :formatVersion', { formatVersion })
-      .andWhere('ami.pruefidentifikator = :pruefi', { pruefi })
-      .getOne();
+    // Get the lines from the database view
+    const lines = await AppDataSource.getRepository(AhbLine)
+      .createQueryBuilder('al')
+      .where('al.format_version = :formatVersion', { formatVersion })
+      .andWhere('al.pruefidentifikator = :pruefi', { pruefi })
+      .orderBy('al.sort_path', 'ASC')
+      .getMany();
 
-    if (!metaInfo) {
+    if (lines.length === 0) {
       throw new NotFoundError(
         `AHB document not found. Prüfidentifikator: ${pruefi}, Format Version: ${formatVersion}`
       );
     }
 
-    const lines = await AppDataSource.getRepository(AhbLine)
-      .createQueryBuilder('al')
-      .where('al.ahb_id = :ahbId', { ahbId: metaInfo.ahb_id })
-      .orderBy('al.position_inside_ahb', 'ASC')
-      .getMany();
+    // Get the first line to extract meta information
+    const firstLine = lines[0];
 
     // Transform the data to match the API schema
     return {
       meta: {
-        description: metaInfo.description || '',
-        direction: metaInfo.direction || '',
-        pruefidentifikator: metaInfo.pruefidentifikator,
+        description: firstLine.description || '',
+        direction: firstLine.direction || '',
+        pruefidentifikator: firstLine.pruefidentifikator,
       },
       lines: lines.map(line => ({
-        ahb_expression: line.ahb_expression || '',
-        conditions: line.conditions || '',
+        ahb_expression: line.line_ahb_status || '',
+        conditions: '', // This will be handled separately as mentioned in the view definition
         data_element: line.data_element || '',
         guid: line.id,
-        index: line.index || 0,
-        name: line.name || '',
-        section_name: line.section_name || '',
+        index: 0, // This will need to be calculated based on sort_path if needed
+        name: line.line_name || '',
+        section_name: '', // This might need to be derived from the path if needed
         segment_code: line.segment_code || '',
-        segment_group_key: line.segment_group_key || '',
-        value_pool_entry: line.value_pool_entry || '',
+        segment_group_key: line.segmentgroup_key || '',
+        value_pool_entry: line.qualifier || '',
       })),
     };
   }
