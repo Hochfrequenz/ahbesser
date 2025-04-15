@@ -13,6 +13,9 @@ export class AhbLine {
   format_version!: string;
 
   @Column({ type: 'varchar' })
+  format!: string;
+
+  @Column({ type: 'varchar' })
   pruefidentifikator!: string;
 
   @Column({ type: 'varchar', nullable: true })
@@ -47,4 +50,10 @@ export class AhbLine {
 
   @Column({ type: 'varchar', nullable: true })
   sort_path?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  bedingung?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  bedingungsfehler?: string;
 }
