@@ -76,7 +76,7 @@
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "ng-mocks": "^14.13.4",
-    "ng-openapi-gen": "^0.52.0",
+    "ng-openapi-gen": "^0.53.0",
     "npm-watch": "^0.13.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
