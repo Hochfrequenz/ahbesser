@@ -73,7 +73,9 @@ export default class AHBRepository {
         name: line.line_name || '',
         section_name: '', // This might need to be derived from the path if needed
         segment_code: line.segment_code || '',
-        segment_group_key: line.segmentgroup_key || '',
+        segment_group_key: line.segmentgroup_key?.startsWith('SGSG')
+          ? line.segmentgroup_key.substring(2)
+          : line.segmentgroup_key || '',
         value_pool_entry: line.qualifier || '',
       })),
     };
