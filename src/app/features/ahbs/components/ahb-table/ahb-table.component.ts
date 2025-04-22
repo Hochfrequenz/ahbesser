@@ -134,24 +134,6 @@ export class AhbTableComponent {
     return currentLine.section_name !== previousLine.section_name;
   }
 
-  // determines each time the section changes
-  hasSegmentChanged(currentIndex: number): boolean {
-    if (currentIndex === 0) return false;
-    const currentLine = this.lines()[currentIndex];
-    const previousLine = this.lines()[currentIndex - 1];
-    return currentLine.segment_code !== previousLine.segment_code;
-  }
-
-  // determines each time the data_element changes to add a dashed rule in ahb-table.component.html
-  hasDataElementChanged(currentIndex: number): boolean {
-    if (currentIndex === 0) return false;
-    const currentLine = this.lines()[currentIndex];
-    const previousLine = this.lines()[currentIndex - 1];
-    return (
-      currentLine.data_element !== previousLine.data_element && currentLine.data_element !== ''
-    );
-  }
-
   private getLineStyle(currentLine: Ahb['lines'][0], previousLine: Ahb['lines'][0]): string {
     if (!previousLine) return this.LINE_STYLE.NONE;
 
