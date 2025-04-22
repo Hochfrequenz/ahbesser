@@ -2,7 +2,7 @@
 // The table is created by the ahbline.sql file in the database/sql folder.
 // Which you can find here: https://github.com/Hochfrequenz/ahb-mig-backend/releases/tag/v0.0.1
 
-import { Entity, Column, PrimaryColumn, Index } from 'typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity({ name: 'v_ahbtabellen', synchronize: false })
 export class AhbLine {
