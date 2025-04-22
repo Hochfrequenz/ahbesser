@@ -2,7 +2,6 @@ import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
 import BlobStorageContainerBacked from './abstract/blobStorageBacked';
 import { NotFoundError } from '../infrastructure/errors';
 import { AppDataSource } from '../infrastructure/database';
-import { AhbMetaInformation } from '../entities/ahb-meta-information.entity';
 import { AhbLine } from '../entities/ahb-line.entity';
 
 interface FormatVersionsWithPruefis {
