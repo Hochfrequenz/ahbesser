@@ -226,8 +226,14 @@ export class AhbTableComponent {
     return this.getLineStyle(currentLine, previousLine);
   }
 
-  isNewSegment(index: number): boolean {
-    return this.hasSectionNameChanged(index);
+  isSegmentGroup(index: number): boolean {
+    const currentLine = this.lines()[index];
+
+    if (currentLine.line_type === this.LINE_TYPE.SEGMENT_GROUP) {
+      return true;
+    }
+
+    return false;
   }
 
   generateBedingungsbaumDeepLink(expression: string): string {
