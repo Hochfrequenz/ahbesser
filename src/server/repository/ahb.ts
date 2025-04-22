@@ -56,6 +56,7 @@ export default class AHBRepository {
         ? line.segmentgroup_key.substring(2)
         : line.segmentgroup_key || '',
       value_pool_entry: line.qualifier || '',
+      line_type: line.line_type || '',
     };
   }
 
