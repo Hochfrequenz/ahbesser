@@ -3,7 +3,6 @@ import { Readable } from 'stream';
 import { Ahb } from '../../app/core/api/models';
 import { NotFoundError } from '../infrastructure/errors';
 import { AppDataSource } from '../infrastructure/database';
-import { AhbMetaInformation } from '../entities/ahb-meta-information.entity';
 import { AhbLine } from '../entities/ahb-line.entity';
 
 export enum FileType {
