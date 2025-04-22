@@ -49,8 +49,8 @@ export default class AHBRepository {
         : line.data_element || '',
       guid: line.id,
       index: 0, // This will need to be calculated based on sort_path if needed
-      name: line.line_name || '',
-      section_name: '', // This might need to be derived from the path if needed
+      name: line.line_type === 'segment' ? '' : line.line_name || '',
+      section_name: line.line_type === 'segment' ? line.line_name || '' : '',
       segment_code: line.segment_code || '',
       segment_group_key: line.segmentgroup_key?.startsWith('SGSG')
         ? line.segmentgroup_key.substring(2)
