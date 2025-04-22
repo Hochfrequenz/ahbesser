@@ -168,6 +168,9 @@ components:
               value_pool_entry:
                 type: string
                 example: 'Entry1'
+              line_type:
+                type: string
+                example: 'segment'
             required:
               - ahb_expression
               - data_element
@@ -178,6 +181,7 @@ components:
               - segment_code
               - segment_group_key
               - value_pool_entry
+              - line_type
         meta:
           type: object
           properties:
