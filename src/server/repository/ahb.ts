@@ -32,6 +32,33 @@ export default class AHBRepository {
     }
   }
 
+  private mapMetaInformation(line: AhbLine): Ahb['meta'] {
+    return {
+      description: line.description || '',
+      direction: line.direction || '',
+      pruefidentifikator: line.pruefidentifikator,
+    };
+  }
+
+  private mapLine(line: AhbLine): Ahb['lines'][0] {
+    return {
+      ahb_expression: line.line_ahb_status || '',
+      conditions: line.bedingung || '',
+      data_element: line.data_element?.startsWith('D_')
+        ? line.data_element.substring(2)
+        : line.data_element || '',
+      guid: line.id,
+      index: 0, // This will need to be calculated based on sort_path if needed
+      name: line.line_name || '',
+      section_name: '', // This might need to be derived from the path if needed
+      segment_code: line.segment_code || '',
+      segment_group_key: line.segmentgroup_key?.startsWith('SGSG')
+        ? line.segmentgroup_key.substring(2)
+        : line.segmentgroup_key || '',
+      value_pool_entry: line.qualifier || '',
+    };
+  }
+
   private async getFromDatabase(pruefi: string, formatVersion: string): Promise<Ahb> {
     // Initialize the database connection if not already initialized
     if (!AppDataSource.isInitialized) {
@@ -57,27 +84,8 @@ export default class AHBRepository {
 
     // Transform the data to match the API schema
     return {
-      meta: {
-        description: firstLine.description || '',
-        direction: firstLine.direction || '',
-        pruefidentifikator: firstLine.pruefidentifikator,
-      },
-      lines: lines.map(line => ({
-        ahb_expression: line.line_ahb_status || '',
-        conditions: line.bedingung || '',
-        data_element: line.data_element?.startsWith('D_')
-          ? line.data_element.substring(2)
-          : line.data_element || '',
-        guid: line.id,
-        index: 0, // This will need to be calculated based on sort_path if needed
-        name: line.line_name || '',
-        section_name: '', // This might need to be derived from the path if needed
-        segment_code: line.segment_code || '',
-        segment_group_key: line.segmentgroup_key?.startsWith('SGSG')
-          ? line.segmentgroup_key.substring(2)
-          : line.segmentgroup_key || '',
-        value_pool_entry: line.qualifier || '',
-      })),
+      meta: this.mapMetaInformation(firstLine),
+      lines: lines.map(line => this.mapLine(line)),
     };
   }
 
