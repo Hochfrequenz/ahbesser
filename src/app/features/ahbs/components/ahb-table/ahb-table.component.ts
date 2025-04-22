@@ -41,6 +41,21 @@ export class AhbTableComponent {
   // max. string length of 'Bedingung/Hinweis' entries
   readonly COLLAPSE_LENGTH = 80;
 
+  private readonly LINE_TYPE = {
+    SEGMENT_GROUP: 'segment_group',
+    SEGMENT: 'segment',
+    CODE: 'code',
+    DATA_ELEMENT: 'dataelement',
+  } as const;
+
+  private readonly LINE_STYLE = {
+    THICK: 'border-t-4 border-hf-grell-rose',
+    THIN: 'border-t-2 border-hf-grell-rose',
+    THIN_DOTTED: 'border-t-2 border-hf-grell-rose border-dashed',
+    GREEN: 'border-t-4 border-green-500',
+    NONE: '',
+  } as const;
+
   markElements = computed<HTMLElement[]>(() => {
     const highlight = this.highlight();
     const nativeElement = this.elementRef.nativeElement;
@@ -137,19 +152,58 @@ export class AhbTableComponent {
     );
   }
 
+  private getLineStyle(currentLine: Ahb['lines'][0], previousLine: Ahb['lines'][0]): string {
+    if (!previousLine) return this.LINE_STYLE.NONE;
+
+    const currentType = currentLine.line_type;
+    const previousType = previousLine.line_type;
+
+    // Change from segment_group to segment: thick line
+    if (previousType === this.LINE_TYPE.SEGMENT_GROUP && currentType === this.LINE_TYPE.SEGMENT) {
+      return this.LINE_STYLE.THICK;
+    }
+
+    // Change from segment to data_element: thin line
+    if (previousType === this.LINE_TYPE.SEGMENT && currentType === this.LINE_TYPE.DATA_ELEMENT) {
+      return this.LINE_STYLE.THIN;
+    }
+
+    // Change from segment to code: thin line
+    if (previousType === this.LINE_TYPE.SEGMENT && currentType === this.LINE_TYPE.CODE) {
+      return this.LINE_STYLE.THIN;
+    }
+
+    // Change from code to data_element: thin line
+    if (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.DATA_ELEMENT) {
+      return this.LINE_STYLE.THIN;
+    }
+
+    // Change from code to code: thin dotted line
+    if (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.CODE) {
+      return this.LINE_STYLE.THIN_DOTTED;
+    }
+
+    // Change from code to segment_group: thick line
+    if (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.SEGMENT_GROUP) {
+      return this.LINE_STYLE.THICK;
+    }
+
+    // Change from data_element to code: thin line
+    if (previousType === this.LINE_TYPE.DATA_ELEMENT && currentType === this.LINE_TYPE.CODE) {
+      return this.LINE_STYLE.THIN;
+    }
+
+    return this.LINE_STYLE.NONE;
+  }
+
   // determines the appropriate class for each row
   getRowClass(index: number): string {
-    if (index === 0) return '';
+    if (index === 0) return this.LINE_STYLE.NONE;
 
-    if (this.hasSectionNameChanged(index)) {
-      return 'border-t-4 border-hf-grell-rose'; // bold line between different segment_names
-    }
+    const currentLine = this.lines()[index];
+    const previousLine = this.lines()[index - 1];
 
-    if (this.hasDataElementChanged(index) || this.hasSegmentChanged(index)) {
-      return 'border-t-2 border-hf-grell-rose'; // thin solid line between different data_elements
-    }
-
-    return 'border-t-2 border-hf-grell-rose border-dashed'; //  by default: dashed line between all rows (if not overwritten by the bold/thin solid lines)
+    return this.getLineStyle(currentLine, previousLine);
   }
 
   isNewSegment(index: number): boolean {
