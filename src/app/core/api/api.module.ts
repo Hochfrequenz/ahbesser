@@ -8,7 +8,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { AhbService } from './services/ahb.service';
 import { MaintenanceService } from './services/maintenance.service';
-import { provideHttpClient } from '@angular/common/http';
+
 /**
  * Module that provides all services and configuration.
  */
@@ -19,8 +19,7 @@ import { provideHttpClient } from '@angular/common/http';
   providers: [
     AhbService,
     MaintenanceService,
-    ApiConfiguration,
-    provideHttpClient()
+    ApiConfiguration
   ],
 })
 export class ApiModule {
@@ -36,7 +35,7 @@ export class ApiModule {
     }
   }
 
-  constructor(
+  constructor( 
     @Optional() @SkipSelf() parentModule: ApiModule,
     @Optional() http: HttpClient
   ) {

@@ -14,6 +14,7 @@ export interface Ahb {
 'segment_code': string;
 'segment_group_key': string;
 'value_pool_entry': string;
+'line_type': string;
 }>;
   meta: {
 'description': string;
