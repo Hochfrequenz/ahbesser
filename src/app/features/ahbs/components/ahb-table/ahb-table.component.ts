@@ -140,84 +140,61 @@ export class AhbTableComponent {
     const currentType = currentLine.line_type;
     const previousType = previousLine.line_type;
 
-    // Change from segment_group to segment: thick line
-    if (previousType === this.LINE_TYPE.SEGMENT_GROUP && currentType === this.LINE_TYPE.SEGMENT) {
+    // Helper function to check if two lines have the same segment and data element
+    const hasSameSegmentAndDataElement = (
+      line1: Ahb['lines'][0],
+      line2: Ahb['lines'][0]
+    ): boolean => {
+      return line1.segment_code === line2.segment_code && line1.data_element === line2.data_element;
+    };
+
+    // Group 1: Thick lines (major structural changes)
+    if (
+      // Change from segment_group to segment
+      (previousType === this.LINE_TYPE.SEGMENT_GROUP && currentType === this.LINE_TYPE.SEGMENT) ||
+      // Change from code to segment_group
+      (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.SEGMENT_GROUP) ||
+      // Change from code to segment
+      (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.SEGMENT) ||
+      // Change from data_element to segment_group
+      (previousType === this.LINE_TYPE.DATA_ELEMENT &&
+        currentType === this.LINE_TYPE.SEGMENT_GROUP) ||
+      // Change from data_element to segment
+      (previousType === this.LINE_TYPE.DATA_ELEMENT && currentType === this.LINE_TYPE.SEGMENT)
+    ) {
       return this.LINE_STYLE.THICK;
     }
 
-    // Change from segment to data_element: thin line
-    if (previousType === this.LINE_TYPE.SEGMENT && currentType === this.LINE_TYPE.DATA_ELEMENT) {
-      return this.LINE_STYLE.THIN;
-    }
-
-    // Change from segment to code: thin line
-    if (previousType === this.LINE_TYPE.SEGMENT && currentType === this.LINE_TYPE.CODE) {
-      return this.LINE_STYLE.THIN;
-    }
-
-    // Change from code to code (same segment_code and data_element): thin dotted line
+    // Group 2: Thin dotted lines (same type with same segment and data element)
     if (
-      previousType === this.LINE_TYPE.CODE &&
-      currentType === this.LINE_TYPE.CODE &&
-      previousLine.segment_code === currentLine.segment_code &&
-      previousLine.data_element === currentLine.data_element
+      // Code to code with same segment and data element
+      (previousType === this.LINE_TYPE.CODE &&
+        currentType === this.LINE_TYPE.CODE &&
+        hasSameSegmentAndDataElement(previousLine, currentLine)) ||
+      // Data element to data element with same segment and data element
+      (previousType === this.LINE_TYPE.DATA_ELEMENT &&
+        currentType === this.LINE_TYPE.DATA_ELEMENT &&
+        hasSameSegmentAndDataElement(previousLine, currentLine))
     ) {
       return this.LINE_STYLE.THIN_DOTTED;
     }
 
-    // Change from code to code: thin line
-    if (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.CODE) {
-      return this.LINE_STYLE.THIN;
-    }
-
-    // Change from code to data_element: thin line
-    if (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.DATA_ELEMENT) {
-      return this.LINE_STYLE.THIN;
-    }
-
-    // Change from code to segment_group: thick line
-    if (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.SEGMENT_GROUP) {
-      return this.LINE_STYLE.THICK;
-    }
-
-    // Change from code to segment: thick line
-    if (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.SEGMENT) {
-      return this.LINE_STYLE.THICK;
-    }
-
-    // Change from data_element to segment_group: thick line
+    // Group 3: Thin lines (minor structural changes)
     if (
-      previousType === this.LINE_TYPE.DATA_ELEMENT &&
-      currentType === this.LINE_TYPE.SEGMENT_GROUP
+      // Segment to data_element
+      (previousType === this.LINE_TYPE.SEGMENT && currentType === this.LINE_TYPE.DATA_ELEMENT) ||
+      // Segment to code
+      (previousType === this.LINE_TYPE.SEGMENT && currentType === this.LINE_TYPE.CODE) ||
+      // Code to code
+      (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.CODE) ||
+      // Code to data_element
+      (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.DATA_ELEMENT) ||
+      // Data element to data element
+      (previousType === this.LINE_TYPE.DATA_ELEMENT &&
+        currentType === this.LINE_TYPE.DATA_ELEMENT) ||
+      // Data element to code
+      (previousType === this.LINE_TYPE.DATA_ELEMENT && currentType === this.LINE_TYPE.CODE)
     ) {
-      return this.LINE_STYLE.THICK;
-    }
-
-    // Change from data_element to segment: thick line
-    if (previousType === this.LINE_TYPE.DATA_ELEMENT && currentType === this.LINE_TYPE.SEGMENT) {
-      return this.LINE_STYLE.THICK;
-    }
-
-    // Change from data_element to data_element (same segment_code and data_element): thin dotted line
-    if (
-      previousType === this.LINE_TYPE.DATA_ELEMENT &&
-      currentType === this.LINE_TYPE.DATA_ELEMENT &&
-      previousLine.segment_code === currentLine.segment_code &&
-      previousLine.data_element === currentLine.data_element
-    ) {
-      return this.LINE_STYLE.THIN_DOTTED;
-    }
-
-    // Change from data_element to data_element: thin line
-    if (
-      previousType === this.LINE_TYPE.DATA_ELEMENT &&
-      currentType === this.LINE_TYPE.DATA_ELEMENT
-    ) {
-      return this.LINE_STYLE.THIN;
-    }
-
-    // Change from data_element to code: thin line
-    if (previousType === this.LINE_TYPE.DATA_ELEMENT && currentType === this.LINE_TYPE.CODE) {
       return this.LINE_STYLE.THIN;
     }
 
