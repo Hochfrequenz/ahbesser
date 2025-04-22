@@ -208,6 +208,14 @@ export class AhbTableComponent {
       return this.LINE_STYLE.THIN_DOTTED;
     }
 
+    // Change from data_element to data_element: thin line
+    if (
+      previousType === this.LINE_TYPE.DATA_ELEMENT &&
+      currentType === this.LINE_TYPE.DATA_ELEMENT
+    ) {
+      return this.LINE_STYLE.THIN;
+    }
+
     // Change from data_element to code: thin line
     if (previousType === this.LINE_TYPE.DATA_ELEMENT && currentType === this.LINE_TYPE.CODE) {
       return this.LINE_STYLE.THIN;
