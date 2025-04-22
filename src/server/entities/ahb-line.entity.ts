@@ -49,6 +49,9 @@ export class AhbLine {
   line_name?: string;
 
   @Column({ type: 'varchar', nullable: true })
+  line_type?: string;
+
+  @Column({ type: 'varchar', nullable: true })
   sort_path?: string;
 
   @Column({ type: 'varchar', nullable: true })
