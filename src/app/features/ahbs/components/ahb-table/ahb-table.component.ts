@@ -173,18 +173,38 @@ export class AhbTableComponent {
       return this.LINE_STYLE.THIN;
     }
 
+    // Change from code to code: thin line
+    if (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.CODE) {
+      return this.LINE_STYLE.THIN;
+    }
+
     // Change from code to data_element: thin line
     if (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.DATA_ELEMENT) {
       return this.LINE_STYLE.THIN;
     }
 
-    // Change from code to code: thin dotted line
-    if (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.CODE) {
+    // Change from code to code (same segment_code and data_element): thin dotted line
+    if (
+      previousType === this.LINE_TYPE.CODE &&
+      currentType === this.LINE_TYPE.CODE &&
+      previousLine.segment_code === currentLine.segment_code &&
+      previousLine.data_element === currentLine.data_element
+    ) {
       return this.LINE_STYLE.THIN_DOTTED;
     }
 
     // Change from code to segment_group: thick line
     if (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.SEGMENT_GROUP) {
+      return this.LINE_STYLE.THICK;
+    }
+
+    // Change from code to segment: thick line
+    if (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.SEGMENT) {
+      return this.LINE_STYLE.THICK;
+    }
+
+    // Change from data_element to segment: thick line
+    if (previousType === this.LINE_TYPE.DATA_ELEMENT && currentType === this.LINE_TYPE.SEGMENT) {
       return this.LINE_STYLE.THICK;
     }
 
