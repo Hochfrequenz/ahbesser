@@ -2,37 +2,60 @@ import { DataSource } from 'typeorm';
 import { AhbMetaInformation } from '../entities/ahb-meta-information.entity';
 import { AhbLine } from '../entities/ahb-line.entity';
 import path from 'path';
-import fernet from 'fernet';
 import fs from 'fs';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 
-const fernetKey = process.env['FERNET_KEY'];
-if (!fernetKey) {
-  throw new Error('FERNET_KEY environment variable is required');
+const execAsync = promisify(exec);
+
+const password = process.env['FERNET_KEY'];
+if (!password) {
+  throw new Error('FERNET_KEY environment variable is required for 7z archive password');
 }
 
-const encryptedDbPath = path.resolve(process.cwd(), 'src/server/data/fernet_encrypted_ahb.db');
-const decryptedDbPath = path.resolve(process.cwd(), 'src/server/data/ahb.db');
+const archivePath = path.resolve(process.cwd(), 'src/server/data/ahb.db.7z');
+const dbPath = path.resolve(process.cwd(), 'src/server/data/ahb.db');
 
-// Decrypt the database if it doesn't exist or if the encrypted version is newer
-if (
-  !fs.existsSync(decryptedDbPath) ||
-  fs.statSync(encryptedDbPath).mtime > fs.statSync(decryptedDbPath).mtime
-) {
-  const encryptedData = fs.readFileSync(encryptedDbPath);
-  const secret = new fernet.Secret(fernetKey);
-  const token = new fernet.Token({
-    secret: secret,
-    token: encryptedData.toString('base64'),
-    ttl: 0,
-  });
-  const decryptedData = token.decode();
-  fs.writeFileSync(decryptedDbPath, decryptedData);
+// Function to extract 7z archive
+async function extractArchive() {
+  console.log('Checking if database needs to be extracted...');
+
+  if (!fs.existsSync(archivePath)) {
+    throw new Error(`7z archive not found at ${archivePath}`);
+  }
+
+  // Only extract if the database doesn't exist or if the archive is newer
+  if (!fs.existsSync(dbPath) || fs.statSync(archivePath).mtime > fs.statSync(dbPath).mtime) {
+    console.log('Extracting database from 7z archive...');
+    try {
+      // Using 7z command line tool to extract the archive
+      await execAsync(`7z x -p${password} -o${path.dirname(dbPath)} ${archivePath}`);
+      console.log('Database extracted successfully');
+    } catch (error) {
+      console.error('Error extracting database:', error);
+      throw new Error('Failed to extract database from 7z archive');
+    }
+  } else {
+    console.log('Database is up to date, no extraction needed');
+  }
 }
 
-export const AppDataSource = new DataSource({
-  type: 'sqlite',
-  database: decryptedDbPath,
+// Create the DataSource configuration
+const dataSourceConfig = {
+  type: 'sqlite' as const,
+  database: dbPath,
   entities: [AhbMetaInformation, AhbLine],
   logging: true, // Enable SQL query logging
   synchronize: false, // Set to false since we already have the database schema
-});
+};
+
+// Initialize the database connection
+export async function initializeDatabase(): Promise<DataSource> {
+  await extractArchive();
+  const dataSource = new DataSource(dataSourceConfig);
+  await dataSource.initialize();
+  return dataSource;
+}
+
+// Export the DataSource configuration for use in other files
+export const AppDataSource = new DataSource(dataSourceConfig);
