@@ -3,10 +3,25 @@ import { AhbMetaInformation } from '../entities/ahb-meta-information.entity';
 import { AhbLine } from '../entities/ahb-line.entity';
 import path from 'path';
 import fs from 'fs';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import Seven from 'node-7z';
 
-const execAsync = promisify(exec);
+// Type declarations for node-7z
+declare module 'node-7z' {
+  interface SevenOptions {
+    password?: string;
+    $progress?: boolean;
+  }
+
+  interface Seven {
+    extractFull: (
+      archivePath: string,
+      destPath: string,
+      options: SevenOptions
+    ) => {
+      on: (event: 'end' | 'error', callback: (err?: Error) => void) => void;
+    };
+  }
+}
 
 const password = process.env['FERNET_KEY'];
 if (!password) {
@@ -28,12 +43,26 @@ async function extractArchive() {
   if (!fs.existsSync(dbPath) || fs.statSync(archivePath).mtime > fs.statSync(dbPath).mtime) {
     console.log('Extracting database from 7z archive...');
     try {
-      // Using 7z command line tool to extract the archive
-      await execAsync(`7z x -p${password} -o${path.dirname(dbPath)} ${archivePath}`);
-      console.log('Database extracted successfully');
+      // Using node-7z to extract the archive with password
+      const stream = Seven.extractFull(archivePath, path.dirname(dbPath), {
+        password: password,
+        $progress: true,
+      });
+
+      await new Promise<void>((resolve, reject) => {
+        stream.on('end', () => {
+          console.log('Database extracted successfully');
+          resolve();
+        });
+
+        stream.on('error', (err?: Error) => {
+          console.error('Error extracting database:', err);
+          reject(new Error('Failed to extract database from 7z archive'));
+        });
+      });
     } catch (error) {
       console.error('Error extracting database:', error);
-      throw new Error('Failed to extract database from 7z archive');
+      throw error;
     }
   } else {
     console.log('Database is up to date, no extraction needed');
