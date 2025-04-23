@@ -5,24 +5,6 @@ import path from 'path';
 import fs from 'fs';
 import Seven from 'node-7z';
 
-// Type declarations for node-7z
-declare module 'node-7z' {
-  interface SevenOptions {
-    password?: string;
-    $progress?: boolean;
-  }
-
-  interface Seven {
-    extractFull: (
-      archivePath: string,
-      destPath: string,
-      options: SevenOptions
-    ) => {
-      on: (event: 'end' | 'error', callback: (err?: Error) => void) => void;
-    };
-  }
-}
-
 const password = process.env['FERNET_KEY'];
 if (!password) {
   throw new Error('FERNET_KEY environment variable is required for 7z archive password');
