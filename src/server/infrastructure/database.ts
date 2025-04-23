@@ -5,9 +5,11 @@ import path from 'path';
 import fs from 'fs';
 import Seven from 'node-7z';
 
-const password = process.env['FERNET_KEY'];
+const password = process.env['DB_7Z_ARCHIVE_PASSWORD'];
 if (!password) {
-  throw new Error('FERNET_KEY environment variable is required for 7z archive password');
+  throw new Error(
+    'DB_7Z_ARCHIVE_PASSWORD environment variable is required for 7z archive password'
+  );
 }
 
 const archivePath = path.resolve(process.cwd(), 'src/server/data/ahb.db.7z');
