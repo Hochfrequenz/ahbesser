@@ -36,7 +36,7 @@ jobs:
       - name: Unit tests
         run: npm test
         env:
-          FERNET_KEY: ${{ secrets.SQLITE_AHB_DB_FERNET_KEY }} # secret is set in organization settings
+          DB_7Z_ARCHIVE_PASSWORD: ${{ secrets.SQLITE_AHB_DB_7Z_ARCHIVE_PASSWORD }} # secret is set in organization settings
 
       - name: Build frontend
         run: npm run ng:build
