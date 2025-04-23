@@ -18,4 +18,4 @@ config:
   ahb-tabellen:ohDearHealthCheckSecret:
     secure: AAABAMlO2g+61udj5KO4b16Pg2ESsCmCAdj2LIvT77mrZdHkCZeANgSQz+0aBbkW
   ahb-tabellen:db_7z_archive_password:
-    secure: AAABAPIG9l/5BbjTByzHszRR9S28m7nW0SuXYtEVFSvbFHHNntBA85FGY78zd8dJ65oWTsxLy/UV6u9P3odx0YLp9EBnVk7F/9Hsmg==
+    secure: AAABAEr0ZVzGcUJ8fM+kKp6rBY3YXI0AnTzuJFCQgucWKA5UVyqX9wI3oUtXoVKXd6UVscc01ZUki8DQjxQ=
