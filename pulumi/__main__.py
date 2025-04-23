@@ -41,8 +41,8 @@ assert websites_container_start_time_limit, "websitesContainerStartTimeLimit mus
 oh_dear_health_check_secret = config.require_secret("ohDearHealthCheckSecret")
 assert oh_dear_health_check_secret, "ohDearHealthCheckSecret must be set"
 
-fernet_key = config.require_secret("fernet_key")
-assert fernet_key, "fernet_key must be set"
+db_7z_archive_password = config.require_secret("db_7z_archive_password")
+assert db_7z_archive_password, "db_7z_archive_password must be set"
 
 cpu = config.get_int("cpu", 1)
 memory = config.get_int("memory", 2)
@@ -133,7 +133,7 @@ web_app = azure_native.web.WebApp(
             azure_native.web.NameValuePairArgs(name="ENVIRONMENT", value=environment),
             azure_native.web.NameValuePairArgs(name="WEBSITES_CONTAINER_START_TIME_LIMIT", value=websites_container_start_time_limit),
             azure_native.web.NameValuePairArgs(name="OH_DEAR_HEALTH_CHECK_SECRET", value=oh_dear_health_check_secret),
-            azure_native.web.NameValuePairArgs(name="FERNET_KEY", value=fernet_key),
+            azure_native.web.NameValuePairArgs(name="DB_7Z_ARCHIVE_PASSWORD", value=db_7z_archive_password),
         ],
         linux_fx_version=f"DOCKER|{image_name_with_tag}",
     ),
