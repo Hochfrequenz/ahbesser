@@ -12,7 +12,7 @@ if (!password) {
   );
 }
 
-const archivePath = path.resolve(process.cwd(), 'src/server/data/ahb.db.7z');
+const archivePath = path.resolve(process.cwd(), 'src/server/data/ahb.db.encrypted.7z');
 const dbPath = path.resolve(process.cwd(), 'src/server/data/ahb.db');
 
 // Function to extract 7z archive
