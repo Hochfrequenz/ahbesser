@@ -46,14 +46,14 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
-    "node-7z": "^3.0.0",
     "prettier": "^3.5.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.2",
     "sqlite3": "^5.1.7",
     "tslib": "^2.8.1",
     "typeorm": "^0.3.21",
-    "zone.js": "~0.15.0"
+    "zone.js": "~0.15.0",
+    "7zip-min": "^2.1.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.3",
