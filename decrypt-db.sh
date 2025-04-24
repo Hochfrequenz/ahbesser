@@ -21,7 +21,7 @@ if [ ! -f "$DB_PATH" ] || [ "$ARCHIVE_PATH" -nt "$DB_PATH" ]; then
         exit 1
     fi
 
-    7z x -p"$DB_7Z_ARCHIVE_PASSWORD" -o"$(dirname "$DB_PATH")" "$ARCHIVE_PATH"
+    7z x -y -p"$DB_7Z_ARCHIVE_PASSWORD" -o"$(dirname "$DB_PATH")" "$ARCHIVE_PATH"
 
     if [ $? -eq 0 ]; then
         echo "Database decrypted successfully"
