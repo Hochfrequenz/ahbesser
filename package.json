@@ -1,6 +1,9 @@
 {
   "name": "ahbesser",
   "version": "0.0.0",
+  "engines": {
+    "node": ">=23.11.0"
+  },
   "scripts": {
     "init": "npm run install-submodules",
     "start": "concurrently \"npm run ng:start\" \"npm run server:watch\"",
