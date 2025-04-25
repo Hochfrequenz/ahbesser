@@ -41,6 +41,21 @@ export class AhbTableComponent {
   // max. string length of 'Bedingung/Hinweis' entries
   readonly COLLAPSE_LENGTH = 80;
 
+  private readonly LINE_TYPE = {
+    SEGMENT_GROUP: 'segment_group',
+    SEGMENT: 'segment',
+    CODE: 'code',
+    DATA_ELEMENT: 'dataelement',
+  } as const;
+
+  private readonly LINE_STYLE = {
+    THICK: 'border-t-4 border-hf-grell-rose',
+    THIN: 'border-t-2 border-hf-grell-rose',
+    THIN_DOTTED: 'border-t-2 border-hf-grell-rose border-dashed',
+    GREEN: 'border-t-4 border-green-500',
+    NONE: '',
+  } as const;
+
   markElements = computed<HTMLElement[]>(() => {
     const highlight = this.highlight();
     const nativeElement = this.elementRef.nativeElement;
@@ -119,41 +134,91 @@ export class AhbTableComponent {
     return currentLine.section_name !== previousLine.section_name;
   }
 
-  // determines each time the section changes
-  hasSegmentChanged(currentIndex: number): boolean {
-    if (currentIndex === 0) return false;
-    const currentLine = this.lines()[currentIndex];
-    const previousLine = this.lines()[currentIndex - 1];
-    return currentLine.segment_code !== previousLine.segment_code;
-  }
+  private getLineStyle(currentLine: Ahb['lines'][0], previousLine: Ahb['lines'][0]): string {
+    if (!previousLine) return this.LINE_STYLE.NONE;
 
-  // determines each time the data_element changes to add a dashed rule in ahb-table.component.html
-  hasDataElementChanged(currentIndex: number): boolean {
-    if (currentIndex === 0) return false;
-    const currentLine = this.lines()[currentIndex];
-    const previousLine = this.lines()[currentIndex - 1];
-    return (
-      currentLine.data_element !== previousLine.data_element && currentLine.data_element !== ''
-    );
+    const currentType = currentLine.line_type;
+    const previousType = previousLine.line_type;
+
+    // Helper function to check if two lines have the same segment and data element
+    const hasSameSegmentAndDataElement = (
+      line1: Ahb['lines'][0],
+      line2: Ahb['lines'][0]
+    ): boolean => {
+      return line1.segment_code === line2.segment_code && line1.data_element === line2.data_element;
+    };
+
+    // Group 1: Thick lines (major structural changes)
+    if (
+      // Change from segment_group to segment
+      (previousType === this.LINE_TYPE.SEGMENT_GROUP && currentType === this.LINE_TYPE.SEGMENT) ||
+      // Change from code to segment_group
+      (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.SEGMENT_GROUP) ||
+      // Change from code to segment
+      (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.SEGMENT) ||
+      // Change from data_element to segment_group
+      (previousType === this.LINE_TYPE.DATA_ELEMENT &&
+        currentType === this.LINE_TYPE.SEGMENT_GROUP) ||
+      // Change from data_element to segment
+      (previousType === this.LINE_TYPE.DATA_ELEMENT && currentType === this.LINE_TYPE.SEGMENT)
+    ) {
+      return this.LINE_STYLE.THICK;
+    }
+
+    // Group 2: Thin dotted lines (same type with same segment and data element)
+    if (
+      // Code to code with same segment and data element
+      (previousType === this.LINE_TYPE.CODE &&
+        currentType === this.LINE_TYPE.CODE &&
+        hasSameSegmentAndDataElement(previousLine, currentLine)) ||
+      // Data element to data element with same segment and data element
+      (previousType === this.LINE_TYPE.DATA_ELEMENT &&
+        currentType === this.LINE_TYPE.DATA_ELEMENT &&
+        hasSameSegmentAndDataElement(previousLine, currentLine))
+    ) {
+      return this.LINE_STYLE.THIN_DOTTED;
+    }
+
+    // Group 3: Thin lines (minor structural changes)
+    if (
+      // Segment to data_element
+      (previousType === this.LINE_TYPE.SEGMENT && currentType === this.LINE_TYPE.DATA_ELEMENT) ||
+      // Segment to code
+      (previousType === this.LINE_TYPE.SEGMENT && currentType === this.LINE_TYPE.CODE) ||
+      // Code to code
+      (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.CODE) ||
+      // Code to data_element
+      (previousType === this.LINE_TYPE.CODE && currentType === this.LINE_TYPE.DATA_ELEMENT) ||
+      // Data element to data element
+      (previousType === this.LINE_TYPE.DATA_ELEMENT &&
+        currentType === this.LINE_TYPE.DATA_ELEMENT) ||
+      // Data element to code
+      (previousType === this.LINE_TYPE.DATA_ELEMENT && currentType === this.LINE_TYPE.CODE)
+    ) {
+      return this.LINE_STYLE.THIN;
+    }
+
+    return this.LINE_STYLE.NONE;
   }
 
   // determines the appropriate class for each row
   getRowClass(index: number): string {
-    if (index === 0) return '';
+    if (index === 0) return this.LINE_STYLE.NONE;
 
-    if (this.hasSectionNameChanged(index)) {
-      return 'border-t-4 border-hf-grell-rose'; // bold line between different segment_names
-    }
+    const currentLine = this.lines()[index];
+    const previousLine = this.lines()[index - 1];
 
-    if (this.hasDataElementChanged(index) || this.hasSegmentChanged(index)) {
-      return 'border-t-2 border-hf-grell-rose'; // thin solid line between different data_elements
-    }
-
-    return 'border-t-2 border-hf-grell-rose border-dashed'; //  by default: dashed line between all rows (if not overwritten by the bold/thin solid lines)
+    return this.getLineStyle(currentLine, previousLine);
   }
 
-  isNewSegment(index: number): boolean {
-    return this.hasSectionNameChanged(index);
+  isSegmentGroup(index: number): boolean {
+    const currentLine = this.lines()[index];
+
+    if (currentLine.line_type === this.LINE_TYPE.SEGMENT_GROUP) {
+      return true;
+    }
+
+    return false;
   }
 
   generateBedingungsbaumDeepLink(expression: string): string {

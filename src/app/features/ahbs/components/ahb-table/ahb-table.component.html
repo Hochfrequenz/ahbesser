@@ -49,15 +49,15 @@
         <tr [class]="getRowClass(i)">
           <td
             class="px-6 py-4"
-            [class.font-bold]="isNewSegment(i)"
+            [class.font-bold]="isSegmentGroup(i)"
             [innerHTML]="line.segment_group_key | highlight: highlight()"></td>
           <td
             class="px-6 py-4"
-            [class.font-bold]="isNewSegment(i)"
+            [class.font-bold]="isSegmentGroup(i)"
             [innerHTML]="line.section_name | highlight: highlight()"></td>
           <td
             class="px-6 py-4"
-            [class.font-bold]="isNewSegment(i)"
+            [class.font-bold]="isSegmentGroup(i)"
             [innerHTML]="line.segment_code | highlight: highlight()"></td>
           <td class="px-6 py-4" [innerHTML]="line.data_element | highlight: highlight()"></td>
           <td class="px-6 py-4">

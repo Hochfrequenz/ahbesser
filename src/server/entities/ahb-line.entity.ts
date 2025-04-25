@@ -1,20 +1,38 @@
 // The here defined columns come from the ahbline table in the database.
 // The table is created by the ahbline.sql file in the database/sql folder.
-// Which you can find here: https://github.com/Hochfrequenz/ahb-mig-backend/releases/tag/v0.0.1
+// Which you can find here: https://github.com/Hochfrequenz/xml-fundamend-python/blob/main/src/fundamend/sqlmodels/create_ahbtabellen_view.sql
+// The related SQLModel can by found here: https://github.com/Hochfrequenz/xml-fundamend-python/blob/9a45e07f953d42c707db4c7af4294790f26e01ce/src/fundamend/sqlmodels/ahbtabellen_view.py#L37-L60
 
-import { Entity, Column, PrimaryColumn, Index } from 'typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
-@Entity({ name: 'ahbline', synchronize: false })
+@Entity({ name: 'v_ahbtabellen', synchronize: false })
 export class AhbLine {
   @PrimaryColumn({ type: 'varchar', length: 32 })
   id!: string;
 
-  @Column({ type: 'integer' })
-  @Index('ix_ahbline_position_inside_ahb')
-  position_inside_ahb!: number;
+  @Column({ type: 'varchar' })
+  format_version!: string;
+
+  @Column({ type: 'varchar' })
+  format!: string;
+
+  @Column({ type: 'varchar' })
+  pruefidentifikator!: string;
 
   @Column({ type: 'varchar', nullable: true })
-  segment_group_key?: string;
+  path?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  id_path?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  direction?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  description?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  segmentgroup_key?: string;
 
   @Column({ type: 'varchar', nullable: true })
   segment_code?: string;
@@ -23,26 +41,23 @@ export class AhbLine {
   data_element?: string;
 
   @Column({ type: 'varchar', nullable: true })
-  segment_id?: string;
+  qualifier?: string;
 
   @Column({ type: 'varchar', nullable: true })
-  value_pool_entry?: string;
+  line_ahb_status?: string;
 
   @Column({ type: 'varchar', nullable: true })
-  name?: string;
+  line_name?: string;
 
   @Column({ type: 'varchar', nullable: true })
-  ahb_expression?: string;
+  line_type?: string;
 
   @Column({ type: 'varchar', nullable: true })
-  conditions?: string;
+  sort_path?: string;
 
   @Column({ type: 'varchar', nullable: true })
-  section_name?: string;
+  bedingung?: string;
 
-  @Column({ type: 'integer', nullable: true })
-  index?: number;
-
-  @Column({ type: 'varchar', length: 32, nullable: true })
-  ahb_id?: string;
+  @Column({ type: 'varchar', nullable: true })
+  bedingungsfehler?: string;
 }

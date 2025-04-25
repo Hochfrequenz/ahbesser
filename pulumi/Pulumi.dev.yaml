@@ -17,3 +17,5 @@ config:
   pulumi:template: container-azure-python
   ahb-tabellen:ohDearHealthCheckSecret:
     secure: AAABAMlO2g+61udj5KO4b16Pg2ESsCmCAdj2LIvT77mrZdHkCZeANgSQz+0aBbkW
+  ahb-tabellen:db_7z_archive_password:
+    secure: AAABAEr0ZVzGcUJ8fM+kKp6rBY3YXI0AnTzuJFCQgucWKA5UVyqX9wI3oUtXoVKXd6UVscc01ZUki8DQjxQ=

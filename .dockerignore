@@ -5,7 +5,6 @@ node_modules
 /.vscode
 /.nx
 /.angular
-.drone.yml
 .editorconfig
 .eslintrc.json
 .git
@@ -25,4 +24,3 @@ README.md
 .idea
 .octopus
 azure-mock
-node_modules

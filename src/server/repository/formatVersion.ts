@@ -2,7 +2,7 @@ import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
 import BlobStorageContainerBacked from './abstract/blobStorageBacked';
 import { NotFoundError } from '../infrastructure/errors';
 import { AppDataSource } from '../infrastructure/database';
-import { AhbMetaInformation } from '../entities/ahb-meta-information.entity';
+import { AhbLine } from '../entities/ahb-line.entity';
 
 interface FormatVersionsWithPruefis {
   [formatVersion: string]: Set<string>;
@@ -40,10 +40,10 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
       await AppDataSource.initialize();
     }
 
-    const formatVersions = await AppDataSource.getRepository(AhbMetaInformation)
+    const formatVersions = await AppDataSource.getRepository(AhbLine)
       .createQueryBuilder('ahb')
-      .select('DISTINCT ahb.edifact_format_version', 'formatVersion')
-      .orderBy('ahb.edifact_format_version')
+      .select('DISTINCT ahb.format_version', 'formatVersion')
+      .orderBy('ahb.format_version')
       .getRawMany();
 
     return formatVersions.map(result => result.formatVersion);
@@ -57,12 +57,12 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
       await AppDataSource.initialize();
     }
 
-    const pruefis = await AppDataSource.getRepository(AhbMetaInformation)
+    const pruefis = await AppDataSource.getRepository(AhbLine)
       .createQueryBuilder('ahb')
-      .select(['ahb.pruefidentifikator', 'ahb.description'])
-      .where('ahb.edifact_format_version = :formatVersion', { formatVersion })
+      .select('DISTINCT ahb.pruefidentifikator, ahb.description')
+      .where('ahb.format_version = :formatVersion', { formatVersion })
       .orderBy('ahb.pruefidentifikator')
-      .getMany();
+      .getRawMany();
 
     if (pruefis.length === 0) {
       throw new NotFoundError(`Format version ${formatVersion} does not exist`);

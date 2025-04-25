@@ -15,7 +15,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20.13'
@@ -35,6 +34,10 @@ jobs:
 
       - name: Unit tests
         run: npm test
+        env:
+          # secret is set in organization settings
+          # https://github.com/organizations/Hochfrequenz/settings/secrets/actions/SQLITE_AHB_DB_7Z_ARCHIVE_PASSWORD
+          DB_7Z_ARCHIVE_PASSWORD: ${{ secrets.SQLITE_AHB_DB_7Z_ARCHIVE_PASSWORD }}
 
       - name: Build frontend
         run: npm run ng:build

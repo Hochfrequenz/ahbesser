@@ -17,14 +17,24 @@ WORKDIR /service
 RUN addgroup --system --gid 1001 nodejs && \
   adduser --system --uid 1001 nodejs
 
-# Copy all necessary files into the image
-COPY . .
-
-# Change ownership of the service folder and all copied files to the nodejs user
-RUN chown -R nodejs:nodejs /service
+# Copy package files first for better caching
+COPY package*.json ./
+COPY tailwind.config.js ./
 
 # Install dependencies
 RUN npm ci --no-scripts
+
+# Copy the rest of the application
+COPY . .
+
+# Install p7zip for 7z archive handling
+RUN apk add --no-cache p7zip
+
+# Make scripts executable
+RUN chmod +x ./start.sh ./decrypt-db.sh
+
+# Change ownership of the service folder and all copied files to the nodejs user
+RUN chown -R nodejs:nodejs /service
 
 # Switch to non-root user
 USER nodejs
