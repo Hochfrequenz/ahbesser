@@ -52,9 +52,7 @@ export default class AHBRepository {
       name: isSectionLine ? '' : line.line_name || '',
       section_name: isSectionLine ? line.line_name || '' : '',
       segment_code: line.segment_code || '',
-      segment_group_key: line.segmentgroup_key?.startsWith('SGSG')
-        ? line.segmentgroup_key.substring(2)
-        : line.segmentgroup_key || '',
+      segment_group_key: line.segmentgroup_key || '',
       value_pool_entry: line.qualifier || '',
       line_type: line.line_type || '',
     };
