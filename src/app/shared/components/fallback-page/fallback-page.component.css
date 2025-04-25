@@ -1,0 +1,27 @@
+:host {
+  display: block;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.p-5 {
+  padding: 1.25rem;
+}
+
+.bg-hf-grell-rose {
+  background-color: #f8f9fa;
+}
+
+.text-hf-weiches-schwarz {
+  color: #343a40;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
