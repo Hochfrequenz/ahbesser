@@ -74,6 +74,18 @@ $ npm install -g @angular/cli
 
 Create an `.env` file in the root directory and paste the contents of the `.example.env` file.
 
+> [!IMPORTANT]
+> The application requires a SQLite database to function.
+> This database is stored in an encrypted 7z archive at `src/server/data/ahb.db.encrypted.7z`.
+> You will need the password to decrypt this archive, which can be found in the Hochfrequenz 1Password vault at [this link](https://start.1password.com/open/i?a=F35NURJ4PFGOPBA77PR66C5P4I&v=vjgfwz7dg5wg656rfpvadetrqy&i=grnjb4hn6ipcau4bqe43rkuwnq&h=hochfrequenz.1password.com).
+>
+> If you don't have access to the 1Password vault, please ask your teamates how to get the password.
+>
+> To work locally, you need to decrypt the archive and store the decrypted file in at `src/server/data/ahb.db`.
+>
+> If you want to start the application with Docker, you need to set the `DB_7Z_ARCHIVE_PASSWORD` environment variable in the `docker-compose.yaml` file either by setting it directly or by using the `.env` file.
+> We recommend the latter to keep the `docker-compose.yaml` file clean and readable.
+
 While having [Docker Desktop](https://www.docker.com/products/docker-desktop/) up and running, start the docker container using
 
 ```bash
