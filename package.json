@@ -48,7 +48,7 @@
     "@mdi/font": "^7.4.47",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0",
+    "express": "^4.21.2",
     "prettier": "^3.5.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.2",
@@ -84,6 +84,7 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.3",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "@types/express": "^4.17.21"
   }
 }
