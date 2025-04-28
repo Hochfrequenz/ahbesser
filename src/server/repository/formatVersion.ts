@@ -20,6 +20,9 @@ interface PruefiWithName {
 export default class FormatVersionRepository extends BlobStorageContainerBacked {
   private ahbContainerName: string;
   private formatVersionContainerName: string;
+  private formatVersionsCache: { versions: string[]; timestamp: number } | null = null;
+  private readonly CACHE_TTL = 3600000; // 1 hour in milliseconds
+
   constructor(client?: BlobServiceClient) {
     super(client);
     if (!process.env['AHB_CONTAINER_NAME']) {
@@ -35,6 +38,14 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
 
   // Return a list of all unique format versions from the database
   public async list(): Promise<string[]> {
+    // Check if we have a valid cache
+    if (
+      this.formatVersionsCache &&
+      Date.now() - this.formatVersionsCache.timestamp < this.CACHE_TTL
+    ) {
+      return this.formatVersionsCache.versions;
+    }
+
     // Initialize the database connection if not already initialized
     if (!AppDataSource.isInitialized) {
       await AppDataSource.initialize();
@@ -46,7 +57,15 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
       .orderBy('ahb.format_version')
       .getRawMany();
 
-    return formatVersions.map(result => result.formatVersion);
+    const versions = formatVersions.map(result => result.formatVersion);
+
+    // Update cache
+    this.formatVersionsCache = {
+      versions,
+      timestamp: Date.now(),
+    };
+
+    return versions;
   }
 
   // Return a list of all pruefis for a specific format version by looking at the json files

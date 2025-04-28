@@ -9,7 +9,12 @@ export default class FormatVersionController {
 
   public async list(_req: Request, res: Response): Promise<void> {
     const formatVersionEntity = await this.repository.list();
-    res.status(200).setHeader('Content-Type', 'application/json').send(formatVersionEntity);
+    res
+      .status(200)
+      .setHeader('Content-Type', 'application/json')
+      .setHeader('Cache-Control', 'public, max-age=3600') // Cache for 1 hour
+      .setHeader('ETag', `"${formatVersionEntity.join(',')}"`) // Simple ETag based on content
+      .send(formatVersionEntity);
   }
 
   public async listPruefisByFormatVersion(req: Request, res: Response): Promise<void> {
