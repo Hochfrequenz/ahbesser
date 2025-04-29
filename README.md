@@ -79,7 +79,7 @@ Create an `.env` file in the root directory and paste the contents of the `.exam
 > This database is stored in an encrypted 7z archive at `src/server/data/ahb.db.encrypted.7z`.
 > You will need the password to decrypt this archive, which can be found in the Hochfrequenz 1Password vault at [this link](https://start.1password.com/open/i?a=F35NURJ4PFGOPBA77PR66C5P4I&v=vjgfwz7dg5wg656rfpvadetrqy&i=grnjb4hn6ipcau4bqe43rkuwnq&h=hochfrequenz.1password.com).
 >
-> If you don't have access to the 1Password vault, please ask your teamates how to get the password.
+> If you don't have access to the 1Password vault, please ask your teammates how to get the password.
 >
 > To work locally, you need to decrypt the archive and store the decrypted file in at `src/server/data/ahb.db`.
 >
@@ -93,6 +93,8 @@ $ docker compose up -d --build
 ```
 
 and navigate to `http://localhost:4000/`.
+
+If this fails to start because of azure-mock problems, just copy the _unencrypted_ database to `src/server/data/ahb.db` and start the Angular CLI server.
 
 ### Starting the app using Angular CLI
 
