@@ -5,6 +5,15 @@
 
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 
+@Entity({ name: 'anwendungshandbuch', synchronize: false })
+export class Anwendungshandbuch {
+  // original structure: https://github.com/Hochfrequenz/xml-fundamend-python/blob/f94fbe2bf228f30fc4919abc47d5edc4dd1e3ea5/src/fundamend/sqlmodels/anwendungshandbuch.py#L464-L512
+  @PrimaryColumn({ type: 'varchar', length: 32 })
+  primary_key!: string;
+  // we omit the other columns as they are not relevant to use right now
+  @Column({ type: 'varchar', nullable: true })
+  edifact_format_version?: string;
+}
 @Entity({ name: 'v_ahbtabellen', synchronize: false })
 export class AhbLine {
   @PrimaryColumn({ type: 'varchar', length: 32 })

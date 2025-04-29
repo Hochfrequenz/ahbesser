@@ -2,7 +2,7 @@ import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
 import BlobStorageContainerBacked from './abstract/blobStorageBacked';
 import { NotFoundError } from '../infrastructure/errors';
 import { AppDataSource } from '../infrastructure/database';
-import { AhbLine } from '../entities/ahb-line.entity';
+import { AhbLine, Anwendungshandbuch } from '../entities/ahb-line.entity';
 
 interface FormatVersionsWithPruefis {
   [formatVersion: string]: Set<string>;
@@ -40,10 +40,10 @@ export default class FormatVersionRepository extends BlobStorageContainerBacked 
       await AppDataSource.initialize();
     }
 
-    const formatVersions = await AppDataSource.getRepository(AhbLine)
+    const formatVersions = await AppDataSource.getRepository(Anwendungshandbuch)
       .createQueryBuilder('ahb')
-      .select('DISTINCT ahb.format_version', 'formatVersion')
-      .orderBy('ahb.format_version')
+      .select('DISTINCT ahb.edifact_format_version', 'formatVersion')
+      .orderBy('ahb.edifact_format_version')
       .getRawMany();
 
     return formatVersions.map(result => result.formatVersion);
