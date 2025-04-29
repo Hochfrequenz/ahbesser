@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { AhbMetaInformation } from '../entities/ahb-meta-information.entity';
-import {AhbLine, Anwendungshandbuch} from '../entities/ahb-line.entity';
+import { AhbLine, Anwendungshandbuch } from '../entities/ahb-line.entity';
 import path from 'path';
 
 const dbPath = path.resolve(process.cwd(), 'src/server/data/ahb.db');
