@@ -4,6 +4,7 @@ import { Ahb } from '../../app/core/api/models';
 import { NotFoundError } from '../infrastructure/errors';
 import { AppDataSource } from '../infrastructure/database';
 import { AhbLine } from '../entities/ahb-line.entity';
+import { XlsxGeneratorService } from '../infrastructure/xlsx-generator.service';
 
 export enum FileType {
   CSV = 'csv',
@@ -14,18 +15,23 @@ export enum FileType {
 export default class AHBRepository {
   private blobClient?: BlobServiceClient;
   private ahbContainerName?: string;
+  private xlsxGenerator: XlsxGeneratorService;
 
   constructor(client?: BlobServiceClient) {
     if (client) {
       this.blobClient = client;
       this.ahbContainerName = process.env['AHB_CONTAINER_NAME'];
     }
+    this.xlsxGenerator = new XlsxGeneratorService();
   }
 
-  // Retrieve a single AHB from either database (JSON) or blob storage (XLSX/CSV)
+  // Retrieve a single AHB from either database (JSON) or generate XLSX on the fly
   public async get(pruefi: string, formatVersion: string, type: FileType): Promise<Ahb | Buffer> {
     if (type === FileType.JSON) {
       return this.getFromDatabase(pruefi, formatVersion);
+    } else if (type === FileType.XLSX) {
+      const ahb = await this.getFromDatabase(pruefi, formatVersion);
+      return this.xlsxGenerator.generateXlsx(ahb);
     } else {
       return this.getFromBlobStorage(pruefi, formatVersion, type);
     }
