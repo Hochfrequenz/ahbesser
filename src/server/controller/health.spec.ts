@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../infrastructure/database';
-import { createNewBlobStorageClient } from '../infrastructure/azure-blob-storage-client';
 import HealthController from './health';
 import { AppError } from '../infrastructure/errors';
 
@@ -9,7 +8,6 @@ jest.mock('@azure/storage-blob', () => ({
   BlobServiceClient: jest.fn(),
 }));
 jest.mock('../infrastructure/database');
-jest.mock('../infrastructure/azure-blob-storage-client');
 
 describe('HealthController', () => {
   let healthController: HealthController;
@@ -71,15 +69,6 @@ describe('HealthController', () => {
       .mockResolvedValueOnce([{ count: 10 }]) // Second query mock
       .mockResolvedValueOnce([{ count: 20 }]); // Third query mock
 
-    // Mock blob storage check
-    const mockGetProperties = jest.fn().mockResolvedValue({});
-    const mockGetContainerClient = jest.fn().mockReturnValue({
-      getProperties: mockGetProperties,
-    });
-    (createNewBlobStorageClient as jest.Mock).mockReturnValue({
-      getContainerClient: mockGetContainerClient,
-    });
-
     await healthController.check(mockReq as Request, mockRes as Response);
 
     expect(mockStatus).toHaveBeenCalledWith(200);
@@ -88,10 +77,6 @@ describe('HealthController', () => {
         checkResults: expect.arrayContaining([
           expect.objectContaining({
             name: 'SQLiteConnection',
-            status: 'ok',
-          }),
-          expect.objectContaining({
-            name: 'AzureBlobStorage',
             status: 'ok',
           }),
         ]),
@@ -104,15 +89,6 @@ describe('HealthController', () => {
     Object.defineProperty(AppDataSource, 'isInitialized', { get: () => true });
     (AppDataSource.query as jest.Mock) = jest.fn().mockRejectedValue(new Error('DB Error'));
 
-    // Mock successful blob storage check
-    const mockGetProperties = jest.fn().mockResolvedValue({});
-    const mockGetContainerClient = jest.fn().mockReturnValue({
-      getProperties: mockGetProperties,
-    });
-    (createNewBlobStorageClient as jest.Mock).mockReturnValue({
-      getContainerClient: mockGetContainerClient,
-    });
-
     await healthController.check(mockReq as Request, mockRes as Response);
 
     expect(mockStatus).toHaveBeenCalledWith(500);
@@ -121,35 +97,6 @@ describe('HealthController', () => {
         checkResults: expect.arrayContaining([
           expect.objectContaining({
             name: 'SQLiteConnection',
-            status: 'failed',
-          }),
-        ]),
-      })
-    );
-  });
-
-  it('should return 500 when blob storage check fails', async () => {
-    // Mock successful database checks
-    Object.defineProperty(AppDataSource, 'isInitialized', { get: () => true });
-    (AppDataSource.query as jest.Mock) = jest
-      .fn()
-      .mockResolvedValueOnce([{ count: 1 }])
-      .mockResolvedValueOnce([{ count: 10 }])
-      .mockResolvedValueOnce([{ count: 20 }]);
-
-    // Mock blob storage failure
-    (createNewBlobStorageClient as jest.Mock).mockImplementation(() => {
-      throw new Error('Blob Storage Error');
-    });
-
-    await healthController.check(mockReq as Request, mockRes as Response);
-
-    expect(mockStatus).toHaveBeenCalledWith(500);
-    expect(mockJson).toHaveBeenCalledWith(
-      expect.objectContaining({
-        checkResults: expect.arrayContaining([
-          expect.objectContaining({
-            name: 'AzureBlobStorage',
             status: 'failed',
           }),
         ]),
