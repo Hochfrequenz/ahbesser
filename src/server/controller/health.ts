@@ -76,15 +76,6 @@ export default class HealthController {
       });
     }
 
-    // Check Azure Blob Storage connection
-    checkResults.push({
-      name: 'AzureBlobStorage',
-      label: 'Azure Blob Storage Connection',
-      notificationMessage: 'Azure Blob Storage functionality has been removed',
-      shortSummary: 'Removed',
-      status: HealthCheckStatus.OK,
-    });
-
     const response: HealthCheckResponse = {
       finishedAt: Math.floor(Date.now() / 1000),
       checkResults,
