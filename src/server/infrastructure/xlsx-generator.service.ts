@@ -9,6 +9,21 @@ export class XlsxGeneratorService {
     // Create the main data sheet
     const mainSheetData = this.prepareMainSheetData(ahb);
     const mainSheet = XLSX.utils.aoa_to_sheet(mainSheetData);
+
+    // Set column widths
+    const columnWidths = {
+      A: 14, // Segmentgruppe
+      B: 29, // Segmentname
+      C: 10, // Segment
+      D: 12, // Datenelement
+      E: 12, // Qualifier
+      F: 69, // Name
+      G: 25, // Pflichtfeld-Kennzeichen
+      H: 118, // Bedingung / Hinweis / Format
+    };
+
+    mainSheet['!cols'] = Object.values(columnWidths).map(width => ({ wch: width }));
+
     XLSX.utils.book_append_sheet(workbook, mainSheet, 'AHB');
 
     // Generate the Excel file as a buffer
