@@ -55,6 +55,7 @@
     "sqlite3": "^5.1.7",
     "tslib": "^2.8.1",
     "typeorm": "^0.3.21",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
@@ -66,6 +67,7 @@
     "@angular-eslint/template-parser": "^19.2.1",
     "@angular/cli": "^19.2.3",
     "@angular/compiler-cli": "^19.2.2",
+    "@types/express": "^4.17.21",
     "@types/jest": "^29.5.14",
     "@typescript-eslint/eslint-plugin": "^8.30.1",
     "@typescript-eslint/parser": "^8.28.0",
@@ -84,7 +86,6 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.3",
-    "typescript": "~5.8.3",
-    "@types/express": "^4.17.21"
+    "typescript": "~5.8.3"
   }
 }
