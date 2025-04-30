@@ -18,26 +18,26 @@ export class XlsxGeneratorService {
   private prepareMainSheetData(ahb: Ahb): any[][] {
     // Header row
     const headers = [
-      'Segment',
       'Segmentgruppe',
+      'Segmentname',
+      'Segment',
       'Datenelement',
-      'Bedingung',
-      'Wert',
-      'Beschreibung',
-      'AHB-Expression',
-      'Richtung',
+      'Qualifier',
+      'Name',
+      'Pflichtfeld-Kennzeichen',
+      'Bedingung / Hinweis / Format',
     ];
 
     // Data rows
     const rows = ahb.lines.map(line => [
-      line.segment_code,
       line.segment_group_key,
+      line.section_name,
+      line.segment_code,
       line.data_element,
-      line.conditions,
       line.value_pool_entry,
-      line.name || line.section_name,
-      line.ahb_expression,
-      ahb.meta.direction,
+      line.name,
+      line.ahb_expression, // This maps to Pflichtfeld-Kennzeichen
+      line.conditions, // This maps to Bedingung / Hinweis / Format
     ]);
 
     return [headers, ...rows];
