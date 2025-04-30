@@ -3,10 +3,6 @@ import { AppDataSource } from '../infrastructure/database';
 import HealthController from './health';
 import { AppError } from '../infrastructure/errors';
 
-// Mock Azure Storage Blob
-jest.mock('@azure/storage-blob', () => ({
-  BlobServiceClient: jest.fn(),
-}));
 jest.mock('../infrastructure/database');
 
 describe('HealthController', () => {
