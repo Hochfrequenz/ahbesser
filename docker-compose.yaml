@@ -1,20 +1,4 @@
 services:
-  azurite:
-    image: mcr.microsoft.com/azure-storage/azurite:latest
-    ports:
-      - 10000:10000
-    command: azurite-blob --blobHost 0.0.0.0 --skipApiVersionCheck
-    restart: unless-stopped
-
-  upload-documents:
-    build:
-      context: .
-      dockerfile: azure-mock/Dockerfile
-    environment:
-      - AZURE_STORAGE_HOST=http://azurite
-    depends_on:
-      - azurite
-
   server:
     build:
       dockerfile: ./Dockerfile
@@ -27,11 +11,7 @@ services:
       - 4000:4000
     environment:
       - PORT=4000
-      - AZURE_BLOB_STORAGE_CONNECTION_STRING=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://host.docker.internal:10000/devstoreaccount1;
-      - AHB_CONTAINER_NAME=uploaded-files
-      - FORMAT_VERSION_CONTAINER_NAME=format-versions
       - DB_7Z_ARCHIVE_PASSWORD=${DB_7Z_ARCHIVE_PASSWORD}
       - ENVIRONMENT=docker
     depends_on:
       - upload-documents
-      - azurite

@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../infrastructure/database';
-import { createNewBlobStorageClient } from '../infrastructure/azure-blob-storage-client';
 import { ExternalServiceError } from '../infrastructure/errors';
 
 enum HealthCheckStatus {
@@ -71,36 +70,6 @@ export default class HealthController {
         name: 'SQLiteConnection',
         label: 'SQLite Database Connection',
         notificationMessage: `Error: Database connection failed: ${(error as Error).message}`,
-        shortSummary: 'Failed',
-        status: HealthCheckStatus.FAILED,
-        meta: { error: (error as Error).message },
-      });
-    }
-
-    // Check Azure Blob Storage connection
-    try {
-      const blobClient = createNewBlobStorageClient();
-      const containerName = process.env['AHB_CONTAINER_NAME'];
-
-      if (!containerName) {
-        throw new Error('AHB_CONTAINER_NAME environment variable is not set');
-      }
-
-      const containerClient = blobClient.getContainerClient(containerName);
-      await containerClient.getProperties();
-
-      checkResults.push({
-        name: 'AzureBlobStorage',
-        label: 'Azure Blob Storage Connection',
-        notificationMessage: 'Azure Blob Storage connection successful',
-        shortSummary: 'Connected',
-        status: HealthCheckStatus.OK,
-      });
-    } catch (error) {
-      checkResults.push({
-        name: 'AzureBlobStorage',
-        label: 'Azure Blob Storage Connection',
-        notificationMessage: `Blob storage connection failed: ${(error as Error).message}`,
         shortSummary: 'Failed',
         status: HealthCheckStatus.FAILED,
         meta: { error: (error as Error).message },
