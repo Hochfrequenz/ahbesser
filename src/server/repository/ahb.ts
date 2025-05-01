@@ -25,7 +25,7 @@ export default class AHBRepository {
       const ahb = await this.getFromDatabase(pruefi, formatVersion);
       return this.xlsxGenerator.generateXlsx(ahb);
     } else {
-      return this.getFromBlobStorage(pruefi, formatVersion, type);
+      throw new Error('Unsupported file type');
     }
   }
 
@@ -84,13 +84,5 @@ export default class AHBRepository {
       meta: this.mapMetaInformation(firstLine),
       lines: lines.map(line => this.mapLine(line)),
     };
-  }
-
-  private async getFromBlobStorage(
-    pruefi: string,
-    formatVersion: string,
-    type: FileType
-  ): Promise<Buffer> {
-    throw new Error('Blob storage functionality has been removed');
   }
 }

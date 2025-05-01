@@ -30,7 +30,7 @@ export class XlsxGeneratorService {
     return XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
   }
 
-  private prepareMainSheetData(ahb: Ahb): any[][] {
+  private prepareMainSheetData(ahb: Ahb): string[][] {
     // Header row
     const headers = [
       'Segmentgruppe',
@@ -45,14 +45,14 @@ export class XlsxGeneratorService {
 
     // Data rows
     const rows = ahb.lines.map(line => [
-      line.segment_group_key,
-      line.section_name,
-      line.segment_code,
-      line.data_element,
-      line.value_pool_entry,
-      line.name,
-      line.ahb_expression, // This maps to Pflichtfeld-Kennzeichen
-      line.conditions, // This maps to Bedingung / Hinweis / Format
+      line.segment_group_key || '',
+      line.section_name || '',
+      line.segment_code || '',
+      line.data_element || '',
+      line.value_pool_entry || '',
+      line.name || '',
+      line.ahb_expression || '', // This maps to Pflichtfeld-Kennzeichen
+      line.conditions || '', // This maps to Bedingung / Hinweis / Format
     ]);
 
     return [headers, ...rows];
