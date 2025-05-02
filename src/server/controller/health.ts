@@ -48,9 +48,14 @@ export default class HealthController {
       }
       await AppDataSource.query('SELECT 1');
 
-      // Check if tables exist and have data
-      const [vAhbtabellenCount] = await AppDataSource.query(
-        'SELECT COUNT(*) as count FROM v_ahbtabellen'
+      // Get Prüfidentifikatoren count per format version
+      const pruefidentifikatorenCount = await AppDataSource.query(
+        `SELECT
+          format_version,
+          COUNT(DISTINCT pruefidentifikator) as unique_pruefidentifikatoren_count
+        FROM v_ahbtabellen
+        GROUP BY format_version
+        ORDER BY format_version`
       );
 
       checkResults.push({
@@ -60,7 +65,7 @@ export default class HealthController {
         shortSummary: `Connected - Tables verified`,
         status: HealthCheckStatus.OK,
         meta: {
-          vAhbtabellenCount: vAhbtabellenCount.count,
+          pruefidentifikatorenCount: pruefidentifikatorenCount,
         },
       });
     } catch (error) {
