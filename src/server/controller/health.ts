@@ -49,10 +49,9 @@ export default class HealthController {
       await AppDataSource.query('SELECT 1');
 
       // Check if tables exist and have data
-      const [ahbMetaCount] = await AppDataSource.query(
-        'SELECT COUNT(*) as count FROM ahbmetainformation'
+      const [vAhbtabellenCount] = await AppDataSource.query(
+        'SELECT COUNT(*) as count FROM v_ahbtabellen'
       );
-      const [ahbLineCount] = await AppDataSource.query('SELECT COUNT(*) as count FROM ahbline');
 
       checkResults.push({
         name: 'SQLiteConnection',
@@ -61,8 +60,7 @@ export default class HealthController {
         shortSummary: `Connected - Tables verified`,
         status: HealthCheckStatus.OK,
         meta: {
-          ahbMetaCount: ahbMetaCount.count,
-          ahbLineCount: ahbLineCount.count,
+          vAhbtabellenCount: vAhbtabellenCount.count,
         },
       });
     } catch (error) {
