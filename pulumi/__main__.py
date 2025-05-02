@@ -17,12 +17,6 @@ image_name_with_tag = f"{image_name}:{image_tag}"
 ghcr_token = config.require_secret("ghcr_token")
 assert ghcr_token, "ghcr_token must be set"
 
-ahb_blob_container_name = config.get("ahbBlobContainerName")
-assert ahb_blob_container_name, "ahbBlobContainerName must be set"
-
-format_version_container_name = config.get("formatVersionContainerName")
-assert format_version_container_name, "formatVersionContainerName must be set"
-
 container_port = config.get_int("containerPort")
 assert container_port, "containerPort must be set"
 
@@ -60,30 +54,6 @@ storage_account = azure_native.storage.StorageAccount(
     kind=azure_native.storage.Kind.STORAGE_V2,
 )
 
-# Create an Azure Blob Container
-blob_container = azure_native.storage.BlobContainer(
-    ahb_blob_container_name,
-    resource_group_name=resource_group.name,
-    account_name=storage_account.name,
-    public_access=azure_native.storage.PublicAccess.NONE,
-)
-
-# Securely retrieve the primary storage account key
-primary_key = pulumi.Output.all(resource_group.name, storage_account.name).apply(
-    lambda args: azure_native.storage.list_storage_account_keys(
-        resource_group_name=args[0], account_name=args[1]
-    )
-    .keys[0]
-    .value
-)
-
-# Generate the connection string securely
-azure_blob_storage_connection_string = pulumi.Output.all(
-    storage_account.name, primary_key
-).apply(
-    lambda args: f"DefaultEndpointsProtocol=https;AccountName={args[0]};AccountKey={args[1]};EndpointSuffix=core.windows.net"
-)
-
 # Create an App Service Plan
 app_service_plan = azure_native.web.AppServicePlan(
     "ahb-tabellen-plan",
@@ -113,17 +83,6 @@ web_app = azure_native.web.WebApp(
                 name="DOCKER_REGISTRY_SERVER_PASSWORD", value=ghcr_token
             ),  # Provide GitHub token or PAT
             azure_native.web.NameValuePairArgs(name="PORT", value=str(container_port)),
-            azure_native.web.NameValuePairArgs(
-                name="AZURE_BLOB_STORAGE_CONNECTION_STRING",
-                value=azure_blob_storage_connection_string,
-            ),
-            azure_native.web.NameValuePairArgs(
-                name="AHB_CONTAINER_NAME", value=ahb_blob_container_name
-            ),
-            azure_native.web.NameValuePairArgs(
-                name="FORMAT_VERSION_CONTAINER_NAME",
-                value=format_version_container_name,
-            ),
             azure_native.web.NameValuePairArgs(
                 name="BEDINGUNGSBAUM_BASE_URL", value=bedingungsbaum_base_url
             ),
