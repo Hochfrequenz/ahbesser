@@ -48,11 +48,15 @@ export default class HealthController {
       }
       await AppDataSource.query('SELECT 1');
 
-      // Check if tables exist and have data
-      const [ahbMetaCount] = await AppDataSource.query(
-        'SELECT COUNT(*) as count FROM ahbmetainformation'
+      // Get Prüfidentifikatoren count per format version
+      const pruefidentifikatorenCount = await AppDataSource.query(
+        `SELECT
+          format_version,
+          COUNT(DISTINCT pruefidentifikator) as unique_pruefidentifikatoren_count
+        FROM v_ahbtabellen
+        GROUP BY format_version
+        ORDER BY format_version`
       );
-      const [ahbLineCount] = await AppDataSource.query('SELECT COUNT(*) as count FROM ahbline');
 
       checkResults.push({
         name: 'SQLiteConnection',
@@ -61,8 +65,7 @@ export default class HealthController {
         shortSummary: `Connected - Tables verified`,
         status: HealthCheckStatus.OK,
         meta: {
-          ahbMetaCount: ahbMetaCount.count,
-          ahbLineCount: ahbLineCount.count,
+          pruefidentifikatorenCount: pruefidentifikatorenCount,
         },
       });
     } catch (error) {
