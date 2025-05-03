@@ -19,11 +19,17 @@ export class LandingPageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    const baseUrl = environment.baseUrl;
+
     this.meta.addTags([
       {
         name: 'description',
         content:
           'AHB-Tabellen ist ein intuitives Tool, das die Navigation in Anwendungshandbüchern vereinfacht, indem es die Daten pro Prüfidentifikator klar darstellt.',
+      },
+      {
+        name: 'keywords',
+        content: 'AHB, Anwendungshandbuch, Energie, Hochfrequenz, Tabellen, Prüfidentifikator',
       },
       { property: 'og:title', content: 'AHB Tabellen - Anwendungshandbücher für Menschen' },
       {
@@ -32,14 +38,28 @@ export class LandingPageComponent implements OnInit {
           'AHB-Tabellen ist ein intuitives Tool, das die Navigation in Anwendungshandbüchern vereinfacht, indem es die Daten pro Prüfidentifikator klar darstellt.',
       },
       { property: 'og:type', content: 'website' },
-      { property: 'og:url', content: window.location.href },
-      { property: 'twitter:card', content: 'summary' },
+      { property: 'og:url', content: baseUrl },
+      { property: 'og:image', content: `${baseUrl}/assets/logo.png` },
+      { property: 'og:image:width', content: '1200' },
+      { property: 'og:image:height', content: '630' },
+      { property: 'og:site_name', content: 'AHB Tabellen' },
+      { property: 'twitter:card', content: 'summary_large_image' },
       { property: 'twitter:title', content: 'AHB Tabellen - Anwendungshandbücher für Menschen' },
       {
         property: 'twitter:description',
         content:
           'AHB-Tabellen ist ein intuitives Tool, das die Navigation in Anwendungshandbüchern vereinfacht, indem es die Daten pro Prüfidentifikator klar darstellt.',
       },
+      { property: 'twitter:image', content: `${baseUrl}/assets/logo.png` },
+      { property: 'linkedin:title', content: 'AHB Tabellen - Anwendungshandbücher für Menschen' },
+      {
+        property: 'linkedin:description',
+        content:
+          'AHB-Tabellen ist ein intuitives Tool, das die Navigation in Anwendungshandbüchern vereinfacht, indem es die Daten pro Prüfidentifikator klar darstellt.',
+      },
+      { property: 'linkedin:image', content: `${baseUrl}/assets/logo.png` },
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: 'Hochfrequenz' },
     ]);
   }
 
