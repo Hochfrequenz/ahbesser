@@ -5,4 +5,5 @@ export interface EnvironmentInterface {
   ebdBaseUrl: string;
   auth0Domain: string;
   auth0ClientId: string;
+  baseUrl: string;
 }
