@@ -9,4 +9,5 @@ export const environment: EnvironmentInterface = {
   ebdBaseUrl: 'https://ebd.stage.hochfrequenz.de',
   auth0Domain: 'auth.hochfrequenz.de',
   auth0ClientId: 'Hku0EniRjy4B2krnx1sCwTIOzAiVta1B',
+  baseUrl: 'http://localhost:4200',
 };

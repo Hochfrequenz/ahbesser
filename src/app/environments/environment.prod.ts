@@ -7,4 +7,5 @@ export const environment: EnvironmentInterface = {
   ebdBaseUrl: 'https://ebd.hochfrequenz.de',
   auth0Domain: 'auth.hochfrequenz.de',
   auth0ClientId: 'VSkXGqlTD7Rf5Q4n9a0h00rInEyL2ZQj',
+  baseUrl: 'https://ahb-tabellen.hochfrequenz.de',
 };
