@@ -5,6 +5,7 @@ export const environment: EnvironmentInterface = {
   apiUrl: 'https://ahb-tabellen.stage.hochfrequenz.de',
   bedingungsbaumBaseUrl: 'https://bedingungsbaum.stage.hochfrequenz.de',
   ebdBaseUrl: 'https://ebd.stage.hochfrequenz.de',
+  fristenkalenderBaseUrl: 'https://fristenkalender.stage.hochfrequenz.de',
   auth0Domain: 'auth.hochfrequenz.de',
   auth0ClientId: 'Hku0EniRjy4B2krnx1sCwTIOzAiVta1B',
   baseUrl: 'https://ahb-tabellen.stage.hochfrequenz.de',
