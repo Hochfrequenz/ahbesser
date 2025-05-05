@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: AHBesser API Documentation
+  title: AHB Tabellen API Documentation
   description: >
-    This is the description for the API of the ahbesser web application.
+    This is the description for the API of the ahb-tabellen web application.
 
     Some useful links:
     - [The machine-readable-anwendungshandbuecher repository](https://github.com/Hochfrequenz/machine-readable_anwendungshandbuecher)
@@ -18,7 +18,7 @@ externalDocs:
   description: JSON files of the AHB documents
   url: https://github.com/Hochfrequenz/machine-readable_anwendungshandbuecher
 servers:
-  - url: https://ahbesser.hochfrequenz.de/api/v1
+  - url: https://ahb-tabellen.hochfrequenz.de/api/v1
 tags:
   - name: ahb
     description: Everything about AHB documents
@@ -67,7 +67,7 @@ paths:
                 type: string
                 format: binary
       security:
-        - ahbesser_auth:
+        - ahb_tabellen_auth:
             - read:ahb
   /api/format-versions:
     get:
@@ -222,7 +222,7 @@ components:
           type: string
           example: 'main'
   securitySchemes:
-    ahbesser_auth:
+    ahb_tabellen_auth:
       type: oauth2
       flows:
         implicit:
