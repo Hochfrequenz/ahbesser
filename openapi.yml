@@ -119,7 +119,7 @@ paths:
     get:
       tags:
         - maintenance
-      summary: Get the current version of the AHBesser application
+      summary: Get the current version of the AHB-Tabellen application
       responses:
         '200':
           description: successful operation
