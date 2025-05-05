@@ -1,4 +1,4 @@
-# AHBesser (AHB-Tabellen) Web Application
+# AHB-Tabellen Web Application
 
 ## ℹ️ Overview
 
@@ -14,23 +14,26 @@ This is our test environment where we deploy the latest changes to test them bef
 
 ### 🏛 Architecture
 
+The AHB tables application follows a simple but effective architecture for processing and displaying Anwendungshandbücher (AHB) data:
+
+1. **Data Source**: The process begins with XML files from edi@energy, which contain the official AHB specifications.
+2. **Data Processing**: Our Python package `fundamend` processes these XML files, extracting and structuring the data into a SQLite database format.
+3. **Web Application**: The AHB tables web application reads directly from the SQLite database to display the structured AHB information to users.
+
+This architecture ensures data consistency and provides a reliable way to access and display AHB information.
+
 ```mermaid
 flowchart TD
-    A("edi-energy-mirror:
-    raw documents (PDF, docx)") -->|kohlrAHBi🥬| B("machine-readable-
-    anwendungshandbücher")
-    B -->|sync upload🔄| C("Azure Blob Storage")
-    C <--> D("AHBesser
-    (AHB tables)")
+    A("edi@energy:
+    XML files") -->|fundamend| B("SQLite Database")
+    B -->|read| C("AHB tables
+    web application")
 ```
 
 ### 📂 Project Structure
 
 ```plaintext
 .
-├── azure-mock/
-    ├── data/                     # contains AHB data stored in machine-readable_anwendungshandbuecher repository
-    └── upload-documents.ts       # script to upload data/ directory to azure blob storage
 ├── src/
     ├── app/
         ├── core/
