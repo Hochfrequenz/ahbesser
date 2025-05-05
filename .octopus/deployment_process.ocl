@@ -9,7 +9,7 @@ step "copy-repo-to-tmp-directory" {
         properties = {
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "github-feed"
-            Octopus.Action.Package.PackageId = "Hochfrequenz/ahbesser"
+            Octopus.Action.Package.PackageId = "Hochfrequenz/ahb-tabellen"
             Octopus.Action.Script.ScriptFileName = "CopyToTmp.sh"
             Octopus.Action.Script.ScriptSource = "Package"
         }
@@ -18,7 +18,7 @@ step "copy-repo-to-tmp-directory" {
         packages {
             acquisition_location = "Server"
             feed = "github-feed"
-            package_id = "Hochfrequenz/ahbesser"
+            package_id = "Hochfrequenz/ahb-tabellen"
             properties = {
                 SelectionMode = "immediate"
             }
