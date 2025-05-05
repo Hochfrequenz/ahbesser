@@ -25,7 +25,7 @@ export class MaintenanceService extends BaseService {
   static readonly VersionGetPath = '/version';
 
   /**
-   * Get the current version of the AHBesser application.
+   * Get the current version of the AHB-Tabellen application.
    *
    *
    *
@@ -39,7 +39,7 @@ export class MaintenanceService extends BaseService {
   }
 
   /**
-   * Get the current version of the AHBesser application.
+   * Get the current version of the AHB-Tabellen application.
    *
    *
    *
