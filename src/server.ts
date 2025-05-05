@@ -23,7 +23,7 @@ server.use(
   })
 );
 
-const distFolder = join(process.cwd(), 'dist/ahbesser/browser');
+const distFolder = join(process.cwd(), 'dist/ahb-tabellen/browser');
 const indexHtml = 'index.html';
 
 // Initialize database connection
