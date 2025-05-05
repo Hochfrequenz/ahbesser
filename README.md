@@ -26,7 +26,7 @@ This architecture ensures data consistency and provides a reliable way to access
 flowchart TD
     A("edi@energy:
     XML files") -->|fundamend| B("SQLite Database")
-    B -->|read| C("AHB tables
+    B -->|read| C("AHB-Tabellen
     web application")
 ```
 
