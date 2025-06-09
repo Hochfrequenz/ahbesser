@@ -53,7 +53,7 @@
     "rxjs": "~7.8.2",
     "sqlite3": "^5.1.7",
     "tslib": "^2.8.1",
-    "typeorm": "^0.3.23",
+    "typeorm": "^0.3.24",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zone.js": "~0.15.1"
   },
