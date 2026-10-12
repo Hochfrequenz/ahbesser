@@ -96,7 +96,7 @@
     "npm-watch": "^0.13.0",
     "postcss": "^8.5.28",
     "tailwindcss": "^4.1.18",
-    "tsx": "^4.23.13",
+    "tsx": "^4.23.15",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.71.0"
   },
