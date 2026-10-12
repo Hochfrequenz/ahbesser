@@ -50,7 +50,7 @@
     "@azure/msal-browser": "^5.23.0",
     "@hochfrequenz/efoli": "^2.0.1",
     "@mdi/font": "^7.4.47",
-    "@modelcontextprotocol/sdk": "^1.31.0",
+    "@modelcontextprotocol/sdk": "^1.32.1",
     "cors": "^2.8.5",
     "diff": "^9.0.0",
     "dotenv": "^18.0.3",
