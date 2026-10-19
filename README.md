@@ -206,6 +206,8 @@ If no provider is set, the MCP endpoint runs **unauthenticated** (useful for loc
 
 The endpoint URL is `https://ahb-tabellen.hochfrequenz.de/mcp` (production) or `https://ahb-tabellen.stage.hochfrequenz.de/mcp` (stage). When auth is enabled the client will open a browser for the Auth0 login on first connect.
 
+Client registration: the Auth0 tenant uses OAuth **Client ID Metadata Documents** (CIMD). Claude (claude.ai / Desktop), Claude Code (v2.1.81 or newer), VS Code (GitHub Copilot) and opencode identify themselves with their published metadata URL and need no registration. Dynamic Client Registration is **disabled** on the tenant (it created one Auth0 application per install and ran into the tenant's application limit), so a client without CIMD support fails with "does not support dynamic client registration": update it, or ask us for a pre-registered client id (`claude mcp add … --client-id`). A CIMD client that is not set up on the tenant fails with `Unknown client`; ask us to register it. The tenant setup is documented in the private repo ahbicht-functions (`docs/auth0-mcp-client-registration.md`).
+
 **Claude (Claude Code / Claude Desktop)** — add a remote MCP server:
 
 ```bash

@@ -1,3 +1,5 @@
+> **Note (2026-10-08):** historical plan. Client registration no longer uses DCR; the tenant uses Client ID Metadata Documents, see the README section "Connecting a client".
+
 # MCP Server over HTTP with Auth0 (Round 2)
 
 ## Goal
