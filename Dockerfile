@@ -9,7 +9,7 @@
 
 # --- dependencies -------------------------------------------------------------------------
 # Separate from the build stage so a source-only change does not reinstall node_modules.
-FROM node:26.11-alpine AS deps
+FROM node:26.12-alpine AS deps
 WORKDIR /service
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -21,7 +21,7 @@ RUN npm ci
 #
 # Only the `production` configuration is built: one image serves every environment, configured
 # at runtime through /config.js. See src/server/infrastructure/app-config.ts.
-FROM node:26.11-alpine AS build
+FROM node:26.12-alpine AS build
 WORKDIR /service
 COPY --from=deps /service/node_modules ./node_modules
 COPY package.json package-lock.json angular.json tailwind.config.js postcss.config.json ./
@@ -32,14 +32,14 @@ RUN npm run ng:build -- --configuration=production \
 
 # --- production dependencies ---------------------------------------------------------------
 # Pruned rather than reinstalled, so the native sqlite3 binding built in `deps` is reused.
-FROM node:26.11-alpine AS prod-deps
+FROM node:26.12-alpine AS prod-deps
 WORKDIR /service
 COPY --from=deps /service/node_modules ./node_modules
 COPY package.json package-lock.json ./
 RUN npm prune --omit=dev
 
 # --- runtime -------------------------------------------------------------------------------
-FROM node:26.11-alpine AS runtime
+FROM node:26.12-alpine AS runtime
 
 ARG BUILD_DATE
 ARG COMMIT_DATE
