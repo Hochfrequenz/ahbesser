@@ -1,4 +1,4 @@
-import { Component, input, output, effect, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, input, output, effect, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -6,7 +6,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
 import { PruefiInputComponent } from '../pruefi-input/pruefi-input.component';
 import { FormatVersionSelectComponent } from '../format-version-select/format-version-select.component';
 
@@ -18,8 +17,6 @@ import { FormatVersionSelectComponent } from '../format-version-select/format-ve
   templateUrl: './ahb-search-form-header.component.html',
 })
 export class AhbSearchFormHeaderComponent {
-  private readonly router = inject(Router);
-
   formatVersion = input.required<string>();
   pruefi = input.required<string>();
 
@@ -47,7 +44,11 @@ export class AhbSearchFormHeaderComponent {
       }
     });
 
-    // Handle form control changes
+    // Emit the changed values so the hosting page can navigate. We deliberately emit the
+    // value handed to us by `valueChanges` and do NOT navigate from here: when a single
+    // control changes, its `valueChanges` fires before the parent FormGroup's aggregate
+    // `.value`/`.valid` are recomputed, so re-reading `headerSearchForm.value` here would
+    // yield the previous pruefi and navigate back to it (see issue #941).
     this.headerSearchForm.get('formatVersion')?.valueChanges.subscribe(value => {
       if (value) {
         this.formatVersionChange.emit(value);
@@ -57,18 +58,7 @@ export class AhbSearchFormHeaderComponent {
     this.headerSearchForm.get('pruefi')?.valueChanges.subscribe(value => {
       if (value) {
         this.pruefiChange.emit(value);
-        this.navigateToAhb();
       }
     });
-  }
-
-  private navigateToAhb() {
-    if (this.headerSearchForm.valid) {
-      this.router.navigate([
-        '/ahb',
-        this.headerSearchForm.value.formatVersion,
-        this.headerSearchForm.value.pruefi,
-      ]);
-    }
   }
 }
