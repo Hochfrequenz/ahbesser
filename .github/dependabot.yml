@@ -29,3 +29,9 @@ updates:
       interval: 'weekly'
     commit-message:
       prefix: 'chore'
+
+  # Keep git submodules up to date
+  - package-ecosystem: 'gitsubmodule'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
