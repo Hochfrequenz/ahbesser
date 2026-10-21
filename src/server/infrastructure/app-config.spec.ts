@@ -43,6 +43,19 @@ describe('buildRuntimeConfig', () => {
     });
   });
 
+  it('maps the API token audience and scope', () => {
+    expect(
+      buildRuntimeConfig({
+        APP_AUTH0_AUDIENCE: 'https://host/mcp',
+        APP_ENTRA_API_SCOPE: 'api://abc/access_as_user',
+      })
+    ).toEqual({ auth0Audience: 'https://host/mcp', entraApiScope: 'api://abc/access_as_user' });
+  });
+
+  it('leaves the API token audience and scope out when empty', () => {
+    expect(buildRuntimeConfig({ APP_AUTH0_AUDIENCE: '', APP_ENTRA_API_SCOPE: '' })).toEqual({});
+  });
+
   it('rejects a boolean that is neither "true" nor "false" instead of silently reading it as false', () => {
     expect(() => buildRuntimeConfig({ APP_ALLOW_SEARCH_INDEXING: 'yes' })).toThrow(
       /APP_ALLOW_SEARCH_INDEXING must be "true" or "false"/

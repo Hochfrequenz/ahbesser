@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { AuthService as Auth0Service } from '@auth0/auth0-angular';
-import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { AccountInfo, InteractionRequiredAuthError } from '@azure/msal-browser';
+import { BehaviorSubject, combineLatest, defer, merge, Observable, of } from 'rxjs';
+import { distinctUntilChanged, filter, map, switchMap, take } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { AUTH_IS_DEVELOPMENT, MSAL_CLIENT } from './msal.tokens';
 import { safeStorageGet, safeStorageRemove, safeStorageSet } from './safe-storage';
@@ -17,6 +18,12 @@ export interface AuthUser {
 }
 
 const ACTIVE_PROVIDER_KEY = 'ahb.activeAuthProvider';
+
+/** sessionStorage key holding when we last redirected to Microsoft for re-authentication (ms). */
+const REAUTH_AT_KEY = 'ahb.apiReauthAt';
+
+/** Within this window a second re-auth redirect is refused, to break redirect loops. */
+const REAUTH_LOOP_WINDOW_MS = 60_000;
 
 /** sessionStorage key holding the route the user was heading to before being asked to sign in. */
 export const POST_LOGIN_TARGET_KEY = 'ahb.postLoginTarget';
@@ -45,6 +52,9 @@ export class AuthFacade {
 
   /** In-flight MSAL initialization, shared across callers so init/redirect handling runs once. */
   private initialization?: Promise<void>;
+
+  /** In-flight redirect to Microsoft sign-in, shared so concurrent API calls trigger only one. */
+  private reauthRedirect?: Promise<never>;
 
   readonly isAuthenticated$: Observable<boolean>;
   readonly isLoading$: Observable<boolean>;
@@ -135,6 +145,101 @@ export class AuthFacade {
   }
 
   /**
+   * Access token for the backend API, from the provider of the current user — exactly the one
+   * `user$` reports, so the tie-break and the "anonymous" case cannot drift from what the UI shows.
+   * `user$` only emits once Auth0 has finished loading, which also keeps us from asking Auth0 for a
+   * token while it is still processing its redirect callback.
+   *
+   * Emits `null` — meaning "send no token" — under the dev stub, when signed out, or when the
+   * audience/scope for the user's provider is not configured; the API then answers 401, which is
+   * loud rather than silent.
+   *
+   * Failure handling differs by provider: Microsoft `interaction_required` triggers one redirect to
+   * sign in again; an Auth0 failure (`login_required`, `missing_refresh_token`) errors the request
+   * and the user recovers by logging in again.
+   */
+  getAccessToken(): Observable<string | null> {
+    if (this.isDevelopment) {
+      return of(null);
+    }
+    return this.user$.pipe(
+      take(1),
+      switchMap((user): Observable<string | null> => {
+        if (user?.provider === 'microsoft') {
+          const account = this.msalAccount();
+          const scope = environment.entraApiScope;
+          return account && scope ? defer(() => this.acquireMsalToken(account, scope)) : of(null);
+        }
+        if (user?.provider === 'auth0') {
+          const audience = environment.auth0Audience;
+          return audience
+            ? this.auth0
+                .getAccessTokenSilently({ authorizationParams: { audience } })
+                .pipe(map(token => token ?? null))
+            : of(null);
+        }
+        return of(null);
+      })
+    );
+  }
+
+  private async acquireMsalToken(account: AccountInfo, scope: string): Promise<string> {
+    try {
+      const result = await this.msal.acquireTokenSilent({ scopes: [scope], account });
+      safeStorageRemove(sessionStorage, REAUTH_AT_KEY);
+      return result.accessToken;
+    } catch (error) {
+      if (!(error instanceof InteractionRequiredAuthError)) {
+        throw error;
+      }
+      // A page load fires several API calls at once; they must share ONE redirect, or MSAL rejects
+      // the later ones with `interaction_in_progress` and those surface as spurious HTTP errors.
+      this.reauthRedirect ??= this.redirectToMicrosoft(account, scope, error);
+      return this.reauthRedirect;
+    }
+  }
+
+  /**
+   * The silent path cannot renew the session (e.g. refresh token expired): send the user through
+   * Microsoft sign-in again, returning them to where they were. The page navigates away, so on
+   * success the returned promise never settles — resolving or rejecting would fire a spurious API
+   * request / error right before the redirect.
+   *
+   * Loop guard: if we already redirected less than a minute ago and the silent path still needs
+   * interaction, redirecting again would loop forever, so the original error is surfaced instead.
+   */
+  private redirectToMicrosoft(
+    account: AccountInfo,
+    scope: string,
+    cause: InteractionRequiredAuthError
+  ): Promise<never> {
+    const lastAt = Number(safeStorageGet(sessionStorage, REAUTH_AT_KEY));
+    if (Number.isFinite(lastAt) && lastAt > 0 && Date.now() - lastAt < REAUTH_LOOP_WINDOW_MS) {
+      return Promise.reject(cause).catch((error: unknown) => {
+        this.reauthRedirect = undefined; // do not memoise the refusal
+        throw error;
+      });
+    }
+    safeStorageSet(sessionStorage, REAUTH_AT_KEY, String(Date.now()));
+    const target = safeInternalTarget(window.location.pathname + window.location.search);
+    // Mirror login(): never leave a stale target behind when there is nothing to carry.
+    if (target !== '/') {
+      safeStorageSet(sessionStorage, POST_LOGIN_TARGET_KEY, target);
+    } else {
+      safeStorageRemove(sessionStorage, POST_LOGIN_TARGET_KEY);
+    }
+    return this.msal.acquireTokenRedirect({ scopes: [scope], account }).then(
+      () => new Promise<never>(() => undefined),
+      (error: unknown) => {
+        // No redirect happened, so it must not count against the loop guard.
+        safeStorageRemove(sessionStorage, REAUTH_AT_KEY);
+        this.reauthRedirect = undefined; // allow a later attempt to retry
+        throw error;
+      }
+    );
+  }
+
+  /**
    * Initialize MSAL and process any pending redirect response. Both the app initializer and the
    * MSAL callback route call this on the redirect round-trip, so it is idempotent: the in-flight
    * promise is cached and reused (and cleared on failure so a later call can retry). No-op under
@@ -166,6 +271,13 @@ export class AuthFacade {
     this.msalAuthenticated$.next(this.msal.getAllAccounts().length > 0);
   }
 
+  /** The live Microsoft account, if any — never read before `initializeMsal()` has run. */
+  private msalAccount(): AccountInfo | null {
+    return this.msalAuthenticated$.value
+      ? (this.msal.getActiveAccount() ?? this.msal.getAllAccounts()[0] ?? null)
+      : null;
+  }
+
   private resolveUser(
     auth0User:
       { email?: string | null; name?: string | null; sub?: string | null } | null | undefined,
@@ -173,9 +285,7 @@ export class AuthFacade {
   ): AuthUser | null {
     // Resolve from the actual sessions present, not the persisted hint: a live MSAL account must
     // surface a user even if the active-provider key was cleared or never written.
-    const account = msalAuthed
-      ? (this.msal.getActiveAccount() ?? this.msal.getAllAccounts()[0])
-      : null;
+    const account = msalAuthed ? this.msalAccount() : null;
     const microsoftUser: AuthUser | null = account
       ? {
           email: account.username,

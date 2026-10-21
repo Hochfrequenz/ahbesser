@@ -24,9 +24,11 @@ export const ENV_VARS = {
   fristenkalenderBaseUrl: 'APP_FRISTENKALENDER_BASE_URL',
   auth0Domain: 'APP_AUTH0_DOMAIN',
   auth0ClientId: 'APP_AUTH0_CLIENT_ID',
+  auth0Audience: 'APP_AUTH0_AUDIENCE',
   entraClientId: 'APP_ENTRA_CLIENT_ID',
   entraAuthority: 'APP_ENTRA_AUTHORITY',
   entraScopes: 'APP_ENTRA_SCOPES',
+  entraApiScope: 'APP_ENTRA_API_SCOPE',
   warmupUrl: 'APP_WARMUP_URL',
   allowSearchIndexing: 'APP_ALLOW_SEARCH_INDEXING',
   enablePruefiComparison: 'APP_ENABLE_PRUEFI_COMPARISON',
@@ -94,6 +96,8 @@ export function buildRuntimeConfig(env: NodeJS.ProcessEnv = process.env): Runtim
   setIfPresent(config, 'entraClientId', readString(env, ENV_VARS.entraClientId));
   setIfPresent(config, 'entraAuthority', readString(env, ENV_VARS.entraAuthority));
   setIfPresent(config, 'entraScopes', readList(env, ENV_VARS.entraScopes));
+  setIfPresent(config, 'auth0Audience', readString(env, ENV_VARS.auth0Audience));
+  setIfPresent(config, 'entraApiScope', readString(env, ENV_VARS.entraApiScope));
   setIfPresent(config, 'warmupUrl', readString(env, ENV_VARS.warmupUrl));
   setIfPresent(config, 'allowSearchIndexing', readBoolean(env, ENV_VARS.allowSearchIndexing));
   setIfPresent(config, 'enablePruefiComparison', readBoolean(env, ENV_VARS.enablePruefiComparison));

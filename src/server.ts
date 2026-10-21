@@ -7,6 +7,7 @@ import cors from 'cors';
 import router from './server/infrastructure/api.routes';
 import { httpErrorHandler } from './server/infrastructure/errors';
 import { AppDataSource } from './server/infrastructure/database';
+import { requireApiAuth } from './server/infrastructure/api-auth';
 import { mountMcp } from './server/mcp/http';
 import {
   buildRuntimeConfig,
@@ -75,7 +76,10 @@ server.get('/readiness', (_, res) =>
   databaseReady ? res.send() : res.status(503).send({ status: 'database not ready' })
 );
 
-server.use('/api', router);
+// Every /api route requires a valid Auth0 / Entra access token, except the few public paths
+// listed in api-auth.ts. The root probe routes above (/version, /health, /readiness) are
+// registered before this and stay open.
+server.use('/api', requireApiAuth(), router);
 
 // Mount the MCP server (Streamable HTTP) + its OAuth metadata. MUST be registered before
 // the static/catch-all routes below so /mcp and /.well-known are not shadowed by the SPA.

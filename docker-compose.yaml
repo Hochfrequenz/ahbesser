@@ -30,6 +30,8 @@ services:
     environment:
       PORT: 3000
       ENVIRONMENT: docker
+      # The local stack has no Auth0/Entra configuration (and the SPA runs on its dev stub there).
+      API_AUTH_DISABLED: 'true'
       AHB_DB_PATH: /data/ahb.db
       OH_DEAR_HEALTH_CHECK_SECRET: ${OH_DEAR_HEALTH_CHECK_SECRET:-local-health-check-secret}
       # Runtime configuration for the frontend, served at /config.js. Anything left unset keeps

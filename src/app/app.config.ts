@@ -10,9 +10,10 @@ import { Title } from '@angular/platform-browser';
 
 import { routes } from './app.routes';
 import { ApiModule } from './core/api';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { environment } from './environments/environment';
 import { provideAuth0 } from '@auth0/auth0-angular';
+import { apiAuthInterceptor } from './core/auth/api-auth.interceptor';
 import { AuthFacade } from './core/auth/auth.facade';
 import { computeAuthIsDevelopment } from './core/auth/msal.tokens';
 
@@ -27,8 +28,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding()),
     provideAnimations(),
     Title,
+    provideHttpClient(withInterceptors([apiAuthInterceptor])),
     importProvidersFrom(
-      HttpClientModule,
       ApiModule.forRoot({
         rootUrl: environment.apiUrl,
       })
@@ -39,6 +40,7 @@ export const appConfig: ApplicationConfig = {
       useRefreshTokens: true,
       authorizationParams: {
         redirect_uri: window.location.origin,
+        ...(environment.auth0Audience ? { audience: environment.auth0Audience } : {}),
       },
       ...(isDevelopmentEnvironment() && {
         skipRedirectCallback: true,

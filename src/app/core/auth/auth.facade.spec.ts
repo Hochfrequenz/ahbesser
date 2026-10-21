@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { AuthService } from '@auth0/auth0-angular';
-import { firstValueFrom, Observable, Subject, of } from 'rxjs';
+import { InteractionRequiredAuthError } from '@azure/msal-browser';
+import { firstValueFrom, Observable, Subject, of, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { AuthFacade, POST_LOGIN_TARGET_KEY } from './auth.facade';
 import { AUTH_IS_DEVELOPMENT, MSAL_CLIENT } from './msal.tokens';
 
@@ -10,6 +12,7 @@ type MockAuth0 = {
   user$: Observable<{ email?: string; name?: string; sub?: string } | null>;
   loginWithRedirect: jest.Mock;
   logout: jest.Mock;
+  getAccessTokenSilently: jest.Mock;
 };
 
 type MockMsal = {
@@ -20,6 +23,8 @@ type MockMsal = {
   handleRedirectPromise: jest.Mock;
   loginRedirect: jest.Mock;
   logoutRedirect: jest.Mock;
+  acquireTokenSilent: jest.Mock;
+  acquireTokenRedirect: jest.Mock;
 };
 
 function makeAuth0(overrides: Partial<MockAuth0> = {}): MockAuth0 {
@@ -29,6 +34,7 @@ function makeAuth0(overrides: Partial<MockAuth0> = {}): MockAuth0 {
     user$: of(null),
     loginWithRedirect: jest.fn(),
     logout: jest.fn(),
+    getAccessTokenSilently: jest.fn().mockReturnValue(of('auth0-token')),
     ...overrides,
   };
 }
@@ -42,6 +48,8 @@ function makeMsal(overrides: Partial<MockMsal> = {}): MockMsal {
     handleRedirectPromise: jest.fn().mockResolvedValue(null),
     loginRedirect: jest.fn().mockResolvedValue(undefined),
     logoutRedirect: jest.fn().mockResolvedValue(undefined),
+    acquireTokenSilent: jest.fn().mockResolvedValue({ accessToken: 'msal-token' }),
+    acquireTokenRedirect: jest.fn().mockResolvedValue(undefined),
     ...overrides,
   };
 }
@@ -320,6 +328,223 @@ describe('AuthFacade', () => {
       expect(msal.handleRedirectPromise).toHaveBeenCalledWith({ navigateToLoginRequestUrl: false });
       expect(msal.setActiveAccount).toHaveBeenCalledWith(account);
       await expect(firstValueFrom(facade.isAuthenticated$)).resolves.toBe(true);
+    });
+  });
+
+  describe('getAccessToken', () => {
+    const AUDIENCE = 'https://host/mcp';
+    const SCOPE = 'api://abc/access_as_user';
+    const account = { username: 'e@hf.de', name: 'E', localAccountId: 'id' };
+    const auth0User = { sub: 'a', email: 'a@b.c' };
+    const env = environment as { auth0Audience?: string; entraApiScope?: string };
+
+    async function msalFacade(msalOverrides: Partial<MockMsal> = {}, auth0 = makeAuth0()) {
+      const msal = makeMsal({
+        getAllAccounts: jest.fn().mockReturnValue([account]),
+        ...msalOverrides,
+      });
+      const created = createFacade(false, auth0, msal);
+      await created.facade.initializeMsal();
+      return created;
+    }
+
+    /** Resolves to 'pending' if the observable neither emits nor errors within a short time. */
+    function settleOrPending(obs: Observable<string | null>): Promise<unknown> {
+      return Promise.race([
+        firstValueFrom(obs).then(
+          value => ({ value }),
+          (error: unknown) => ({ error })
+        ),
+        new Promise(resolve => setTimeout(() => resolve('pending'), 50)),
+      ]);
+    }
+
+    beforeEach(() => {
+      env.auth0Audience = AUDIENCE;
+      env.entraApiScope = SCOPE;
+    });
+
+    afterEach(() => {
+      delete env.auth0Audience;
+      delete env.entraApiScope;
+      window.history.replaceState(null, '', '/');
+    });
+
+    it('emits null under the development stub without calling either SDK', async () => {
+      const { facade, auth0, msal } = createFacade(true);
+      await expect(firstValueFrom(facade.getAccessToken())).resolves.toBeNull();
+      expect(auth0.getAccessTokenSilently).not.toHaveBeenCalled();
+      expect(msal.acquireTokenSilent).not.toHaveBeenCalled();
+    });
+
+    it('returns the Auth0 token for the configured audience', async () => {
+      const { facade, auth0 } = createFacade(false, makeAuth0({ user$: of(auth0User) }));
+      await expect(firstValueFrom(facade.getAccessToken())).resolves.toBe('auth0-token');
+      expect(auth0.getAccessTokenSilently).toHaveBeenCalledWith({
+        authorizationParams: { audience: AUDIENCE },
+      });
+    });
+
+    it('emits null for an Auth0 user when no audience is configured', async () => {
+      delete env.auth0Audience;
+      const { facade, auth0 } = createFacade(false, makeAuth0({ user$: of(auth0User) }));
+      await expect(firstValueFrom(facade.getAccessToken())).resolves.toBeNull();
+      expect(auth0.getAccessTokenSilently).not.toHaveBeenCalled();
+    });
+
+    it('returns the MSAL token for the configured scope', async () => {
+      const { facade, msal } = await msalFacade();
+      await expect(firstValueFrom(facade.getAccessToken())).resolves.toBe('msal-token');
+      expect(msal.acquireTokenSilent).toHaveBeenCalledWith({ scopes: [SCOPE], account });
+    });
+
+    it('emits null for a Microsoft user when no scope is configured', async () => {
+      delete env.entraApiScope;
+      const { facade, msal } = await msalFacade();
+      await expect(firstValueFrom(facade.getAccessToken())).resolves.toBeNull();
+      expect(msal.acquireTokenSilent).not.toHaveBeenCalled();
+    });
+
+    it('emits null when anonymous without calling either SDK', async () => {
+      const { facade, auth0, msal } = createFacade(false);
+      await facade.initializeMsal();
+      await expect(firstValueFrom(facade.getAccessToken())).resolves.toBeNull();
+      expect(auth0.getAccessTokenSilently).not.toHaveBeenCalled();
+      expect(msal.acquireTokenSilent).not.toHaveBeenCalled();
+    });
+
+    it('uses the live Microsoft session despite a stale auth0 provider hint', async () => {
+      localStorage.setItem('ahb.activeAuthProvider', 'auth0');
+      const { facade, auth0 } = await msalFacade({}, makeAuth0({ user$: of(null) }));
+      await expect(firstValueFrom(facade.getAccessToken())).resolves.toBe('msal-token');
+      expect(auth0.getAccessTokenSilently).not.toHaveBeenCalled();
+    });
+
+    it('breaks a both-signed-in tie with the hint, like resolveUser', async () => {
+      localStorage.setItem('ahb.activeAuthProvider', 'auth0');
+      const { facade } = await msalFacade({}, makeAuth0({ user$: of(auth0User) }));
+      await expect(firstValueFrom(facade.getAccessToken())).resolves.toBe('auth0-token');
+    });
+
+    describe('when Microsoft needs interaction', () => {
+      const interactionRequired = () =>
+        jest
+          .fn()
+          .mockRejectedValue(
+            new InteractionRequiredAuthError('interaction_required', 'test-correlation-id')
+          );
+
+      beforeEach(() => window.history.replaceState(null, '', '/some/page?x=1'));
+
+      it('redirects once to sign in, stashes the return target and never settles', async () => {
+        const { facade, msal } = await msalFacade({ acquireTokenSilent: interactionRequired() });
+        await expect(settleOrPending(facade.getAccessToken())).resolves.toBe('pending');
+        expect(msal.acquireTokenRedirect).toHaveBeenCalledWith({ scopes: [SCOPE], account });
+        expect(sessionStorage.getItem(POST_LOGIN_TARGET_KEY)).toBe('/some/page?x=1');
+      });
+
+      it('shares a single redirect between concurrent requests', async () => {
+        const { facade, msal } = await msalFacade({ acquireTokenSilent: interactionRequired() });
+        await Promise.all([
+          settleOrPending(facade.getAccessToken()),
+          settleOrPending(facade.getAccessToken()),
+        ]);
+        expect(msal.acquireTokenRedirect).toHaveBeenCalledTimes(1);
+      });
+
+      it('errors when the redirect itself fails, and retries on a later call', async () => {
+        const failure = new Error('redirect failed');
+        const { facade, msal } = await msalFacade({
+          acquireTokenSilent: interactionRequired(),
+          acquireTokenRedirect: jest.fn().mockRejectedValue(failure),
+        });
+        await expect(firstValueFrom(facade.getAccessToken())).rejects.toBe(failure);
+        await expect(firstValueFrom(facade.getAccessToken())).rejects.toBe(failure);
+        expect(msal.acquireTokenRedirect).toHaveBeenCalledTimes(2);
+      });
+    });
+
+    describe('redirect-loop guard', () => {
+      const KEY = 'ahb.apiReauthAt';
+      const NOW = 1_700_000_000_000;
+      const interactionError = new InteractionRequiredAuthError('interaction_required', 'cid');
+      let nowSpy: jest.SpyInstance;
+
+      beforeEach(() => {
+        nowSpy = jest.spyOn(Date, 'now').mockReturnValue(NOW);
+        window.history.replaceState(null, '', '/some/page?x=1');
+      });
+
+      afterEach(() => nowSpy.mockRestore());
+
+      it('refuses to redirect again within 60s and surfaces the original error', async () => {
+        sessionStorage.setItem(KEY, String(NOW - 30_000));
+        const { facade, msal } = await msalFacade({
+          acquireTokenSilent: jest.fn().mockRejectedValue(interactionError),
+        });
+        await expect(firstValueFrom(facade.getAccessToken())).rejects.toBe(interactionError);
+        expect(msal.acquireTokenRedirect).not.toHaveBeenCalled();
+        // The refusal is not memoised: once the window has passed, a later call redirects.
+        nowSpy.mockReturnValue(NOW + 120_000);
+        await settleOrPending(facade.getAccessToken());
+        expect(msal.acquireTokenRedirect).toHaveBeenCalledTimes(1);
+      });
+
+      it('redirects and stores a fresh timestamp when the previous one is stale', async () => {
+        sessionStorage.setItem(KEY, String(NOW - 61_000));
+        const { facade, msal } = await msalFacade({
+          acquireTokenSilent: jest.fn().mockRejectedValue(interactionError),
+        });
+        await expect(settleOrPending(facade.getAccessToken())).resolves.toBe('pending');
+        expect(msal.acquireTokenRedirect).toHaveBeenCalledTimes(1);
+        expect(sessionStorage.getItem(KEY)).toBe(String(NOW));
+      });
+
+      it('clears the timestamp after a successful silent fetch', async () => {
+        sessionStorage.setItem(KEY, String(NOW - 1_000));
+        const { facade } = await msalFacade();
+        await expect(firstValueFrom(facade.getAccessToken())).resolves.toBe('msal-token');
+        expect(sessionStorage.getItem(KEY)).toBeNull();
+      });
+
+      it('removes a stale post-login target when redirecting from the root', async () => {
+        window.history.replaceState(null, '', '/');
+        sessionStorage.setItem(POST_LOGIN_TARGET_KEY, '/old/place');
+        const { facade, msal } = await msalFacade({
+          acquireTokenSilent: jest.fn().mockRejectedValue(interactionError),
+        });
+        await settleOrPending(facade.getAccessToken());
+        expect(msal.acquireTokenRedirect).toHaveBeenCalledTimes(1);
+        expect(sessionStorage.getItem(POST_LOGIN_TARGET_KEY)).toBeNull();
+      });
+    });
+
+    it('propagates an Auth0 token failure to the caller', async () => {
+      const failure = new Error('login_required');
+      const { facade } = createFacade(
+        false,
+        makeAuth0({
+          user$: of(auth0User),
+          getAccessTokenSilently: jest.fn().mockReturnValue(throwError(() => failure)),
+        })
+      );
+      await expect(firstValueFrom(facade.getAccessToken())).rejects.toBe(failure);
+    });
+
+    it('does not ask MSAL for a token before initializeMsal() has run', async () => {
+      const msal = makeMsal({ getAllAccounts: jest.fn().mockReturnValue([account]) });
+      const { facade } = createFacade(false, makeAuth0(), msal);
+      await expect(firstValueFrom(facade.getAccessToken())).resolves.toBeNull();
+      expect(msal.acquireTokenSilent).not.toHaveBeenCalled();
+    });
+
+    it('errors on a generic MSAL failure without redirecting', async () => {
+      const failure = new Error('boom');
+      const { facade, msal } = await msalFacade({
+        acquireTokenSilent: jest.fn().mockRejectedValue(failure),
+      });
+      await expect(firstValueFrom(facade.getAccessToken())).rejects.toBe(failure);
+      expect(msal.acquireTokenRedirect).not.toHaveBeenCalled();
     });
   });
 });

@@ -184,7 +184,7 @@ All tools are read-only:
 
 ### Authentication
 
-The MCP endpoint is a **dual-issuer** OAuth resource server, while the REST API stays open. It accepts `Bearer` access tokens from **Auth0** (OAuth 2.1) and/or **Microsoft Entra ID** — a token is accepted if it is valid for either configured provider. Each request is dispatched to the matching provider by its `iss` claim and then fully validated (signature via JWKS, `iss`, `aud`, `exp`). The RFC 9728 metadata advertises every configured authorization server (Auth0 first, for client back-compat).
+The MCP endpoint is a **dual-issuer** OAuth resource server. It accepts `Bearer` access tokens from **Auth0** (OAuth 2.1) and/or **Microsoft Entra ID** — a token is accepted if it is valid for either configured provider. Each request is dispatched to the matching provider by its `iss` claim and then fully validated (signature via JWKS, `iss`, `aud`, `exp`). The RFC 9728 metadata advertises every configured authorization server (Auth0 first, for client back-compat).
 
 Configure via environment variables (see `.example.env`). Configure either provider, both, or neither; setting exactly one variable of a provider throws (fail-closed):
 
@@ -200,7 +200,15 @@ MCP_ENTRA_AUDIENCE=<entra-mcp-app-client-id-guid>             # token `aud`: the
 # MCP_RESOURCE=...                                            # RFC 9728 resource (endpoint https URL); defaults to the first http(s) provider audience — REQUIRED for an Entra-only deployment
 ```
 
-If no provider is set, the MCP endpoint runs **unauthenticated** (useful for local development).
+If no provider is set, the MCP endpoint runs **unauthenticated** (useful for local development). The REST API is stricter, see below.
+
+### REST API authentication
+
+`/api/*` requires a `Bearer` access token from Auth0 or Entra, validated against the same `MCP_*` configuration as `/mcp`. Public exceptions are `/api/health` (Oh Dear, has its own shared-secret check) and `/api/datenstand`; requests without a valid token get `401`. `/health`, `/version`, `/readiness`, `/config.js` and the static files stay public.
+
+The SPA attaches the token automatically. It requests it using two runtime-config values (see `.example.env`): `APP_AUTH0_AUDIENCE` (= `MCP_AUTH0_AUDIENCE`) and `APP_ENTRA_API_SCOPE` (= `api://<MCP_ENTRA_AUDIENCE>/access_as_user`). If the value for the user's provider is unset, or the user is signed out, no token is sent and the API answers `401`.
+
+Without a configured `MCP_*` provider the server **refuses to start**, unless `API_AUTH_DISABLED=true` is set (local development and the local compose stack only, never on a deployed stack). The deployment-side steps are tracked in [#1007](https://github.com/Hochfrequenz/ahb-tabellen/issues/1007).
 
 ### Connecting a client
 
