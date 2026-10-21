@@ -1,0 +1,115 @@
+name: Deploy Auth0 (Pulumi)
+
+# Manages the shared Auth0 tenant as code (issue #903).
+# - PRs touching infra/auth0/** get a `pulumi preview` posted as a comment.
+# - Merges to main run `pulumi up` against the single `shared` stack.
+#
+# This is intentionally self-contained (does not use the reusable Hochfrequenz
+# deploy workflow, which is Azure-OIDC specific). Auth0 provider credentials come
+# from secrets; Pulumi state lives in Pulumi Cloud.
+#
+# Security model — both `pulumi preview` and `pulumi up` execute the code in
+# infra/auth0/ (index.ts) with Auth0 Management API credentials in scope, so the
+# jobs are hardened accordingly:
+#   * preview runs only for PRs from THIS repository (never forks) and uses a
+#     READ-ONLY Auth0 M2M app (secrets AUTH0_PREVIEW_*), so a malicious PR cannot
+#     modify the tenant.
+#   * deploy runs only on main and draws its write-capable credentials from the
+#     protected `auth0` GitHub Environment (add required reviewers there).
+#   * dependencies are installed with `npm ci --ignore-scripts` (no lifecycle
+#     scripts); Pulumi fetches its resource plugins itself at runtime.
+#   * all actions are pinned to commit SHAs.
+
+on:
+  pull_request:
+    paths:
+      - 'infra/auth0/**'
+      - '.github/workflows/deploy-auth0.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/auth0/**'
+      - '.github/workflows/deploy-auth0.yml'
+
+# Never run two Auth0 operations against the shared tenant at once.
+concurrency:
+  group: auth0-shared
+  cancel-in-progress: false
+
+jobs:
+  preview:
+    name: Preview Auth0
+    # Only same-repo PRs — fork PRs must never receive tenant credentials.
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write # required to post the preview comment
+    env:
+      AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+      AUTH0_CLIENT_ID: ${{ secrets.AUTH0_PREVIEW_CLIENT_ID }}
+      AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_PREVIEW_CLIENT_SECRET }}
+    defaults:
+      run:
+        working-directory: infra/auth0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Pulumi preview
+        uses: pulumi/actions@8582a9e8cc630786854029b4e09281acd6794b58 # v6
+        with:
+          command: preview
+          stack-name: shared
+          work-dir: infra/auth0
+          comment-on-pr: true
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+
+  deploy:
+    name: Deploy Auth0
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    # Write-capable credentials live in this protected environment — add
+    # required reviewers so a human approves before the tenant is changed.
+    environment: auth0
+    permissions:
+      contents: read
+    env:
+      AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+      AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
+      AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
+    defaults:
+      run:
+        working-directory: infra/auth0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Pulumi up
+        uses: pulumi/actions@8582a9e8cc630786854029b4e09281acd6794b58 # v6
+        with:
+          command: up
+          stack-name: shared
+          work-dir: infra/auth0
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}

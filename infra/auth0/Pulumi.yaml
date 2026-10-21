@@ -1,0 +1,3 @@
+name: ahb-tabellen-auth0
+runtime: nodejs
+description: "Auth0 configuration for AHB-tables, managed as code 🔐"

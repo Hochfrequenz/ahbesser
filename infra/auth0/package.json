@@ -1,0 +1,12 @@
+{
+    "name": "ahb-tabellen-auth0-pulumi",
+    "main": "index.ts",
+    "devDependencies": {
+        "@types/node": "^22.0.0",
+        "typescript": "^5.9.3"
+    },
+    "dependencies": {
+        "@pulumi/pulumi": "3.162.0",
+        "@pulumi/auth0": "^3.0.0"
+    }
+}

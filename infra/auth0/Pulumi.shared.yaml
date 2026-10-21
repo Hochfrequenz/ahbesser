@@ -1,0 +1,11 @@
+config:
+  # Auth0 provider credentials. Set the secret via the CLI (never commit plaintext):
+  #   pulumi config set auth0:domain auth.hochfrequenz.de
+  #   pulumi config set auth0:clientId <PULUMI_MGMT_M2M_CLIENT_ID>
+  #   pulumi config set --secret auth0:clientSecret <PULUMI_MGMT_M2M_CLIENT_SECRET>
+  # In CI these are provided instead via AUTH0_DOMAIN / AUTH0_CLIENT_ID / AUTH0_CLIENT_SECRET env vars.
+  auth0:domain: auth.hochfrequenz.de
+
+  # MCP API identifiers (audiences). Non-secret; kept here so changes are reviewed.
+  ahb-tabellen-auth0:mcpAudienceProd: https://ahb-tabellen.hochfrequenz.de/mcp
+  ahb-tabellen-auth0:mcpAudienceStage: https://ahb-tabellen.stage.hochfrequenz.de/mcp
